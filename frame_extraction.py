@@ -119,7 +119,7 @@ def main():
     parser.add_argument(
         "--end",
         type=int,
-        default=100,
+        default=None,
         help="Last frame index (exclusive). Default: process until end of video.",
     )
     parser.add_argument(

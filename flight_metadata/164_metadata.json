@@ -1,0 +1,73 @@
+{
+  "flight_key": "164",
+  "split": "train",
+  "generated_at": "2026-02-07T13:02:25.676517",
+  "frame_count": 59,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_01_31_T_See/1581F62HD226U00B7033_M30T/004_Paznaun-Tag1-R2Stpl6M30",
+    "key": "164",
+    "weather": 2,
+    "start_time": "2024-01-31T14:09:33",
+    "end_time": "2024-01-31T14:29:53",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 1
+  },
+  "species_present": {
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 4,
+      "num_label_states": 40
+    },
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 2,
+      "num_label_states": 12
+    },
+    "Q10738": {
+      "species_name": "No-animal",
+      "wikidata_id": "Q10738",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 1,
+      "num_label_states": 10
+    },
+    "Q5113": {
+      "species_name": "Aves (Bird)",
+      "wikidata_id": "Q5113",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 1,
+      "num_label_states": 4
+    }
+  }
+}

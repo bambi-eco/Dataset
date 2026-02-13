@@ -1,0 +1,16 @@
+{
+  "flight_key": "49",
+  "split": "train",
+  "generated_at": "2026-02-07T12:37:26.115162",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_01_18_Ktn_StoaniGatter_Bichl/1581F5FJB22A700A0DV7_M3TE/011_Gatter_StPichl",
+    "key": "49",
+    "weather": 10,
+    "start_time": "2023-01-18T11:51:06",
+    "end_time": "2023-01-18T11:54:55",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {}
+}

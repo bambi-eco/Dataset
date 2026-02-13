@@ -1,0 +1,45 @@
+{
+  "flight_key": "210",
+  "split": "train",
+  "generated_at": "2026-02-07T13:10:26.389738",
+  "frame_count": 35,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/Spektakulair/2023_07_27_NOe_Purkersdorf/1581F5FJB22A700A0DW3_M3TE/097_BAMBIM3TPurkersdorfSchwarzwild",
+    "key": "210",
+    "weather": 17,
+    "start_time": "2023-07-27T08:41:27",
+    "end_time": "2023-07-27T09:07:43",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 5
+  },
+  "species_present": {
+    "Q58697": {
+      "species_name": "Sus scrofa (Wild boar)",
+      "wikidata_id": "Q58697",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 4,
+      "num_label_states": 32
+    },
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 1,
+      "num_label_states": 3
+    }
+  }
+}

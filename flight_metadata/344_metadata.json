@@ -1,0 +1,59 @@
+{
+  "flight_key": "344",
+  "split": "val",
+  "generated_at": "2026-02-07T13:26:07.563377",
+  "frame_count": 24,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_10_21_Stm_Feldbach_StStefan/1581F62HD226U00B7033_M30T/007_S30R196",
+    "key": "344",
+    "weather": 1,
+    "start_time": "2024-10-21T14:29:55",
+    "end_time": "2024-10-21T14:49:48",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 1
+  },
+  "species_present": {
+    "Q122069": {
+      "species_name": "Capreolus capreolus (Roe deer)",
+      "wikidata_id": "Q122069",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 4,
+      "num_label_states": 20
+    },
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": false,
+      "contains_male": false,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 2,
+      "num_label_states": 12
+    },
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 3,
+      "num_label_states": 9
+    }
+  }
+}

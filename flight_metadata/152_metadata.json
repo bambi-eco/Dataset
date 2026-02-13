@@ -1,0 +1,31 @@
+{
+  "flight_key": "152",
+  "split": "train",
+  "generated_at": "2026-02-07T12:59:34.215335",
+  "frame_count": 43,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_12_14_Ktn_StoaniGatter_Bichl/1581F5FJB22A700A0DV7_M3TE/060_GATSTPBICHLOSTh50d202024",
+    "key": "152",
+    "weather": 42,
+    "start_time": "2023-12-14T10:45:51",
+    "end_time": "2023-12-14T11:03:08",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 13,
+      "num_label_states": 220
+    }
+  }
+}

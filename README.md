@@ -69,7 +69,8 @@ frame, track_id, bb_left, bb_top, bb_width, bb_height, conf, class_id, visibilit
 
 Class_ids are defined as `<wikidata_id>-<gender>-<age>-<visibility>` with the following mapping:
 ```json
-"class_mapping": {
+{
+  "class_mapping": {
     "Q10738-0-0-0": 0,
     "Q10738-0-0-1": 1,
     "Q1219579-0-0-0": 2,
@@ -146,6 +147,7 @@ Class_ids are defined as `<wikidata_id>-<gender>-<age>-<visibility>` with the fo
     "Q602666-0-2-0": 73,
     "Q602666-0-2-1": 74
   }
+}
 ```
 
 ---
@@ -158,15 +160,28 @@ The dataset is publicly available on Zenodo:
 
 ### Automatic Download
 
-To download the dataset automatically, use the provided download script:
+Selectively download flight ZIPs from the BAMBI dataset hosted on Zenodo. Uses the zenodo_upload_summary.json produced by the uploader to resolve which depositions contain which flights, so you can grab exactly what you need without fetching entire multi-GB depositions. Use `filter_flights.py` to get a list of flight IDs for the data that you are looking for (e.g. filtered for species).
+
 
 ```bash
-TODO
+# List all available flights
+python zenodo_download.py -s zenodo_upload_summary.json --list
+
+# Download flights 0, 5, and 12
+python zenodo_download.py -f 0 5 12
+
+# Download flights 10 through 25
+python zenodo_download.py --range 10 25
+
+# Download all flights from parts 1 and 3
+python zenodo_download.py --parts 1 3
+
+# Download everything, extract, and clean up ZIPs
+python zenodo_download.py --unzip
+
+# Preview what a full download would do
+python zenodo_download.py --dry-run
 ```
-
-The script downloads all sequences from Zenodo and verifies file integrity via checksums. Use `--help` for additional options such as filtering by subset or resuming interrupted downloads.
-
-> **Note:** The download script is under development and will be added to this repository shortly.
 
 ---
 
@@ -178,7 +193,43 @@ The script downloads all sequences from Zenodo and verifies file integrity via c
 pip install -r requirements.txt
 ```
 
-The scripts require Python 3.10+ and OpenCV.
+The scripts are tested with Python 3.10+.
+
+### Flight filter
+
+Filter flights based on metadata JSON files by species, occlusion, sex, age, weather, date range, and drone name.
+
+All filters combine with **AND** logic between each other. Within list filters (`--species`, `--drone`, `--sex`, `--age`) values combine with **OR** logic. Weather flags combine with **AND** (all specified conditions must be present).
+
+
+```bash
+# Multiple species (OR: flights containing either)
+python filter_flights.py --species "Roe deer" "Homo sapiens" "Q122069"
+
+# Only flights with occluded frames
+python filter_flights.py --occlusion true
+
+# Flights with male or female subjects
+python filter_flights.py --sex male female
+
+# Flights with juvenile or adult animals
+python filter_flights.py --age juvenile adult
+
+# Flights that are both cloudy AND windy
+python filter_flights.py --weather cloudy windy
+
+# Flights in October 2024
+python filter_flights.py --min-date 2024-10-01 --max-date 2024-10-31
+
+# Visible roe deer in sunny weather during October 2024
+python filter_flights.py ./metadata \
+    --species "Roe deer" \
+    --occlusion false \
+    --weather sunny \
+    --min-date 2024-10-01 \
+    --max-date 2024-10-31 \
+    -v
+```
 
 ### Frame Extraction
 
@@ -297,6 +348,13 @@ The dataset includes a **local patch-based matching strategy** to align thermal 
 The implementation is available in a separate repository:
 
 🔗 **[BAMBI BBox Corrections](https://github.com/HugoMarkoff/BAMBI_BBox_Corrections)**
+
+## Additional related repositories:
+
+- [AlfsPY](https://github.com/bambi-eco/alfs_py): Framework for orthographic projections and light field renderings based on the drone recordings.
+- [Detection](https://github.com/bambi-eco/bambi_detection): Examples on using AlfsPY for different tasks like geo-tiff generation.
+- [Geo-Referenced Tracking](https://github.com/bambi-eco/Geo-Referenced-Tracking): Implementation of tracking algorithms based on local image as well as global world coordinates.
+- [Bambi-QGIS](https://github.com/bambi-eco/Bambi-QGIS): Plugin for integrating drone video processing to the geo-information system QIGS.
 
 
 ---

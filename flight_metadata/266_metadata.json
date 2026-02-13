@@ -1,0 +1,45 @@
+{
+  "flight_key": "266",
+  "split": "train",
+  "generated_at": "2026-02-07T13:22:25.657006",
+  "frame_count": 51,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_10_21_Stm_Feldbach_StStefan/1581F5FJB22A700A0DV7_M3TE/007_S10R223",
+    "key": "266",
+    "weather": 1,
+    "start_time": "2024-10-21T15:04:51",
+    "end_time": "2024-10-21T15:23:06",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q122069": {
+      "species_name": "Capreolus capreolus (Roe deer)",
+      "wikidata_id": "Q122069",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 6,
+      "num_label_states": 35
+    },
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 8,
+      "num_label_states": 64
+    }
+  }
+}

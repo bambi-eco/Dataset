@@ -1,0 +1,31 @@
+{
+  "flight_key": "67",
+  "split": "train",
+  "generated_at": "2026-02-07T12:39:21.870447",
+  "frame_count": 11,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_02_01_T_See/1581F5FJB22A700A0DV7_M3TE/005_R4S12",
+    "key": "67",
+    "weather": 10,
+    "start_time": "2024-02-01T10:24:23",
+    "end_time": "2024-02-01T10:38:56",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q122069": {
+      "species_name": "Capreolus capreolus (Roe deer)",
+      "wikidata_id": "Q122069",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 2,
+      "num_label_states": 20
+    }
+  }
+}

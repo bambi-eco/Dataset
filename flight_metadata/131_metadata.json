@@ -1,0 +1,59 @@
+{
+  "flight_key": "131",
+  "split": "train",
+  "generated_at": "2026-02-07T12:48:52.098527",
+  "frame_count": 50,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_03_22_Ktn_Mageregg/1581F5FJB22A700A0DV7_M3TE/002_GATMagareggNord24update/",
+    "key": "131",
+    "weather": 2,
+    "start_time": "2024-03-22T08:10:42",
+    "end_time": "2024-03-22T08:36:40",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": true,
+      "contains_female": true,
+      "contains_unknown_age": true,
+      "contains_juvenile": true,
+      "contains_adult": true,
+      "num_labels": 7,
+      "num_label_states": 104
+    },
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": true,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 3,
+      "num_label_states": 39
+    },
+    "Q10738": {
+      "species_name": "No-animal",
+      "wikidata_id": "Q10738",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 1,
+      "num_label_states": 12
+    }
+  }
+}

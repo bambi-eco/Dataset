@@ -1,0 +1,73 @@
+{
+  "flight_key": "250",
+  "split": "train",
+  "generated_at": "2026-02-07T13:20:41.602062",
+  "frame_count": 108,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/VC/2023_12_18_Ktn_Gatter_RW_Oberwollanig/FFFF_M30T/004_UgCS-oberwollanig",
+    "key": "250",
+    "weather": 1,
+    "start_time": "2023-12-18T12:53:35",
+    "end_time": "2023-12-18T13:09:49",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 7
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": false,
+      "contains_male": true,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 40,
+      "num_label_states": 730
+    },
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 2,
+      "num_label_states": 19
+    },
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": false,
+      "contains_male": false,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 2,
+      "num_label_states": 19
+    },
+    "Q20908334": {
+      "species_name": "Dama dama (Fallow Deer)",
+      "wikidata_id": "Q20908334",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 2,
+      "num_label_states": 6
+    }
+  }
+}

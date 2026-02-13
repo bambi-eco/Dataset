@@ -1,0 +1,59 @@
+{
+  "flight_key": "248",
+  "split": "train",
+  "generated_at": "2026-02-07T13:19:40.003600",
+  "frame_count": 95,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/VC/2023_12_18_Ktn_Gatter_RW_Oberwollanig/FFFF_M30T/001_UgCS-oberwollanig",
+    "key": "248",
+    "weather": 1,
+    "start_time": "2023-12-18T12:03:59",
+    "end_time": "2023-12-18T12:24:32",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 7
+  },
+  "species_present": {
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 2,
+      "num_label_states": 20
+    },
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": false,
+      "contains_male": true,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 32,
+      "num_label_states": 675
+    },
+    "Q10738": {
+      "species_name": "No-animal",
+      "wikidata_id": "Q10738",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 2,
+      "num_label_states": 38
+    }
+  }
+}

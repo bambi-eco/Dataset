@@ -1,0 +1,31 @@
+{
+  "flight_key": "96",
+  "split": "train",
+  "generated_at": "2026-02-07T12:45:49.412327",
+  "frame_count": 232,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/Spektakulair/2023_04_20_NOe_Purkersdorf/1581F5FJB22A700A0DW3_M3TE/019_BAMBIM3TPurkersdorfSchwarzwildkonv/",
+    "key": "96",
+    "weather": 2,
+    "start_time": "2023-04-20T11:02:23",
+    "end_time": "2023-04-20T11:34:28",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 5
+  },
+  "species_present": {
+    "Q58697": {
+      "species_name": "Sus scrofa (Wild boar)",
+      "wikidata_id": "Q58697",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 27,
+      "num_label_states": 484
+    }
+  }
+}

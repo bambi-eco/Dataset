@@ -1,0 +1,16 @@
+{
+  "flight_key": "270",
+  "split": "train",
+  "generated_at": "2026-02-07T13:22:29.580467",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_06_16_Ktn_Mageregg/1581F5FJB22A700A0DV7_M3TE/019_RehkitzKarntenTheaterwiese01",
+    "key": "270",
+    "weather": null,
+    "start_time": "2023-06-16T05:47:23",
+    "end_time": "2023-06-16T06:17:01",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {}
+}

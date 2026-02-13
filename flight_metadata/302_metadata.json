@@ -1,0 +1,45 @@
+{
+  "flight_key": "302",
+  "split": "val",
+  "generated_at": "2026-02-07T13:25:08.727481",
+  "frame_count": 49,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_11_19_Stm_Feldbach_Lembach/1581F62HD226100BV060_M30T/002_S19R34",
+    "key": "302",
+    "weather": 3,
+    "start_time": "2024-11-19T10:02:32",
+    "end_time": "2024-11-19T10:22:41",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {
+    "Q122069": {
+      "species_name": "Capreolus capreolus (Roe deer)",
+      "wikidata_id": "Q122069",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 9,
+      "num_label_states": 97
+    },
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 2,
+      "num_label_states": 7
+    }
+  }
+}

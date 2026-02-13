@@ -1,0 +1,16 @@
+{
+  "flight_key": "311",
+  "split": "val",
+  "generated_at": "2026-02-07T13:25:31.821970",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_10_21_Stm_Feldbach_Straden/1581F62HD226U00B7033_M30T/002_STurmR198",
+    "key": "311",
+    "weather": 1,
+    "start_time": "2024-10-21T11:12:05",
+    "end_time": "2024-10-21T11:27:59",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 1
+  },
+  "species_present": {}
+}

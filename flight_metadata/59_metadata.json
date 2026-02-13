@@ -1,0 +1,45 @@
+{
+  "flight_key": "59",
+  "split": "train",
+  "generated_at": "2026-02-07T12:39:11.840652",
+  "frame_count": 26,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_05_23_T_See/1581F5FJB22A700A0DV7_M3TE/018_RWTSEE031SO",
+    "key": "59",
+    "weather": 2,
+    "start_time": "2023-05-23T08:48:21",
+    "end_time": "2023-05-23T09:09:17",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 1,
+      "num_label_states": 13
+    },
+    "Q10738": {
+      "species_name": "No-animal",
+      "wikidata_id": "Q10738",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 1,
+      "num_label_states": 13
+    }
+  }
+}

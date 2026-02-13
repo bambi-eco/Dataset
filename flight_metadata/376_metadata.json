@@ -1,0 +1,31 @@
+{
+  "flight_key": "376",
+  "split": "test",
+  "generated_at": "2026-02-07T13:27:09.619274",
+  "frame_count": 34,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/ASP/2024_10_31_OOe_Ansfelden_ASP/FFFE_M30T/002_ASP30mAnsfelden",
+    "key": "376",
+    "weather": null,
+    "start_time": "2024-10-31T09:08:37",
+    "end_time": "2024-10-31T09:17:36",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 8
+  },
+  "species_present": {
+    "Q58697": {
+      "species_name": "Sus scrofa (Wild boar)",
+      "wikidata_id": "Q58697",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 17,
+      "num_label_states": 36
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "flight_key": "6",
+  "split": "train",
+  "generated_at": "2026-02-07T12:06:51.412433",
+  "frame_count": 210,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2023_09_20_Haag/1581F62HD226100BV060_M30T/003_Rotwild/",
+    "key": "6",
+    "weather": 1,
+    "start_time": "2023-09-20T08:05:01",
+    "end_time": "2023-09-20T08:23:54",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": true,
+      "contains_female": true,
+      "contains_unknown_age": true,
+      "contains_juvenile": true,
+      "contains_adult": true,
+      "num_labels": 51,
+      "num_label_states": 1346
+    },
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 4,
+      "num_label_states": 73
+    }
+  }
+}

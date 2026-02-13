@@ -1,0 +1,16 @@
+{
+  "flight_key": "291",
+  "split": "val",
+  "generated_at": "2026-02-07T13:24:31.886701",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_10_28_Sbg_Gastein/1581F5FJB22A700A0DV7_M3TE/002_S4R110",
+    "key": "291",
+    "weather": null,
+    "start_time": "2024-10-28T11:18:17",
+    "end_time": "2024-10-28T11:34:17",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {}
+}

@@ -1,0 +1,16 @@
+{
+  "flight_key": "233",
+  "split": "train",
+  "generated_at": "2026-02-07T13:14:22.187320",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/Spektakulair/2024_02_27_NOe_Purkersdorf/1581F5FJB22A700A0DW3_M3TE/028_spektakulAIRTest-BAMBIM3TPurkersdorfSchwarzwild",
+    "key": "233",
+    "weather": 2,
+    "start_time": "2024-02-27T06:28:42",
+    "end_time": "2024-02-27T06:52:53",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 5
+  },
+  "species_present": {}
+}

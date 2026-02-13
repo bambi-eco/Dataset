@@ -1,0 +1,59 @@
+{
+  "flight_key": "134",
+  "split": "train",
+  "generated_at": "2026-02-07T12:49:34.311337",
+  "frame_count": 93,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_12_14_Ktn_Gatter_SW_Mairist/1581F5FJB22A700A0DV7_M3TE/055_SWMairist30AG2024",
+    "key": "134",
+    "weather": 2,
+    "start_time": "2023-12-14T09:12:07",
+    "end_time": "2023-12-14T09:33:28",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q602666": {
+      "species_name": "Sus scrofa x Sus domesticus (Hybrid Pig)",
+      "wikidata_id": "Q602666",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 6,
+      "num_label_states": 128
+    },
+    "Q58697": {
+      "species_name": "Sus scrofa (Wild boar)",
+      "wikidata_id": "Q58697",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": true,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": true,
+      "contains_adult": true,
+      "num_labels": 17,
+      "num_label_states": 487
+    },
+    "Q15978631": {
+      "species_name": "Homo sapiens (Human)",
+      "wikidata_id": "Q15978631",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 1,
+      "num_label_states": 9
+    }
+  }
+}

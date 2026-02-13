@@ -1,0 +1,16 @@
+{
+  "flight_key": "171",
+  "split": "train",
+  "generated_at": "2026-02-07T13:03:58.981430",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_06_18_HagenbergFH/1581F62HD226100BV060_M30T/022_Feldwegv2",
+    "key": "171",
+    "weather": null,
+    "start_time": "2024-06-18T13:28:46",
+    "end_time": "2024-06-18T13:31:09",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {}
+}

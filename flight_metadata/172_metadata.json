@@ -1,0 +1,16 @@
+{
+  "flight_key": "172",
+  "split": "train",
+  "generated_at": "2026-02-07T13:03:59.029786",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_06_12_OOe_Wartberg_Wenzelskirche/1581F62HD226100BV060_M30T/012_WKr40h50",
+    "key": "172",
+    "weather": null,
+    "start_time": "2024-06-12T14:10:28",
+    "end_time": "2024-06-12T14:28:46",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {}
+}

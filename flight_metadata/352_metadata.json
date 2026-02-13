@@ -1,0 +1,16 @@
+{
+  "flight_key": "352",
+  "split": "test",
+  "generated_at": "2026-02-07T13:26:45.064755",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/ASP/2024_08_26_OOe_StPankraz_ASP/FFFE_M30T/004_vollASPStPankrazBankerlNachmittag",
+    "key": "352",
+    "weather": null,
+    "start_time": "2024-08-26T17:20:25",
+    "end_time": "2024-08-26T17:43:36",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 8
+  },
+  "species_present": {}
+}

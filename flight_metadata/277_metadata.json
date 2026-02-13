@@ -1,0 +1,31 @@
+{
+  "flight_key": "277",
+  "split": "train",
+  "generated_at": "2026-02-07T13:23:03.677267",
+  "frame_count": 74,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/ASP/2024_08_22_OOe_StPankraz_ASP/FFFE_M30T/005_vollASPStPankrazBankerl",
+    "key": "277",
+    "weather": 2,
+    "start_time": "2024-08-22T07:58:15",
+    "end_time": "2024-08-22T08:21:47",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 8
+  },
+  "species_present": {
+    "Q58697": {
+      "species_name": "Sus scrofa (Wild boar)",
+      "wikidata_id": "Q58697",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 20,
+      "num_label_states": 243
+    }
+  }
+}

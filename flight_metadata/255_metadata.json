@@ -1,0 +1,16 @@
+{
+  "flight_key": "255",
+  "split": "train",
+  "generated_at": "2026-02-07T13:21:52.167978",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/Spektakulair/2024_10_21_Stm_Feldbach_Lembach/1581F5FJD23BD00EQCW0_M3TE/070_S1R217",
+    "key": "255",
+    "weather": 1,
+    "start_time": "2024-10-21T12:20:04",
+    "end_time": "2024-10-21T12:28:59",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 6
+  },
+  "species_present": {}
+}

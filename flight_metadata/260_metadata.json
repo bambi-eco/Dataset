@@ -1,0 +1,31 @@
+{
+  "flight_key": "260",
+  "split": "train",
+  "generated_at": "2026-02-07T13:21:59.283746",
+  "frame_count": 37,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_10_21_Stm_Feldbach_Straden/1581F5FJB22A700A0DV7_M3TE/001_STurmR183",
+    "key": "260",
+    "weather": 33,
+    "start_time": "2024-10-21T10:54:25",
+    "end_time": "2024-10-21T11:18:08",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q122069": {
+      "species_name": "Capreolus capreolus (Roe deer)",
+      "wikidata_id": "Q122069",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 7,
+      "num_label_states": 67
+    }
+  }
+}

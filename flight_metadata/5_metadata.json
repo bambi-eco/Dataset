@@ -1,0 +1,45 @@
+{
+  "flight_key": "5",
+  "split": "train",
+  "generated_at": "2026-02-07T12:05:34.828423",
+  "frame_count": 473,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2023_09_20_Haag/1581F62HD226100BV060_M30T/002_Steinbock_Gams/",
+    "key": "5",
+    "weather": 2,
+    "start_time": "2023-09-20T07:26:34",
+    "end_time": "2023-09-20T07:48:26",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {
+    "Q131340": {
+      "species_name": "Rupicapra rupicapra (Chamois)",
+      "wikidata_id": "Q131340",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 2,
+      "num_label_states": 349
+    },
+    "Q168327": {
+      "species_name": "Capra ibex (Alpine ibex)",
+      "wikidata_id": "Q168327",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": true,
+      "contains_adult": true,
+      "num_labels": 10,
+      "num_label_states": 335
+    }
+  }
+}

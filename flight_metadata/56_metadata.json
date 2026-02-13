@@ -1,0 +1,31 @@
+{
+  "flight_key": "56",
+  "split": "train",
+  "generated_at": "2026-02-07T12:38:05.464629",
+  "frame_count": 35,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_01_19_Ktn_Feldreh_Aich/1581F5FJB22A700A0DV7_M3TE/002_FRehAich04h50d20",
+    "key": "56",
+    "weather": 40,
+    "start_time": "2023-01-19T09:33:29",
+    "end_time": "2023-01-19T09:49:41",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q122069": {
+      "species_name": "Capreolus capreolus (Roe deer)",
+      "wikidata_id": "Q122069",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 8,
+      "num_label_states": 162
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "flight_key": "62",
+  "split": "train",
+  "generated_at": "2026-02-07T12:39:15.331851",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_01_31_T_See/1581F5FJB22A700A0DV7_M3TE/003_Paznaun-Tag1-R3Stpl15M3T",
+    "key": "62",
+    "weather": 10,
+    "start_time": "2024-01-31T14:49:58",
+    "end_time": "2024-01-31T15:12:30",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {}
+}

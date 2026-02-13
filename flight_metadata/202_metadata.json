@@ -1,0 +1,45 @@
+{
+  "flight_key": "202",
+  "split": "train",
+  "generated_at": "2026-02-07T13:09:34.044544",
+  "frame_count": 82,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/Spektakulair/2023_07_27_NOe_Purkersdorf/1581F5FJB22A700A0DW3_M3TE/089_BAMBIM3TPurkersdorfRotwild",
+    "key": "202",
+    "weather": 3,
+    "start_time": "2023-07-27T07:44:21",
+    "end_time": "2023-07-27T08:11:30",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 5
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": true,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 21,
+      "num_label_states": 196
+    },
+    "Q24238356": {
+      "species_name": "Unknown",
+      "wikidata_id": "Q24238356",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": false,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 1,
+      "num_label_states": 7
+    }
+  }
+}

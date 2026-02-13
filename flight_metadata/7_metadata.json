@@ -1,0 +1,16 @@
+{
+  "flight_key": "7",
+  "split": "train",
+  "generated_at": "2026-02-07T12:06:51.561085",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2023_09_20_Haag/1581F62HD226100BV060_M30T/006/",
+    "key": "7",
+    "weather": 1,
+    "start_time": "2023-09-20T08:58:23",
+    "end_time": "2023-09-20T09:18:19",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {}
+}

@@ -1,0 +1,16 @@
+{
+  "flight_key": "329",
+  "split": "val",
+  "generated_at": "2026-02-07T13:25:50.108365",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_10_28_Sbg_Gastein/1581F62HD226100BV060_M30T/002_S10R149",
+    "key": "329",
+    "weather": null,
+    "start_time": "2024-10-28T11:11:03",
+    "end_time": "2024-10-28T11:14:29",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 2
+  },
+  "species_present": {}
+}

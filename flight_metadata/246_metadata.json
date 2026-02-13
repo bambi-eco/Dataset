@@ -1,0 +1,45 @@
+{
+  "flight_key": "246",
+  "split": "train",
+  "generated_at": "2026-02-07T13:18:09.434375",
+  "frame_count": 228,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_02_15_Ktn_Gatter_SW_Mairist/1581F5FJB22A700A0DV7_M3TE/006_SWMairist_manuell_umbenannt",
+    "key": "246",
+    "weather": 9,
+    "start_time": "2023-02-15T09:47:25",
+    "end_time": "2023-02-15T10:04:46",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {
+    "Q58697": {
+      "species_name": "Sus scrofa (Wild boar)",
+      "wikidata_id": "Q58697",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": true,
+      "contains_adult": true,
+      "num_labels": 22,
+      "num_label_states": 1456
+    },
+    "Q602666": {
+      "species_name": "Sus scrofa x Sus domesticus (Hybrid Pig)",
+      "wikidata_id": "Q602666",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 6,
+      "num_label_states": 558
+    }
+  }
+}

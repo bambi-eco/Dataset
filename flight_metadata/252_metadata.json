@@ -1,0 +1,45 @@
+{
+  "flight_key": "252",
+  "split": "train",
+  "generated_at": "2026-02-07T13:21:50.032280",
+  "frame_count": 76,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/VC/2024_01_04_Ktn_Gatter_RW_Oberwollanig/FFFF_M30T/002_UgCS-oberwollanig",
+    "key": "252",
+    "weather": null,
+    "start_time": "2024-01-04T09:48:41",
+    "end_time": "2024-01-04T10:04:56",
+    "drone_name": "Matric 30 Thermal",
+    "drone_instance_id": 7
+  },
+  "species_present": {
+    "Q1219579": {
+      "species_name": "Cervus elaphus (Red deer)",
+      "wikidata_id": "Q1219579",
+      "contains_occluded_frames": true,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": true,
+      "contains_female": true,
+      "contains_unknown_age": false,
+      "contains_juvenile": false,
+      "contains_adult": true,
+      "num_labels": 38,
+      "num_label_states": 704
+    },
+    "Q20908334": {
+      "species_name": "Dama dama (Fallow Deer)",
+      "wikidata_id": "Q20908334",
+      "contains_occluded_frames": false,
+      "contains_unoccluded_frames": true,
+      "contains_unknown_sex": true,
+      "contains_male": false,
+      "contains_female": false,
+      "contains_unknown_age": true,
+      "contains_juvenile": false,
+      "contains_adult": false,
+      "num_labels": 2,
+      "num_label_states": 6
+    }
+  }
+}

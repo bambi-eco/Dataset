@@ -1,0 +1,16 @@
+{
+  "flight_key": "154",
+  "split": "train",
+  "generated_at": "2026-02-07T12:59:35.038779",
+  "frame_count": 0,
+  "flight_info": {
+    "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_12_20_Ktn_Mageregg/1581F5FJB22A700A0DV7_M3TE/001_GATMagareggNord45AG2024",
+    "key": "154",
+    "weather": 2,
+    "start_time": "2023-12-20T08:08:32",
+    "end_time": "2023-12-20T08:35:23",
+    "drone_name": "Mavic 3 Thermal",
+    "drone_instance_id": 4
+  },
+  "species_present": {}
+}

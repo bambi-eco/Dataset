@@ -165,22 +165,22 @@ Selectively download flight ZIPs from the BAMBI dataset hosted on Zenodo. Uses t
 
 ```bash
 # List all available flights
-python zenodo_download.py -s zenodo_upload_summary.json --list
+python download_from_zenodo.py -s zenodo_upload_summary.json --list
 
 # Download flights 0, 5, and 12
-python zenodo_download.py -f 0 5 12
+python download_from_zenodo.py -f 0 5 12
 
 # Download flights 10 through 25
-python zenodo_download.py --range 10 25
+python download_from_zenodo.py --range 10 25
 
 # Download all flights from parts 1 and 3
-python zenodo_download.py --parts 1 3
+python download_from_zenodo.py --parts 1 3
 
 # Download everything, extract, and clean up ZIPs
-python zenodo_download.py --unzip
+python download_from_zenodo.py --unzip
 
 # Preview what a full download would do
-python zenodo_download.py --dry-run
+python download_from_zenodo.py --dry-run
 ```
 
 ---

@@ -68,6 +68,7 @@ frame, track_id, bb_left, bb_top, bb_width, bb_height, conf, class_id, visibilit
 | `is_propagated` | int | 0 = annotated key frame, 1 = interpolated |
 
 Class_ids are defined as `<wikidata_id>-<gender>-<age>-<visibility>` with the following wikidata IDs:
+```json
 "class_mapping": {
     "Q10738-0-0-0": 0,
     "Q10738-0-0-1": 1,
@@ -144,7 +145,7 @@ Class_ids are defined as `<wikidata_id>-<gender>-<age>-<visibility>` with the fo
     "Q602666-0-1-0": 72,
     "Q602666-0-2-0": 73,
     "Q602666-0-2-1": 74
-  },
+  }
 ```
 
 ---

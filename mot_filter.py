@@ -4,16 +4,16 @@ Filter custom MOT ground truth files based on various criteria.
 
 Usage examples:
     # Filter a single file by species
-    python filter_mot.py input.txt -o output_dir --species "Homo sapiens (Human)"
+    python mot_filter.py input.txt -o output_dir --species "Homo sapiens (Human)"
 
     # Filter a folder, keep only class_id 50 and 51, with min width 25
-    python filter_mot.py input_folder/ -o output_dir --class-id 50 51 --min-width 25
+    python mot_filter.py input_folder/ -o output_dir --class-id 50 51 --min-width 25
 
     # Filter by multiple species and visibility values
-    python filter_mot.py input_folder/ -o output_dir --species "Homo sapiens (Human)" "Capreolus capreolus (Roe deer)" --visibility 1.0 0.5
+    python mot_filter.py input_folder/ -o output_dir --species "Homo sapiens (Human)" "Capreolus capreolus (Roe deer)" --visibility 1.0 0.5
 
     # Combine filters: class, size range, and gender
-    python filter_mot.py input.txt -o output_dir --class-id 2 --min-width 30 --max-height 40 --gender 0 1
+    python mot_filter.py input.txt -o output_dir --class-id 2 --min-width 30 --max-height 40 --gender 0 1
 """
 
 import argparse

@@ -3,9 +3,9 @@
 Visualize custom MOT ground truth / tracking results on video.
 
 Usage:
-    python visualize_mot.py video.mp4 annotations.txt -o output.mp4
-    python visualize_mot.py video.mp4 annotations.txt -o output.mp4 --interpolate
-    python visualize_mot.py video.mp4 annotations.txt --show  # live preview only
+    python mot_video_viewer.py video.mp4 annotations.txt -o output.mp4
+    python mot_video_viewer.py video.mp4 annotations.txt -o output.mp4 --interpolate
+    python mot_video_viewer.py video.mp4 annotations.txt --show  # live preview only
 """
 
 import argparse

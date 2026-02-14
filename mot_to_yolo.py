@@ -81,6 +81,8 @@ def convert_mot_file(
 ):
     """Convert a single MOT file to per-frame YOLO label files."""
     mot_name = mot_path.stem  # filename without extension
+    # Use everything before the first underscore as sequence ID (e.g. "123_gt" -> "123")
+    seq_id = mot_name.split("_", 1)[0]
 
     # Group detections by frame
     frames: dict[int, list[dict]] = defaultdict(list)
@@ -96,7 +98,7 @@ def convert_mot_file(
     written = 0
     for frame_id in sorted(frames.keys()):
         dets = frames[frame_id]
-        out_path = output_dir / f"{mot_name}_{frame_id}.txt"
+        out_path = output_dir / f"{seq_id}_{frame_id}.txt"
 
         lines = []
         for det in dets:

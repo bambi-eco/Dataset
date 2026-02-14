@@ -7,22 +7,22 @@ specific flight ZIPs without fetching entire depositions.
 
 Usage:
     # Download specific flights by prefix
-    python zenodo_download.py -s zenodo_upload_summary.json -f 0 5 12 42
+    python download_from_zenodo.py -s zenodo_upload_summary.json -f 0 5 12 42
 
     # Download a range of flights
-    python zenodo_download.py -s zenodo_upload_summary.json --range 10 25
+    python download_from_zenodo.py -s zenodo_upload_summary.json --range 10 25
 
     # List all available flights
-    python zenodo_download.py -s zenodo_upload_summary.json --list
+    python download_from_zenodo.py -s zenodo_upload_summary.json --list
 
     # Download all flights from a specific part
-    python zenodo_download.py -s zenodo_upload_summary.json --parts 1 3
+    python download_from_zenodo.py -s zenodo_upload_summary.json --parts 1 3
 
     # Download all flights (no filter)
-    python zenodo_download.py -s zenodo_upload_summary.json
+    python download_from_zenodo.py -s zenodo_upload_summary.json
 
     # Download and automatically extract (deletes ZIPs after extraction)
-    python zenodo_download.py -s zenodo_upload_summary.json --unzip
+    python download_from_zenodo.py -s zenodo_upload_summary.json --unzip
 
 Environment variable ZENODO_TOKEN can be used for restricted depositions.
 """

@@ -4,25 +4,25 @@ Filter BAMBI flight metadata files by species, occlusion, sex, age, weather, dat
 
 Usage examples:
     # Find flights containing Roe deer
-    python filter_metadata.py /path/to/metadata --species "Capreolus capreolus"
+    python filter_flights.py /path/to/metadata --species "Capreolus capreolus"
 
     # Find flights with occluded frames of any species
-    python filter_metadata.py /path/to/metadata --occlusion true
+    python filter_flights.py /path/to/metadata --occlusion true
 
     # Find flights with visible (unoccluded) frames only
-    python filter_metadata.py /path/to/metadata --occlusion false
+    python filter_flights.py /path/to/metadata --occlusion false
 
     # Find flights in sunny AND windy weather
-    python filter_metadata.py /path/to/metadata --weather sunny windy
+    python filter_flights.py /path/to/metadata --weather sunny windy
 
     # Find flights between two dates with female animals
-    python filter_metadata.py /path/to/metadata --min-date 2024-10-01 --max-date 2024-11-01 --sex female
+    python filter_flights.py /path/to/metadata --min-date 2024-10-01 --max-date 2024-11-01 --sex female
 
     # Find flights by drone name
-    python filter_metadata.py /path/to/metadata --drone "Matric 30 Thermal"
+    python filter_flights.py /path/to/metadata --drone "Matric 30 Thermal"
 
     # Combine multiple filters (AND logic)
-    python filter_metadata.py /path/to/metadata --species "Homo sapiens" --occlusion false --sex female --weather sunny
+    python filter_flights.py /path/to/metadata --species "Homo sapiens" --occlusion false --sex female --weather sunny
 """
 
 import argparse

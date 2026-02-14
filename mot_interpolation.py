@@ -7,7 +7,7 @@ interpolates bb_left, bb_top, bb_width, bb_height for all missing frames.
 Interpolated rows are marked with is_propagated=1.
 
 Usage:
-    python interpolate_mot.py <input_path> <output_folder> [--step STEP]
+    python mot_interpolation.py <input_path> <output_folder> [--step STEP]
 
     input_path:     Path to a single .txt MOT file or a folder of .txt files.
     output_folder:  Where interpolated files are written (same filenames).

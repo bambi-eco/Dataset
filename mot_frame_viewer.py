@@ -3,8 +3,8 @@
 Visualize bounding boxes from custom MOT ground truth files on extracted video frames.
 
 Usage:
-    python visualize_mot.py <frame_image> <mot_file> [--output <output_path>] [--show]
-    python visualize_mot.py <frame_image> <mot_file> --interpolate [--show]
+    python mot_frame_viewer.py <frame_image> <mot_file> [--output <output_path>] [--show]
+    python mot_frame_viewer.py <frame_image> <mot_file> --interpolate [--show]
 
 Frame images follow the naming: <video_name>_<frame_idx>.png
 The frame_idx is extracted and used to filter matching detections from the MOT file.

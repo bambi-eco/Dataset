@@ -114,7 +114,7 @@ def matches_mot_filter(record: dict, filters: dict) -> bool:
             else:
                 for v in filter_values:
                     try:
-                        if record_val.index(v):
+                        if record_val.index(v) >= 0:
                             return True
                     except ValueError:
                         pass

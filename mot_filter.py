@@ -89,14 +89,13 @@ def format_line(record: dict) -> str:
 
 
 def matches_filter(record: dict, filters: dict) -> bool:
-    """Check if a record passes all active filters."""
+    """Check if a MOT record passes all active annotation filters."""
 
-    # List filters: if the list is non-empty, the value must be in the list
+    # List filters
     for key in ("class_id", "species", "gender", "age", "visibility"):
         filter_values = filters.get(key)
         if filter_values is not None and len(filter_values) > 0:
             record_val = record[key]
-            # For numeric comparisons, try matching both as-is and converted
             if key == "class_id":
                 if record_val not in [int(v) for v in filter_values]:
                     return False
@@ -104,10 +103,13 @@ def matches_filter(record: dict, filters: dict) -> bool:
                 if record_val not in [float(v) for v in filter_values]:
                     return False
             else:
-                # String matching for species, gender, age
-                str_values = [str(v) for v in filter_values]
-                if str(record_val) not in str_values:
-                    return False
+                for v in filter_values:
+                    try:
+                        if record_val.index(v) >= 0:
+                            return True
+                    except ValueError:
+                        pass
+                return False
 
     # Range filters for width
     if filters.get("min_width") is not None:
@@ -262,6 +264,22 @@ def main():
 
     args = parser.parse_args()
     input_path: Path = args.input
+
+    if args.gender is not None and len(args.gender) > 0:
+        if "Unknown" in args.gender:
+            args.gender.append("0")
+        elif "Male" in args.gender:
+            args.gender.append("1")
+        elif "Female" in args.gender:
+            args.gender.append("2")
+
+    if args.age is not None and len(args.age) > 0:
+        if "Unknown" in args.age:
+            args.age.append("0")
+        elif "Juvenile" in args.age:
+            args.age.append("1")
+        elif "Adult" in args.age:
+            args.age.append("2")
 
     if not input_path.exists():
         print(f"Error: Input path '{input_path}' does not exist.")

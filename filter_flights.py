@@ -106,7 +106,7 @@ def filter_records(records: list[dict], args) -> list[str]:
         if args.weather:
             required_mask = encode_weather(args.weather)
             actual_weather = flight_info.get("weather", 0)
-            if (actual_weather & required_mask) == 0:
+            if actual_weather is None or (actual_weather & required_mask) == 0:
                 continue
 
         # Date range filter
@@ -295,8 +295,7 @@ def main():
             print(f"  Frames:  {r.get('frame_count', 'N/A')}")
             print()
     else:
-        for key in matching_keys:
-            print(key)
+        print(matching_keys)
 
     print(f"\n{len(matching_keys)} / {len(records)} flights matched.", file=sys.stderr)
 

@@ -37,6 +37,7 @@ def add_locations(poses: dict, dem_meta: dict) -> dict:
             round(northing - origin_y, 6),
             round(image["alt"] - origin_z, 6),
         ]
+        image["rotation"] = [image["pitch"], image["roll"], image["yaw"]]
 
     return poses
 

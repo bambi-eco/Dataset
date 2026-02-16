@@ -112,8 +112,13 @@ def matches_mot_filter(record: dict, filters: dict) -> bool:
                 if record_val not in [float(v) for v in filter_values]:
                     return False
             else:
-                if str(record_val) not in [str(v) for v in filter_values]:
-                    return False
+                for v in filter_values:
+                    try:
+                        if record_val.index(v):
+                            return True
+                    except ValueError:
+                        pass
+                return False
 
     # Range filters for width
     if filters.get("min_width") is not None:
@@ -567,6 +572,22 @@ examples:
 
     if not args.thermal and not args.rgb:
         parser.error("At least one of --thermal or --rgb must be enabled.")
+
+    if args.gender is not None and len(args.gender) > 0:
+        if "Unknown" in args.gender:
+            args.gender.append("0")
+        elif "Male" in args.gender:
+            args.gender.append("1")
+        elif "Female" in args.gender:
+            args.gender.append("2")
+
+    if args.age is not None and len(args.age) > 0:
+        if "Unknown" in args.age:
+            args.age.append("0")
+        elif "Juvenile" in args.age:
+            args.age.append("1")
+        elif "Adult" in args.age:
+            args.age.append("2")
 
     input_path = Path(args.input)
     output_dir = Path(args.output)

@@ -229,7 +229,7 @@ def main():
     parser.add_argument(
         "--summary", "-s",
         type=Path,
-        default=Path(r"./zenodo_upload_summary.json"),
+        default=Path(r"./flight_metadata/zenodo_upload_summary.json"),
         help="Path to zenodo_upload_summary.json",
     )
     parser.add_argument(

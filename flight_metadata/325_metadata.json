@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_07_09_Sbg_Gastein/1581F62HD226100BV060_M30T/004_S7R8bankTurn",
     "key": "325",
-    "weather": null,
+    "weather": 1,
     "start_time": "2024-07-09T09:40:13",
     "end_time": "2024-07-09T09:58:45",
     "drone_name": "Matric 30 Thermal",

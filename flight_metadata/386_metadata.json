@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/ASP/2024_11_05_OOe_Ansfelden_ASP/FFFE_M30T/016_ASP30mAnsfelden",
     "key": "386",
-    "weather": null,
+    "weather": 1,
     "start_time": "2024-11-05T07:33:56",
     "end_time": "2024-11-05T07:50:57",
     "drone_name": "Matric 30 Thermal",

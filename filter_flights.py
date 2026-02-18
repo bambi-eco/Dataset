@@ -32,7 +32,7 @@ from datetime import datetime
 from pathlib import Path
 
 WEATHER_FLAGS = {
-    "unspecified": 0b000000,
+    "night":       0b000000,
     "sunny":       0b000001,
     "cloudy":      0b000010,
     "rainy":       0b000100,
@@ -47,7 +47,7 @@ WEATHER_NAMES = {v: k for k, v in WEATHER_FLAGS.items() if v != 0}
 def decode_weather(value: int) -> list[str]:
     """Decode a weather integer into a list of flag names."""
     if value == 0:
-        return ["unspecified"]
+        return ["night"]
     flags = []
     for bit_val, name in sorted(WEATHER_NAMES.items()):
         if value & bit_val:

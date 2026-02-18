@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/Spektakulair/2023_04_26_NOe_Purkersdorf/1581F5FJB22A700A0DW3_M3TE/018_BAMBIM3TPurkersdorfRotwild/",
     "key": "107",
-    "weather": null,
+    "weather": 1,
     "start_time": "2023-04-26T19:22:03",
     "end_time": "2023-04-26T19:53:22",
     "drone_name": "Mavic 3 Thermal",

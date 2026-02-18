@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2023_06_16_Ktn_Mageregg/1581F5FJB22A700A0DV7_M3TE/024_RehkitzKarnten",
     "key": "273",
-    "weather": null,
+    "weather": 1,
     "start_time": "2023-06-16T07:00:41",
     "end_time": "2023-06-16T07:13:34",
     "drone_name": "Mavic 3 Thermal",

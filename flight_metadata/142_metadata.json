@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_03_22_Ktn_Gatter_SW_Mairist/1581F5FJB22A700A0DV7_M3TE/007_SWMairist30AG2024",
     "key": "142",
-    "weather": null,
+    "weather": 1,
     "start_time": "2024-03-22T09:03:40",
     "end_time": "2024-03-22T09:15:30",
     "drone_name": "Mavic 3 Thermal",

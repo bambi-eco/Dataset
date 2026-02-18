@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/BW/2024_02_14_Sbg_Gastein/1581F5FJB22A700A0DV7_M3TE/004_Gasteinv1R4S6M3TE",
     "key": "287",
-    "weather": null,
+    "weather": 1,
     "start_time": "2024-02-14T11:52:48",
     "end_time": "2024-02-14T12:09:06",
     "drone_name": "Mavic 3 Thermal",

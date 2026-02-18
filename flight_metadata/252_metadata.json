@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/VC/2024_01_04_Ktn_Gatter_RW_Oberwollanig/FFFF_M30T/002_UgCS-oberwollanig",
     "key": "252",
-    "weather": null,
+    "weather": 1,
     "start_time": "2024-01-04T09:48:41",
     "end_time": "2024-01-04T10:04:56",
     "drone_name": "Matric 30 Thermal",

@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_10_21_Stm_Feldbach_StStefan/1581F62HD226100BV060_M30T/006_S26R138_Abbruch_SDKarteVoll",
     "key": "350",
-    "weather": null,
+    "weather": 1,
     "start_time": "2024-10-21T14:50:11",
     "end_time": "2024-10-21T15:08:25",
     "drone_name": "Matric 30 Thermal",

@@ -6,7 +6,7 @@
   "flight_info": {
     "sharepoint_link": "https://fhooe.sharepoint.com/teams/BAMBI-dev/Freigegebene%20Dokumente/Processed/FH/2024_01_31_T_See/1581F62HD226100BV060_M30T/004_Paznaun-Tag1-R7Stpl18M30",
     "key": "91",
-    "weather": null,
+    "weather": 8,
     "start_time": "2024-01-31T14:59:40",
     "end_time": "2024-01-31T15:04:25",
     "drone_name": "Matric 30 Thermal",

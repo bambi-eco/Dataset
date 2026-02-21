@@ -266,7 +266,7 @@ def main():
         "--token", "-t",
         type=str,
         default=os.environ.get("ZENODO_TOKEN"),
-        help="Zenodo token (needed for draft/restricted depositions)",
+        help="Zenodo token (only needed for draft/restricted depositions during testing)",
     )
     parser.add_argument(
         "--sandbox",

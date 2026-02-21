@@ -2,8 +2,8 @@
   {
     "part": 1,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 1)",
-    "deposition_id": 18657315,
-    "doi": "10.5281/zenodo.18657315",
+    "deposition_id": 18692354,
+    "doi": "10.5281/zenodo.18692354",
     "flights": [
       "0",
       "1",
@@ -68,8 +68,8 @@
   {
     "part": 2,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 2)",
-    "deposition_id": 18662752,
-    "doi": "10.5281/zenodo.18662752",
+    "deposition_id": 18698508,
+    "doi": "10.5281/zenodo.18698508",
     "flights": [
       "60",
       "61",
@@ -118,8 +118,8 @@
   {
     "part": 3,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 3)",
-    "deposition_id": 18664952,
-    "doi": "10.5281/zenodo.18664952",
+    "deposition_id": 18703312,
+    "doi": "10.5281/zenodo.18703312",
     "flights": [
       "101",
       "102",
@@ -184,20 +184,17 @@
       "164",
       "168",
       "171",
-      "172",
-      "173",
-      "174",
-      "175"
+      "175",
+      "176"
     ],
-    "num_files": 67
+    "num_files": 65
   },
   {
     "part": 4,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 4)",
-    "deposition_id": 18666195,
-    "doi": "10.5281/zenodo.18666195",
+    "deposition_id": 18705705,
+    "doi": "10.5281/zenodo.18705705",
     "flights": [
-      "176",
       "177",
       "178",
       "179",
@@ -242,18 +239,18 @@
       "222",
       "223",
       "224",
-      "225"
+      "225",
+      "226",
+      "227"
     ],
-    "num_files": 46
+    "num_files": 47
   },
   {
     "part": 5,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 5)",
-    "deposition_id": 18668671,
-    "doi": "10.5281/zenodo.18668671",
+    "deposition_id": 18707610,
+    "doi": "10.5281/zenodo.18707610",
     "flights": [
-      "226",
-      "227",
       "228",
       "229",
       "230",
@@ -290,13 +287,13 @@
       "261",
       "262"
     ],
-    "num_files": 37
+    "num_files": 35
   },
   {
     "part": 6,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 6)",
-    "deposition_id": 18672008,
-    "doi": "10.5281/zenodo.18672008",
+    "deposition_id": 18711217,
+    "doi": "10.5281/zenodo.18711217",
     "flights": [
       "263",
       "264",
@@ -335,8 +332,8 @@
   {
     "part": 7,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 7)",
-    "deposition_id": 18674923,
-    "doi": "10.5281/zenodo.18674923",
+    "deposition_id": 18715162,
+    "doi": "10.5281/zenodo.18715162",
     "flights": [
       "294",
       "295",
@@ -394,8 +391,8 @@
   {
     "part": 8,
     "title": "The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife (Part 8)",
-    "deposition_id": 18676453,
-    "doi": "10.5281/zenodo.18676453",
+    "deposition_id": 18717601,
+    "doi": "10.5281/zenodo.18717601",
     "flights": [
       "345",
       "346",

@@ -156,7 +156,14 @@ Class_ids are defined as `<wikidata_id>-<gender>-<age>-<visibility>` with the fo
 
 The dataset is publicly available on Zenodo:
 
-🔗 **[TODO: Zenodo DOI link]**
+- [10.5281/zenodo.18692354](https://doi.org/10.5281/zenodo.18692354)
+- [10.5281/zenodo.18698508](https://doi.org/10.5281/zenodo.18698508)
+- [10.5281/zenodo.18703312](https://doi.org/10.5281/zenodo.18703312)
+- [10.5281/zenodo.18705705](https://doi.org/10.5281/zenodo.18705705)
+- [10.5281/zenodo.18707610](https://doi.org/10.5281/zenodo.18707610)
+- [10.5281/zenodo.18711217](https://doi.org/10.5281/zenodo.18711217)
+- [10.5281/zenodo.18715162](https://doi.org/10.5281/zenodo.18715162)
+- [10.5281/zenodo.18717601](https://doi.org/10.5281/zenodo.18717601)
 
 ---
 

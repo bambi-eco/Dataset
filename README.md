@@ -8,6 +8,8 @@ This repository provides sample scripts for downloading, processing, and visuali
 
 > **Citation:** If you use this dataset in your research, please cite our paper (see [Citation](#citation)).
 
+If you want to make your first steps please refer to our [Jupyter Notebook](introduction.ipynb).
+
 ---
 
 ## Dataset Overview
@@ -244,13 +246,13 @@ Extract thermal and RGB frames from the side-by-side video files. The left half 
 
 ```bash
 # Extract every frame
-python frame_extraction.py video.mp4 -o ./frames
+python frame_extraction.py video.mp4 ./frames
 
 # Extract every 10th frame, RGB only
-python frame_extraction.py video.mp4 -o ./frames --sample-rate 10 --thermal false
+python frame_extraction.py video.mp4 ./frames --sample-rate 10 --thermal false
 
 # Extract a specific frame range
-python frame_extraction.py video.mp4 -o ./frames --start 1000 --end 2000
+python frame_extraction.py video.mp4 ./frames --start 1000 --end 2000
 ```
 
 Output structure:

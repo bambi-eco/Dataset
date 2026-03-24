@@ -24,6 +24,9 @@ Usage:
     # Download and automatically extract (deletes ZIPs after extraction)
     python download_from_zenodo.py -s zenodo_upload_summary.json --unzip
 
+    # Download raw flights instead of processed ones
+    python download_from_zenodo.py --raw -f 0 5 12
+
 Environment variable ZENODO_TOKEN can be used for restricted depositions.
 """
 
@@ -233,6 +236,17 @@ def main():
         help="Path to zenodo_upload_summary.json",
     )
     parser.add_argument(
+        "--raw_summary",
+        type=Path,
+        default=Path(r"./flight_metadata/zenodo_upload_summary_raw.json"),
+        help="Path to zenodo_upload_summary_raw.json",
+    )
+    parser.add_argument(
+        "--raw",
+        action="store_true",
+        help="Download raw flights instead of processed ones",
+    )
+    parser.add_argument(
         "--flights", "-f",
         nargs="+",
         type=str,
@@ -285,7 +299,7 @@ def main():
     )
     args = parser.parse_args()
 
-    summary = load_summary(args.summary)
+    summary = load_summary(args.raw_summary if args.raw else args.summary)
     index = build_flight_index(summary)
     api_base = ZENODO_SANDBOX_API if args.sandbox else ZENODO_API
 

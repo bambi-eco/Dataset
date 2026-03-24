@@ -1,0 +1,825 @@
+[
+  {
+    "part": 1,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 1)",
+    "deposition_id": 18885436,
+    "doi": "10.5281/zenodo.18885436",
+    "flights": [
+      "0",
+      "1",
+      "10",
+      "100",
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106"
+    ],
+    "num_files": 10
+  },
+  {
+    "part": 2,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 2)",
+    "deposition_id": 18895587,
+    "doi": "10.5281/zenodo.18895587",
+    "flights": [
+      "107",
+      "108",
+      "109",
+      "11",
+      "110",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115"
+    ],
+    "num_files": 10
+  },
+  {
+    "part": 3,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 3)",
+    "deposition_id": 18898626,
+    "doi": "10.5281/zenodo.18898626",
+    "flights": [
+      "116",
+      "117",
+      "118",
+      "119",
+      "12",
+      "120",
+      "121",
+      "122",
+      "123"
+    ],
+    "num_files": 9
+  },
+  {
+    "part": 4,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 4)",
+    "deposition_id": 18902130,
+    "doi": "10.5281/zenodo.18902130",
+    "flights": [
+      "124",
+      "125",
+      "126",
+      "127",
+      "128",
+      "129",
+      "13",
+      "130",
+      "131",
+      "132",
+      "133",
+      "134",
+      "135",
+      "136",
+      "137",
+      "138",
+      "139"
+    ],
+    "num_files": 17
+  },
+  {
+    "part": 5,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 5)",
+    "deposition_id": 18905738,
+    "doi": "10.5281/zenodo.18905738",
+    "flights": [
+      "14",
+      "140",
+      "141",
+      "142",
+      "143",
+      "144",
+      "145",
+      "146",
+      "147",
+      "148",
+      "149"
+    ],
+    "num_files": 11
+  },
+  {
+    "part": 6,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 6)",
+    "deposition_id": 18908258,
+    "doi": "10.5281/zenodo.18908258",
+    "flights": [
+      "15",
+      "150",
+      "151",
+      "152",
+      "153",
+      "154",
+      "155"
+    ],
+    "num_files": 7
+  },
+  {
+    "part": 7,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 7)",
+    "deposition_id": 18911860,
+    "doi": "10.5281/zenodo.18911860",
+    "flights": [
+      "156",
+      "157",
+      "158",
+      "159",
+      "16",
+      "160",
+      "161",
+      "162"
+    ],
+    "num_files": 8
+  },
+  {
+    "part": 8,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 8)",
+    "deposition_id": 18916791,
+    "doi": "10.5281/zenodo.18916791",
+    "flights": [
+      "163",
+      "164",
+      "165",
+      "166",
+      "167",
+      "168",
+      "169",
+      "17",
+      "170",
+      "171",
+      "172",
+      "173",
+      "174"
+    ],
+    "num_files": 13
+  },
+  {
+    "part": 9,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 9)",
+    "deposition_id": 18920616,
+    "doi": "10.5281/zenodo.18920616",
+    "flights": [
+      "175",
+      "176",
+      "177",
+      "178",
+      "179"
+    ],
+    "num_files": 5
+  },
+  {
+    "part": 10,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 10)",
+    "deposition_id": 18928160,
+    "doi": "10.5281/zenodo.18928160",
+    "flights": [
+      "18",
+      "180",
+      "181",
+      "182",
+      "183",
+      "184",
+      "185",
+      "186",
+      "187",
+      "188"
+    ],
+    "num_files": 10
+  },
+  {
+    "part": 11,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 11)",
+    "deposition_id": 18931665,
+    "doi": "10.5281/zenodo.18931665",
+    "flights": [
+      "189",
+      "19",
+      "190",
+      "191",
+      "192",
+      "193",
+      "194",
+      "195",
+      "196",
+      "197"
+    ],
+    "num_files": 10
+  },
+  {
+    "part": 12,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 12)",
+    "deposition_id": 18937467,
+    "doi": "10.5281/zenodo.18937467",
+    "flights": [
+      "198",
+      "199",
+      "2",
+      "20",
+      "200",
+      "201",
+      "202",
+      "203",
+      "204"
+    ],
+    "num_files": 9
+  },
+  {
+    "part": 13,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 13)",
+    "deposition_id": 18943988,
+    "doi": "10.5281/zenodo.18943988",
+    "flights": [
+      "205",
+      "206",
+      "207",
+      "208",
+      "209",
+      "21",
+      "210",
+      "211",
+      "212",
+      "213",
+      "214"
+    ],
+    "num_files": 11
+  },
+  {
+    "part": 14,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 14)",
+    "deposition_id": 18949040,
+    "doi": "10.5281/zenodo.18949040",
+    "flights": [
+      "215",
+      "216",
+      "22",
+      "221",
+      "222",
+      "223",
+      "224",
+      "225",
+      "226",
+      "227",
+      "228"
+    ],
+    "num_files": 11
+  },
+  {
+    "part": 15,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 15)",
+    "deposition_id": 18958982,
+    "doi": "10.5281/zenodo.18958982",
+    "flights": [
+      "229",
+      "23",
+      "230",
+      "231",
+      "232",
+      "233",
+      "234",
+      "235",
+      "236",
+      "237",
+      "238",
+      "239",
+      "24",
+      "240"
+    ],
+    "num_files": 14
+  },
+  {
+    "part": 16,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 16)",
+    "deposition_id": 18968497,
+    "doi": "10.5281/zenodo.18968497",
+    "flights": [
+      "241",
+      "242",
+      "243",
+      "244",
+      "245",
+      "246",
+      "247",
+      "248",
+      "249",
+      "25",
+      "250",
+      "251"
+    ],
+    "num_files": 12
+  },
+  {
+    "part": 17,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 17)",
+    "deposition_id": 18975298,
+    "doi": "10.5281/zenodo.18975298",
+    "flights": [
+      "252",
+      "253",
+      "254",
+      "255",
+      "256"
+    ],
+    "num_files": 5
+  },
+  {
+    "part": 18,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 18)",
+    "deposition_id": 18983480,
+    "doi": "10.5281/zenodo.18983480",
+    "flights": [
+      "257",
+      "258",
+      "259",
+      "26",
+      "260"
+    ],
+    "num_files": 5
+  },
+  {
+    "part": 19,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 19)",
+    "deposition_id": 18989873,
+    "doi": "10.5281/zenodo.18989873",
+    "flights": [
+      "261",
+      "262",
+      "263",
+      "264"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 20,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 20)",
+    "deposition_id": 18995072,
+    "doi": "10.5281/zenodo.18995072",
+    "flights": [
+      "265",
+      "266",
+      "267",
+      "268",
+      "269",
+      "27"
+    ],
+    "num_files": 6
+  },
+  {
+    "part": 21,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 21)",
+    "deposition_id": 19004434,
+    "doi": "10.5281/zenodo.19004434",
+    "flights": [
+      "270",
+      "271",
+      "272",
+      "273",
+      "274",
+      "275"
+    ],
+    "num_files": 6
+  },
+  {
+    "part": 22,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 22)",
+    "deposition_id": 19011010,
+    "doi": "10.5281/zenodo.19011010",
+    "flights": [
+      "276",
+      "277",
+      "278",
+      "279",
+      "28",
+      "280",
+      "281",
+      "282",
+      "283",
+      "284"
+    ],
+    "num_files": 10
+  },
+  {
+    "part": 23,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 23)",
+    "deposition_id": 19016292,
+    "doi": "10.5281/zenodo.19016292",
+    "flights": [
+      "285",
+      "286",
+      "287",
+      "288"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 24,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 24)",
+    "deposition_id": 19022059,
+    "doi": "10.5281/zenodo.19022059",
+    "flights": [
+      "289",
+      "29",
+      "290",
+      "291"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 25,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 25)",
+    "deposition_id": 19040833,
+    "doi": "10.5281/zenodo.19040833",
+    "flights": [
+      "292",
+      "293",
+      "294",
+      "295"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 26,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 26)",
+    "deposition_id": 19043198,
+    "doi": "10.5281/zenodo.19043198",
+    "flights": [
+      "296",
+      "297",
+      "298",
+      "299"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 27,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 27)",
+    "deposition_id": 19047570,
+    "doi": "10.5281/zenodo.19047570",
+    "flights": [
+      "3",
+      "30",
+      "300",
+      "301",
+      "302",
+      "303",
+      "304",
+      "305",
+      "306"
+    ],
+    "num_files": 9
+  },
+  {
+    "part": 28,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 28)",
+    "deposition_id": 19052469,
+    "doi": "10.5281/zenodo.19052469",
+    "flights": [
+      "307",
+      "308",
+      "309",
+      "31"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 29,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 29)",
+    "deposition_id": 19056538,
+    "doi": "10.5281/zenodo.19056538",
+    "flights": [
+      "310",
+      "311",
+      "313",
+      "314",
+      "315",
+      "316"
+    ],
+    "num_files": 6
+  },
+  {
+    "part": 30,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 30)",
+    "deposition_id": 19058735,
+    "doi": "10.5281/zenodo.19058735",
+    "flights": [
+      "317",
+      "318",
+      "319",
+      "32",
+      "320",
+      "321",
+      "322",
+      "323"
+    ],
+    "num_files": 8
+  },
+  {
+    "part": 31,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 31)",
+    "deposition_id": 19060823,
+    "doi": "10.5281/zenodo.19060823",
+    "flights": [
+      "324",
+      "325",
+      "326",
+      "327",
+      "328"
+    ],
+    "num_files": 5
+  },
+  {
+    "part": 32,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 32)",
+    "deposition_id": 19066975,
+    "doi": "10.5281/zenodo.19066975",
+    "flights": [
+      "329",
+      "33",
+      "330",
+      "331",
+      "332",
+      "333",
+      "334"
+    ],
+    "num_files": 7
+  },
+  {
+    "part": 33,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 33)",
+    "deposition_id": 19073897,
+    "doi": "10.5281/zenodo.19073897",
+    "flights": [
+      "335",
+      "336",
+      "337",
+      "338",
+      "339",
+      "34",
+      "340",
+      "341",
+      "342"
+    ],
+    "num_files": 9
+  },
+  {
+    "part": 34,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 34)",
+    "deposition_id": 19077836,
+    "doi": "10.5281/zenodo.19077836",
+    "flights": [
+      "343",
+      "344",
+      "345",
+      "346"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 35,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 35)",
+    "deposition_id": 19080733,
+    "doi": "10.5281/zenodo.19080733",
+    "flights": [
+      "347",
+      "348",
+      "349",
+      "35"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 36,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 36)",
+    "deposition_id": 19135787,
+    "doi": "10.5281/zenodo.19135787",
+    "flights": [
+      "350",
+      "351",
+      "352",
+      "353",
+      "354",
+      "355",
+      "356",
+      "357",
+      "358"
+    ],
+    "num_files": 9
+  },
+  {
+    "part": 37,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 37)",
+    "deposition_id": 19140480,
+    "doi": "10.5281/zenodo.19140480",
+    "flights": [
+      "359",
+      "36",
+      "360",
+      "361",
+      "362",
+      "363",
+      "364",
+      "365",
+      "366",
+      "367",
+      "368",
+      "369"
+    ],
+    "num_files": 12
+  },
+  {
+    "part": 38,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 38)",
+    "deposition_id": 19142769,
+    "doi": "10.5281/zenodo.19142769",
+    "flights": [
+      "37",
+      "370",
+      "371",
+      "372",
+      "373",
+      "374",
+      "375",
+      "376",
+      "377",
+      "378",
+      "379",
+      "38",
+      "380",
+      "381",
+      "382",
+      "383",
+      "384",
+      "385"
+    ],
+    "num_files": 18
+  },
+  {
+    "part": 39,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 39)",
+    "deposition_id": 19145596,
+    "doi": "10.5281/zenodo.19145596",
+    "flights": [
+      "386",
+      "387",
+      "388",
+      "389",
+      "39",
+      "390",
+      "391",
+      "392",
+      "393",
+      "394",
+      "395",
+      "396",
+      "397",
+      "398",
+      "399",
+      "4",
+      "40",
+      "400",
+      "401",
+      "402",
+      "403",
+      "404",
+      "41"
+    ],
+    "num_files": 23
+  },
+  {
+    "part": 40,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 40)",
+    "deposition_id": 19150949,
+    "doi": "10.5281/zenodo.19150949",
+    "flights": [
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "5"
+    ],
+    "num_files": 9
+  },
+  {
+    "part": 41,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 41)",
+    "deposition_id": 19153807,
+    "doi": "10.5281/zenodo.19153807",
+    "flights": [
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59"
+    ],
+    "num_files": 10
+  },
+  {
+    "part": 42,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 42)",
+    "deposition_id": 19155449,
+    "doi": "10.5281/zenodo.19155449",
+    "flights": [
+      "6",
+      "60",
+      "61",
+      "62"
+    ],
+    "num_files": 4
+  },
+  {
+    "part": 43,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 43)",
+    "deposition_id": 19158628,
+    "doi": "10.5281/zenodo.19158628",
+    "flights": [
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "7"
+    ],
+    "num_files": 8
+  },
+  {
+    "part": 44,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 44)",
+    "deposition_id": 19161728,
+    "doi": "10.5281/zenodo.19161728",
+    "flights": [
+      "70",
+      "71",
+      "72",
+      "73",
+      "74",
+      "75",
+      "76",
+      "77",
+      "78",
+      "79",
+      "8",
+      "80"
+    ],
+    "num_files": 12
+  },
+  {
+    "part": 45,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 45)",
+    "deposition_id": 19166111,
+    "doi": "10.5281/zenodo.19166111",
+    "flights": [
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88"
+    ],
+    "num_files": 8
+  },
+  {
+    "part": 46,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 46)",
+    "deposition_id": 19172900,
+    "doi": "10.5281/zenodo.19172900",
+    "flights": [
+      "89",
+      "9",
+      "90",
+      "91",
+      "92",
+      "93",
+      "94",
+      "95"
+    ],
+    "num_files": 8
+  },
+  {
+    "part": 47,
+    "title": "The BAMBI Raw Dataset: Unprocessed Nadir UAV-Recordings of Forest Wildlife (Part 47)",
+    "deposition_id": 19177615,
+    "doi": "10.5281/zenodo.19177615",
+    "flights": [
+      "96",
+      "97",
+      "98",
+      "99"
+    ],
+    "num_files": 4
+  }
+]

@@ -202,7 +202,12 @@ python download_from_zenodo.py --unzip
 
 # Preview what a full download would do
 python download_from_zenodo.py --dry-run
+
+# Instead of downloading the pre-processed videos, download the raw data (compatible with all other flags like -f, --range, etc.)
+python download_from_zenodo.py --raw
 ```
+
+
 
 ### Flight filter
 

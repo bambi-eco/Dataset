@@ -1,3 +1,5 @@
+![header image bambi dataset](./figures/header.png)
+
 # 🦌 BAMBI Dataset
 
 **Multimodal Nadir UAV-Recordings of Forest Wildlife**

@@ -484,11 +484,12 @@ The implementation is available in a separate repository:
 ## Citation
 
 ```bibtex
-@inproceedings{bambi2026,
-  title     = {The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife},
-  author    = {TODO},
-  booktitle = {TODO},
-  year      = {2026}
+@misc{praschl2026bambi,
+  title        = {The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife},
+  author       = {Praschl, Christoph and Markoff, Hugo and Maschek, Anna and Jantsch, Wolfram and Wohlfahrt, Stephanie and Leitner, Horst and Beery, Sara and {\O}rsted, Michael and Schedl, David C.},
+  year         = {2026},
+  howpublished = {Presented at the CV4Animals Workshop, held in conjunction with the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  note         = {Non-archival workshop paper},
 }
 ```
 

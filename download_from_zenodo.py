@@ -18,6 +18,9 @@ Usage:
     # Download all flights from a specific part
     python download_from_zenodo.py -s zenodo_upload_summary.json --parts 1 3
 
+    # Download all flights of a dataset split (train / val / test)
+    python download_from_zenodo.py --split val
+
     # Download all flights (no filter)
     python download_from_zenodo.py -s zenodo_upload_summary.json
 
@@ -266,6 +269,18 @@ def main():
         help="Download all flights from specific part numbers",
     )
     parser.add_argument(
+        "--split",
+        choices=["train", "val", "test"],
+        help="Download all flights belonging to a dataset split. "
+             "Ignored when -f, --range, or --parts is also specified.",
+    )
+    parser.add_argument(
+        "--splits-file",
+        type=Path,
+        default=Path("./flight_metadata/splits.json"),
+        help="Path to splits.json used by --split (default: ./flight_metadata/splits.json)",
+    )
+    parser.add_argument(
         "--list", "-l",
         action="store_true",
         help="List all available flights and exit",
@@ -309,8 +324,29 @@ def main():
         return
 
     # ── Resolve flights to download ──────────────────────────────────────────
-    if not args.flights and args.range is None and not args.parts:
-        # No filter specified → download everything
+    has_explicit_filter = bool(args.flights) or args.range is not None or bool(args.parts)
+
+    if args.split and has_explicit_filter:
+        print("WARNING: --split is ignored when -f, --range, or --parts is also specified.")
+
+    if not has_explicit_filter and args.split:
+        # Load the splits file and expand the split into individual flight IDs
+        if not args.splits_file.exists():
+            sys.exit(f"Error: Splits file not found: {args.splits_file}")
+        with open(args.splits_file) as fh:
+            splits_data = json.load(fh)
+        if args.split not in splits_data:
+            sys.exit(f"Error: Split '{args.split}' not found in {args.splits_file}. "
+                     f"Available: {', '.join(splits_data.keys())}")
+        split_fids = [str(fid) for fid in splits_data[args.split]]
+        if not split_fids:
+            sys.exit(f"Error: No flights found for split '{args.split}'.")
+        print(f"[split] '{args.split}': {len(split_fids)} flights loaded "
+              f"from {args.splits_file}")
+        args.flights = split_fids
+        prefixes = resolve_requested_flights(args, index)
+    elif not has_explicit_filter:
+        # No filter at all → download everything
         print("ℹ  No filter specified — downloading all flights.")
         prefixes = sorted(index.keys(), key=lambda x: int(x) if x.isdigit() else x)
     else:

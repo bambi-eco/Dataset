@@ -249,15 +249,22 @@ python download_from_zenodo.py --range 10 25
 # Download all flights from parts 1 and 3
 python download_from_zenodo.py --parts 1 3
 
+# Download all flights of a dataset split (train / val / test)
+python download_from_zenodo.py --split train
+python download_from_zenodo.py --split val
+python download_from_zenodo.py --split test
+
 # Download everything, extract, and clean up ZIPs
 python download_from_zenodo.py --unzip
 
 # Preview what a full download would do
 python download_from_zenodo.py --dry-run
 
-# Instead of downloading the pre-processed videos, download the raw data (compatible with all other flags like -f, --range, etc.)
+# Instead of downloading the pre-processed videos, download the raw data (compatible with all other flags like -f, --range, --split, etc.)
 python download_from_zenodo.py --raw
 ```
+
+> **Note:** `--split` reads flight IDs from `flight_metadata/splits.json`. A custom path can be supplied with `--splits-file <path>`. The flag is silently ignored when `-f`, `--range`, or `--parts` is also specified.
 
 
 

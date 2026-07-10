@@ -233,12 +233,12 @@ The scripts are tested with Python 3.10+.
 
 ### Automatic Download
 
-Selectively download flight ZIPs from the BAMBI dataset hosted on Zenodo. Uses the zenodo_upload_summary.json to resolve which depositions contain which flights, so you can grab exactly what you need without fetching entire multi-GB depositions. Use `filter_flights.py` to get a list of flight IDs for the data that you are looking for (e.g. filtered for species).
+Selectively download flight ZIPs from the BAMBI dataset hosted on Zenodo. Uses the zenodo_upload_summary_*.json files to resolve which depositions contain which flights, so you can grab exactly what you need without fetching entire multi-GB depositions. Use `filter_flights.py` to get a list of flight IDs for the data that you are looking for (e.g. filtered for species).
 
 
 ```bash
 # List all available flights
-python download_from_zenodo.py -s zenodo_upload_summary.json --list
+python download_from_zenodo.py --list
 
 # Download flights 0, 5, and 12
 python download_from_zenodo.py -f 0 5 12
@@ -260,9 +260,13 @@ python download_from_zenodo.py --unzip
 # Preview what a full download would do
 python download_from_zenodo.py --dry-run
 
-# Instead of downloading the pre-processed videos, download the raw data (compatible with all other flags like -f, --range, --split, etc.)
-python download_from_zenodo.py --raw
+# Download a different dataset version instead of the pre-processed videos (compatible with all other flags like -f, --range, --split, etc.)
+python download_from_zenodo.py --version raw
+python download_from_zenodo.py --version matched
+python download_from_zenodo.py --version orthographic
 ```
+
+> **Note:** `--version` selects which dataset version to download and defaults to `base` (the pre-processed videos). The available versions are `base`, `raw`, `matched`, and `orthographic`; each is described by its own `flight_metadata/zenodo_upload_summary_*.json`. A summary file from a custom location can be supplied with `-s <path>`, which overrides `--version`.
 
 > **Note:** `--split` reads flight IDs from `flight_metadata/splits.json`. A custom path can be supplied with `--splits-file <path>`. The flag is silently ignored when `-f`, `--range`, or `--parts` is also specified.
 

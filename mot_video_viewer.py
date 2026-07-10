@@ -42,7 +42,7 @@ def parse_mot_file(path: str) -> list[dict]:
             for i, col in enumerate(COLUMNS):
                 val = row[i].strip() if i < len(row) else ""
                 if col in INT_COLS:
-                    det[col] = int(val) if val else 0
+                    det[col] = int(float(val)) if val else 0
                 elif col in FLOAT_COLS:
                     det[col] = float(val) if val else 0.0
                 else:
@@ -226,9 +226,9 @@ def draw_hud(frame_img: np.ndarray, frame_idx: int, total_frames: int,
 def main():
     parser = argparse.ArgumentParser(
         description="Visualize custom MOT annotations on video.")
-    parser.add_argument("--video", default=r"Z:\bambi_dataset\videos\223_matched_processed.mp4", help="Path to input video")
-    parser.add_argument("--mot_file", default=r"Z:\bambi_dataset\mot\mot\train\223_gt.txt", help="Path to MOT annotation txt/csv")
-    parser.add_argument("-o", "--output", help="Path to output video (mp4)")
+    parser.add_argument("--video", default=r"Z:\sequences\train\26_3\img1\output.mp4", help="Path to input video")
+    parser.add_argument("--mot_file", default=r"Z:\sequences\train\26_3\img1\26_3.txt", help="Path to MOT annotation txt/csv")
+    parser.add_argument("-o", "--output", default=r"Z:\sequences\train\26_3\img1\res.mp4", help="Path to output video (mp4)")
     parser.add_argument("--show", action="store_true",
                         help="Show live preview window")
     parser.add_argument("--interpolate", action="store_true",

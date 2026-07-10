@@ -2,33 +2,36 @@
 """
 Selective Zenodo Downloader for the BAMBI Dataset.
 
-Uses the zenodo_upload_summary.json produced by the uploader to download
+Uses the zenodo_upload_summary_*.json files produced by the uploader to download
 specific flight ZIPs without fetching entire depositions.
 
 Usage:
     # Download specific flights by prefix
-    python download_from_zenodo.py -s zenodo_upload_summary.json -f 0 5 12 42
+    python download_from_zenodo.py -f 0 5 12 42
 
     # Download a range of flights
-    python download_from_zenodo.py -s zenodo_upload_summary.json --range 10 25
+    python download_from_zenodo.py --range 10 25
 
     # List all available flights
-    python download_from_zenodo.py -s zenodo_upload_summary.json --list
+    python download_from_zenodo.py --list
 
     # Download all flights from a specific part
-    python download_from_zenodo.py -s zenodo_upload_summary.json --parts 1 3
+    python download_from_zenodo.py --parts 1 3
 
     # Download all flights of a dataset split (train / val / test)
     python download_from_zenodo.py --split val
 
     # Download all flights (no filter)
-    python download_from_zenodo.py -s zenodo_upload_summary.json
+    python download_from_zenodo.py
 
     # Download and automatically extract (deletes ZIPs after extraction)
-    python download_from_zenodo.py -s zenodo_upload_summary.json --unzip
+    python download_from_zenodo.py --unzip
 
-    # Download raw flights instead of processed ones
-    python download_from_zenodo.py --raw -f 0 5 12
+    # Download another dataset version (base / raw / matched / orthographic)
+    python download_from_zenodo.py --version raw -f 0 5 12
+
+    # Use a summary file from a custom location
+    python download_from_zenodo.py -s /path/to/zenodo_upload_summary.json
 
 Environment variable ZENODO_TOKEN can be used for restricted depositions.
 """
@@ -46,6 +49,16 @@ import requests
 
 ZENODO_API = "https://zenodo.org/api"
 ZENODO_SANDBOX_API = "https://sandbox.zenodo.org/api"
+
+METADATA_DIR = Path("./flight_metadata")
+
+# Dataset versions and the summary file each one is described by.
+VERSION_SUMMARIES = {
+    "base": METADATA_DIR / "zenodo_upload_summary.json",
+    "raw": METADATA_DIR / "zenodo_upload_summary_raw.json",
+    "matched": METADATA_DIR / "zenodo_upload_summary_matched.json",
+    "orthographic": METADATA_DIR / "zenodo_upload_summary_orthographic.json",
+}
 
 
 def load_summary(path: Path) -> list[dict]:
@@ -233,21 +246,15 @@ def main():
         description="Selectively download BAMBI flight ZIPs from Zenodo."
     )
     parser.add_argument(
+        "--version", "-v",
+        choices=sorted(VERSION_SUMMARIES),
+        default="base",
+        help="Dataset version to download (default: base)",
+    )
+    parser.add_argument(
         "--summary", "-s",
         type=Path,
-        default=Path(r"./flight_metadata/zenodo_upload_summary.json"),
-        help="Path to zenodo_upload_summary.json",
-    )
-    parser.add_argument(
-        "--raw_summary",
-        type=Path,
-        default=Path(r"./flight_metadata/zenodo_upload_summary_raw.json"),
-        help="Path to zenodo_upload_summary_raw.json",
-    )
-    parser.add_argument(
-        "--raw",
-        action="store_true",
-        help="Download raw flights instead of processed ones",
+        help="Path to a zenodo_upload_summary JSON file. Overrides --version.",
     )
     parser.add_argument(
         "--flights", "-f",
@@ -314,7 +321,11 @@ def main():
     )
     args = parser.parse_args()
 
-    summary = load_summary(args.raw_summary if args.raw else args.summary)
+    summary_path = args.summary or VERSION_SUMMARIES[args.version]
+    if not summary_path.exists():
+        sys.exit(f"Error: Summary file not found: {summary_path}")
+
+    summary = load_summary(summary_path)
     index = build_flight_index(summary)
     api_base = ZENODO_SANDBOX_API if args.sandbox else ZENODO_API
 

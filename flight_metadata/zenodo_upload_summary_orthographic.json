@@ -1,0 +1,209 @@
+[
+  {
+    "dataset": "2k",
+    "part": 1,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 1)",
+    "deposition_id": 21301636,
+    "doi": "10.5281/zenodo.21301636",
+    "flights": [
+      "1",
+      "2",
+      "3",
+      "6",
+      "10",
+      "13",
+      "14",
+      "15"
+    ],
+    "num_flights": 8,
+    "bytes_uploaded": 44680696256
+  },
+  {
+    "dataset": "2k",
+    "part": 2,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 2)",
+    "deposition_id": 21304284,
+    "doi": "10.5281/zenodo.21304284",
+    "flights": [
+      "17",
+      "18",
+      "20",
+      "21",
+      "22",
+      "32"
+    ],
+    "num_flights": 6,
+    "bytes_uploaded": 49044651182
+  },
+  {
+    "dataset": "2k",
+    "part": 3,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 3)",
+    "deposition_id": 21308829,
+    "doi": "10.5281/zenodo.21308829",
+    "flights": [
+      "33",
+      "36",
+      "37",
+      "55",
+      "59",
+      "64"
+    ],
+    "num_flights": 6,
+    "bytes_uploaded": 43291801029
+  },
+  {
+    "dataset": "2k",
+    "part": 4,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 4)",
+    "deposition_id": 21313119,
+    "doi": "10.5281/zenodo.21313119",
+    "flights": [
+      "66",
+      "70",
+      "71",
+      "72",
+      "74",
+      "84",
+      "85",
+      "86",
+      "93",
+      "104"
+    ],
+    "num_flights": 10,
+    "bytes_uploaded": 46412356943
+  },
+  {
+    "dataset": "2k",
+    "part": 5,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 5)",
+    "deposition_id": 21315950,
+    "doi": "10.5281/zenodo.21315950",
+    "flights": [
+      "105",
+      "106",
+      "119",
+      "120",
+      "121",
+      "122",
+      "123",
+      "124",
+      "129",
+      "130"
+    ],
+    "num_flights": 10,
+    "bytes_uploaded": 47572288986
+  },
+  {
+    "dataset": "2k",
+    "part": 6,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 6)",
+    "deposition_id": 21318796,
+    "doi": "10.5281/zenodo.21318796",
+    "flights": [
+      "131",
+      "132",
+      "143",
+      "152",
+      "155",
+      "156",
+      "159",
+      "160",
+      "161",
+      "162",
+      "163"
+    ],
+    "num_flights": 11,
+    "bytes_uploaded": 44540549859
+  },
+  {
+    "dataset": "2k",
+    "part": 7,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 7)",
+    "deposition_id": 21322508,
+    "doi": "10.5281/zenodo.21322508",
+    "flights": [
+      "175",
+      "176",
+      "177",
+      "178",
+      "188",
+      "189"
+    ],
+    "num_flights": 6,
+    "bytes_uploaded": 47686576593
+  },
+  {
+    "dataset": "2k",
+    "part": 8,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 8)",
+    "deposition_id": 21326737,
+    "doi": "10.5281/zenodo.21326737",
+    "flights": [
+      "190",
+      "191",
+      "192",
+      "193",
+      "194",
+      "195",
+      "196",
+      "197"
+    ],
+    "num_flights": 8,
+    "bytes_uploaded": 49722770124
+  },
+  {
+    "dataset": "2k",
+    "part": 9,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 9)",
+    "deposition_id": 21330351,
+    "doi": "10.5281/zenodo.21330351",
+    "flights": [
+      "201",
+      "202",
+      "203",
+      "204",
+      "205",
+      "206",
+      "211",
+      "212",
+      "213"
+    ],
+    "num_flights": 9,
+    "bytes_uploaded": 47087308529
+  },
+  {
+    "dataset": "2k",
+    "part": 10,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 10)",
+    "deposition_id": 21338084,
+    "doi": "10.5281/zenodo.21338084",
+    "flights": [
+      "215",
+      "236",
+      "237",
+      "238",
+      "239",
+      "240",
+      "241",
+      "242"
+    ],
+    "num_flights": 8,
+    "bytes_uploaded": 33984312386
+  },
+  {
+    "dataset": "2k",
+    "part": 11,
+    "title": "The BAMBI Geo-Referenced Dataset (2K): Orthorectified Nadir UAV-Recordings of Forest Wildlife (Part 11)",
+    "deposition_id": 21342007,
+    "doi": "10.5281/zenodo.21342007",
+    "flights": [
+      "248",
+      "249",
+      "251",
+      "252"
+    ],
+    "num_flights": 4,
+    "bytes_uploaded": 46549957319
+  }
+]

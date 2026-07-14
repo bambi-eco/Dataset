@@ -219,6 +219,23 @@ The unprocessed dataset is also publicly available on Zenodo:
 - Part 46: [10.5281/zenodo.19172900](https://doi.org/10.5281/zenodo.19172900)
 - Part 47: [10.5281/zenodo.19177615](https://doi.org/10.5281/zenodo.19177615)
 
+The matched Red Deer subset:
+- Part 1: [10.5281/zenodo.21291168](https://doi.org/10.5281/zenodo.21291168)
+- Part 2: [10.5281/zenodo.21298044](https://doi.org/10.5281/zenodo.21298044)
+
+The matched, orthographic Red Deer subset:
+- Part 1:   [10.5281/zenodo.21301636](https://doi.org/10.5281/zenodo.21301636) 
+- Part 2:   [10.5281/zenodo.21304284](https://doi.org/10.5281/zenodo.21304284) 
+- Part 3:   [10.5281/zenodo.21308829](https://doi.org/10.5281/zenodo.21308829) 
+- Part 4:   [10.5281/zenodo.21313119](https://doi.org/10.5281/zenodo.21313119) 
+- Part 5:   [10.5281/zenodo.21315950](https://doi.org/10.5281/zenodo.21315950) 
+- Part 6:   [10.5281/zenodo.21318796](https://doi.org/10.5281/zenodo.21318796) 
+- Part 7:   [10.5281/zenodo.21322508](https://doi.org/10.5281/zenodo.21322508) 
+- Part 8:   [10.5281/zenodo.21326737](https://doi.org/10.5281/zenodo.21326737) 
+- Part 9:   [10.5281/zenodo.21330351](https://doi.org/10.5281/zenodo.21330351) 
+- Part 10:  [10.5281/zenodo.21338084](https://doi.org/10.5281/zenodo.21338084) 
+- Part 11:  [10.5281/zenodo.21342007](https://doi.org/10.5281/zenodo.21342007) 
+
 ---
 
 ## Scripts

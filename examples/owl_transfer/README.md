@@ -26,7 +26,7 @@ frame,x,y,score
 Note that OWL's own `detections.csv` stores points in *heatmap* coordinates: the
 released configs stitch with `down_ratio: 2` and `up: False`, so a point in a
 1024x1024 frame comes back in `0..511`. These files already have that factor of
-2 applied. If you feed a raw `detections.csv` to `transfer_labels.py`, pass
+2 applied; a raw `detections.csv` passed to `transfer_labels.py` needs
 `--detection-scale 2`.
 
 Frames that OWL scored but found nothing in are not listed. `transfer_labels.py`

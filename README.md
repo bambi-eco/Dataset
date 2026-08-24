@@ -11,6 +11,7 @@ This repository provides sample scripts for downloading, processing, and visuali
 > **Citation:** If you use this dataset in your research, please cite our paper (see [Citation](#citation)).
 
 If you want to make your first steps please refer to our [Jupyter Notebook](introduction.ipynb).
+For transferring thermal annotations onto the RGB view, see [`owl_label_transfer.ipynb`](owl_label_transfer.ipynb).
 
 ---
 
@@ -392,6 +393,41 @@ python mot_to_yolo.py annotations.txt -o ./yolo_labels
 python mot_to_yolo.py ./annotations/ -o ./yolo_labels --img-width 640 --img-height 512 --labels class_id gender age
 ```
 
+### Thermal → RGB Label Transfer with OWL
+
+Move thermal MOT annotations onto the RGB view by detecting the animals in RGB
+with [OWL](https://github.com/microsoft/MegaDetector-Overhead) (Overhead
+Wildlife Locator) and matching its points to the thermal box centres with the
+Hungarian algorithm. See [RGB–Thermal Frame Matching](#rgbthermal-frame-matching)
+for how this relates to the template-matching toolkit, and
+[`owl_label_transfer.ipynb`](owl_label_transfer.ipynb) for a full walkthrough
+including how to produce the detections.
+
+Only `bb_left` and `bb_top` are modified; every other column is written back
+verbatim, so the output is a drop-in replacement annotation file. A
+`_provenance.csv` sidecar records where each box's shift came from.
+
+```bash
+# single flight, detections already in image pixels
+python transfer_labels.py 119_thermal_mot.txt \
+    -d examples/owl_transfer/owl_detections_flight119.csv \
+    -o 119_rgb_mot.txt
+
+# score the result against the accepted RGB annotations of the matched release
+python transfer_labels.py 119_thermal_mot.txt \
+    -d examples/owl_transfer/owl_detections_flight119.csv \
+    -o 119_rgb_mot.txt --reference 119_rgb_mot_accepted.txt
+
+# a folder of flights, raw OWL output (heatmap coordinates -> scale by 2)
+python transfer_labels.py ./labels -d ./detections -o ./labels_rgb \
+    --detection-scale 2 --report metrics.json
+```
+
+Over the whole `matched` subset (252,857 boxes, 234,264 with an accepted RGB
+reference) this reduces the mean centre error from **14.97 px to 4.31 px** and
+raises the share of boxes at IoU > 0.5 from **51.5% to 95.9%**. Full tables,
+ablations and failure modes are in the notebook.
+
 ### Visualization
 
 #### On Extracted Frames
@@ -498,6 +534,32 @@ The dataset includes a **local patch-based matching strategy** to align thermal 
 The implementation is available in a separate repository:
 
 🔗 **[BAMBI BBox Corrections](https://github.com/HugoMarkoff/BAMBI_BBox_Corrections)**
+
+### Detector-based alternative
+
+A second, complementary strategy is included in this repository as
+[`transfer_labels.py`](transfer_labels.py), walked through in
+[`owl_label_transfer.ipynb`](owl_label_transfer.ipynb). Instead of matching the
+thermal appearance into the RGB frame, it **locates the animals in RGB directly**
+with [OWL](https://github.com/microsoft/MegaDetector-Overhead) (Overhead Wildlife
+Locator, Microsoft AI for Good), a point detector for aerial wildlife imagery,
+and re-centres each thermal box on the point it was assigned to.
+
+1. Per frame, thermal box centres are matched to OWL points by Hungarian
+   assignment on Euclidean distance, under a distance gate.
+2. The median shift per frame, smoothed over time, forms a consensus curve —
+   misalignment is largely a whole-frame effect that drifts slowly.
+3. The assignment is repeated with that consensus as a prior, which resolves
+   most cases where a box would otherwise be handed its neighbour's point.
+4. Each track's shift is smoothed over time; boxes with no match take the
+   consensus.
+
+The two approaches fail differently: template matching needs the animal to
+*look* similar across modalities, while the detector-based route needs it to be
+*detectable* in RGB and unambiguous among its neighbours. Measured against the
+accepted RGB annotations of the `matched` release, the detector-based transfer
+agrees to a mean centre error of 4.31 px (95.9% of boxes at IoU > 0.5), against
+14.97 px (51.5%) for using the thermal boxes unchanged.
 
 ## Additional related repositories:
 

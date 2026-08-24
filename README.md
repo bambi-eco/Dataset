@@ -547,7 +547,7 @@ and re-centres each thermal box on the point it was assigned to.
 
 1. Per frame, thermal box centres are matched to OWL points by Hungarian
    assignment on Euclidean distance, under a distance gate.
-2. The median shift per frame, smoothed over time, forms a consensus curve —
+2. The median shift per frame, smoothed over time, forms a consensus curve;
    misalignment is largely a whole-frame effect that drifts slowly.
 3. The assignment is repeated with that consensus as a prior, which resolves
    most cases where a box would otherwise be handed its neighbour's point.

@@ -1,99 +1,140 @@
 # Environment annotations
 
 > **Status: in preparation.** The methods below are implemented and validated on
-> sample flights, but the Zenodo records are not published yet, so
+> a 15-flight pilot, but the Zenodo records are not published yet, so
 > `--version environment` will report a missing summary file until they are.
-> This page documents what the layers will contain.
 
 Where the animals are is only half of a scene. These layers describe what they
-are moving through: how much canopy is overhead, where the individual trees
-stand, whether the ground is under snow, and where dead wood is standing.
+are moving through: whether the ground is under snow, where the water and the
+tracks are, how much canopy is overhead, and where dead wood is standing.
 
 They are annotation layers, not standalone releases — selecting one downloads
 the `base` recordings alongside it, and everything lands in one directory.
 
-## The four layers
+## The layers
 
-| class | method | what it gives you | version |
+| classes | method | version | licence |
 |---|---|---|---|
-| tree positions | DeepForest, release model | one box and centre point per tree | `environment` |
-| snow | brightness/saturation threshold | binary mask | `environment` |
-| tree cover | Restor TCD SegFormer-B5 | binary canopy mask | `environment-nc` |
-| deadwood | deadtrees.earth SegFormer-B5 | binary mask of standing dead wood | `environment-nc` |
+| snow, water, road, grass, rock, bare ground, roof, vehicle | [SAM 3](https://github.com/facebookresearch/sam3), prompted with each class name | `environment` | CC-BY-4.0 |
+| tree cover | [Restor TCD](https://huggingface.co/restor/tcd-segformer-mit-b5) SegFormer-B5 | `environment-nc` | CC-BY-NC-4.0 |
+| deadwood | [deadtrees.earth](https://github.com/cmosig/deadtreesmodels) SegFormer-B5 | `environment-nc` | CC-BY-NC-4.0 |
 
-The split is by **licence**, not by subject: the two SegFormer-based models are
-restricted to non-commercial use. See
+The split is by **licence**, not by subject. See
 [dataset-versions.md](dataset-versions.md#licensing-and-why-the-environment-layers-are-split-in-two)
-for why, and what that means in practice.
+for why, and `--version environment-all` to fetch both.
 
-## Resolution, and why it matters here
+## Read this before using the masks
+
+**The per-frame masks flicker, and the published masks are not smoothed.**
+
+SAM 3 is a promptable concept *detector*: it finds instances of a concept and
+delimits them. A frame that is one material edge to edge offers no boundary to
+find, and detection there becomes unstable. On one pilot flight over an almost
+featureless snowfield, snow was found in 37 of 80 frames — at 98–99% coverage
+when found and nothing when not, flipping between *adjacent* frames of a
+slowly-moving drone. Lowering the confidence threshold does not help; it is not
+a confidence problem.
+
+Each flight therefore ships a smoothed coverage series and three flags
+alongside the raw output. **The masks themselves are published exactly as the
+model produced them.** Nothing is filled in, and no mask pixel is invented — so
+a user who reads raw per-frame masks and ignores the flags will still see the
+flicker. If you need a stable per-frame signal, use `smoothed`, or drop frames
+where the class is flagged, or aggregate over a window yourself.
+
+### The flags
+
+| flag | scope | meaning |
+|---|---|---|
+| `undetermined` | frame | Luminance dynamic range (p98 − p2) below 90. The frame has no visible content; nothing is claimed about it. |
+| `unstable` | frame × class | This frame's coverage differs from its temporal neighbourhood by more than 0.25, so it is more likely a detector dropout than a real change. |
+| `unreliable_classes` | flight | That class flips presence between consecutive frames more than 10% of the time across the flight. |
+
+Over the pilot (15 flights, 3,837 frames): **355 frames (9.3%)** are
+`undetermined`, **132 frames (3.4%)** carry at least one `unstable` class, and
+**8 class/flight pairs** are marked unreliable. Rolling-median smoothing halves
+the mean flicker rate, from 1.7% to 0.7%.
+
+The `undetermined` threshold is measured, not guessed. Two pilot flights are
+featureless — one a fog whiteout, one a flat snowfield — and their luminance
+range is 66 and 18 against 125 to 200 for every normal flight. Both are excluded
+in full. That does discard a correct answer on the snowfield, which really is
+snow: a person would say so from context. But no rule separates it from the fog
+flight, where the same emptiness produced a confident and wrong `water` label
+over the whole frame, so both are declined.
+
+Only `bare ground` and `grass` ever trip the unreliable threshold, on 5 of the
+15 pilot flights. Those are the classes whose boundaries are genuinely gradual —
+there is no crisp answer to where grass ends — so the flag is describing a
+property of the class as much as a failure of the model. `snow`, `water`,
+`road`, `rock`, `roof` and `vehicle` never trip it.
+
+## Resolution, and why it shapes everything
 
 BAMBI frames are far higher resolution than the imagery these models were built
 for. Estimated from 96,746 annotated animal boxes across seven species of known
 body length, the ground sampling distance is a **median of 3.5 cm/px** (p10 2.3,
 p90 4.8; per flight 1.4 to 9.8). A 1024 px frame therefore covers only about
-**36 x 36 m**.
+**36 × 36 m**.
 
-Both the Restor and DeepForest models are trained at **10 cm/px**, and the
-deadwood model downsamples anything finer to 5 cm. Each layer is therefore
-resampled to the resolution its model expects rather than being run at native
-scale, which a network trained at 10 cm has never seen.
+The two SegFormer layers are resampled to the resolution their models expect —
+10 cm for tree cover, 5 cm for deadwood — rather than run at native scale, which
+neither has seen. SAM 3 runs at native resolution.
 
-That 36 m footprint is also why there is no "road" or "river" class. Land-cover
-models assume a far wider view; at this scale most frames contain no road and no
-water at all, so the classes would be empty almost everywhere.
+That 36 m footprint is also why there is no land-cover-style class scheme: most
+frames contain no road and no water at all, and a model built for 20–50 cm
+country-scale mapping sees something quite different from a 3.5 cm nadir frame.
 
 ## The letterbox
 
-A BAMBI RGB frame is 16:9 content letterboxed into a 1024 x 1024 square, so
+A BAMBI RGB frame is 16:9 content letterboxed into a 1024 × 1024 square, so
 roughly the top and bottom 100 rows are black, and the exact extent varies per
 flight. Every layer here excludes those bands: they are not imagery, and a
-segmentation model fed black bars predicts confidently inside them. The first
-deadwood run reported 8.2% coverage on a flight that has no dead wood at all,
-and all of it was in the letterbox.
+segmentation model fed black bars predicts confidently inside them. An early
+deadwood run reported 8.2% coverage on a flight with no dead wood at all, and
+all of it was in the letterbox.
 
-Coverage fractions are therefore reported over the **imaged area**, not the
-padded square, so flights with different letterboxing stay comparable.
+Coverage fractions are reported over the **imaged area**, not the padded square,
+so flights with different letterboxing stay comparable.
 
-## What each layer is good for, and where it fails
+## Choosing the class names
 
-**Tree cover** is robust across seasons — it handles closed summer canopy, bare
-winter trees and snow alike. Its weakness is granularity: at 10 cm inference
-with SegFormer's quarter-resolution logits, the effective mask resolution is
-about 40 cm on the ground, so it produces smooth blobs rather than crown
-outlines. Good for "how much canopy", not for "which tree".
+The class names are SAM 3 prompts, so they were chosen by measurement rather
+than taste. Sweeping candidates over 30 flights:
 
-**Tree positions** are convincing on green summer canopy and clearly
-under-detect on leaf-off and snow-covered flights, which are outside DeepForest's
-NEON training distribution. On one January flight it found 7 trees where the
-tree-cover layer correctly marked 34% of the frame as canopy. Treat position
-counts from winter flights as a lower bound.
+* `meadow` and `mud` never fired once, on any flight. Dropped.
+* `grass` fires on 24 of 30 flights; `"meadow, grass"` gives a mask with **IoU
+  0.977** against plain `grass`, so the compound phrase adds nothing.
+* `roof` fires on 6 flights against 1 for `building` — from nadir you see roofs,
+  not buildings. Note it also finds *car* roofs, which is literally correct;
+  `vehicle` exists to separate them.
+* `bare ground` and `rock` overlap at **IoU 0.002** — they are cleanly disjoint
+  rather than two names for one region.
 
-Because the two layers disagree in a predictable direction, they cross-check
-each other: **a flight with high tree cover but few detected positions is
-unreliable for positions**, and that comparison costs nothing to compute.
+## Where each layer fails
 
-**Snow** is the most reliable layer, and the only one that uses no learned model
-at all. Snow in RGB is bright and almost completely desaturated, which nothing
-else in a nadir forest scene reliably is. The rule is `V > 140 and S < 40` in
-HSV, followed by morphological cleanup and a minimum-area filter. Thresholds
-were measured, not guessed: over sample frames, the snow flights peak at
-saturation p90 of 30 and 38, while the snow-free flights start at p10 of 42 to
-58. Measured coverage is 99.6% on an open snow field, 66-70% on a snow flight
-with scattered trees, and 0.000% on closed summer canopy.
+**Tree cover** is robust across seasons — closed summer canopy, bare winter
+trees and snow alike. Its weakness is granularity: at 10 cm inference with
+SegFormer's quarter-resolution logits, effective mask resolution is about 40 cm
+on the ground, so it gives smooth blobs rather than crown outlines. Good for
+"how much canopy", not "which tree".
 
-Its failure mode is honest and predictable: it means "bright achromatic
-surface", so overexposed limestone, scree and white gravel tracks read as snow.
-An alpine September flight sits at about 2% for this reason.
+**Deadwood** flags standing dead wood in the canopy, and marks bare grey branch
+structure against green canopy where one would expect it. It has had the least
+validation of the layers here.
 
-**Deadwood** flags standing dead wood in the canopy. It has been checked on
-sample flights, where it marks bare grey branch structure against green canopy,
-but it has had the least validation of the four.
+**`road`** is the least reliable of the SAM 3 classes. It is right where there
+is a real surface — a gravel yard came out at 19.5% — but on snow-covered ground
+it has been seen to segment broad shadowed bands while missing the actual visible
+tracks.
+
+**`snow` and `water` can be confused on featureless frames**, which is what the
+`undetermined` flag exists to catch.
 
 ## Validation
 
 There is no ground truth for these classes in BAMBI, so unlike the transferred
 RGB annotations there is nothing to score against. These layers are **reviewed
-qualitatively only** and carry no accuracy figures. Where two layers can be
-compared — snow against tree cover, positions against cover — their agreement is
-reported, but agreement is not accuracy.
+qualitatively only** and carry no accuracy figures. The flags above report
+self-consistency — agreement between a frame and its neighbours, or between two
+layers — and self-consistency is not accuracy.

@@ -12,8 +12,8 @@ fetched with the same script, via `--version`; see
 | `matched` | A red deer subset carrying human-accepted **RGB** boxes produced by the template-matching toolkit, plus extracted frames. | `<id>_accepted_thermal_mot.txt`, `<id>_accepted_rgb_mot.txt` |
 | `orthographic` | The matched subset reprojected to an orthographic view. | |
 | `owl-transferred` ⚠️ | **Experimental.** RGB boxes for the `base` annotations, transferred from thermal with OWL. An **annotation layer**, not a standalone release. | `<id>_rgb_gt.txt`, `<id>_provenance.csv`, `<id>_owl_detections.csv` |
-| `environment` ⚠️ | **Experimental.** Where the trees are and where the snow is, per frame. An annotation layer. | `<id>_tree_positions.json`, `<id>_snow.json` |
-| `environment-nc` ⚠️🔒 | **Experimental, non-commercial.** Canopy extent and standing deadwood, per frame. An annotation layer. | `<id>_tree_cover.json`, `<id>_deadwood.json` |
+| `environment` ⚠️ | **Experimental.** Snow, water, road, grass, rock, bare ground, roof and vehicle, per frame, from SAM 3. An annotation layer. | `<id>_environment.json` |
+| `environment-nc` ⚠️🔒 | **Experimental, non-commercial.** Canopy extent and standing deadwood, per frame. An annotation layer. | `<id>_environment_nc.json` |
 | `environment-all` ⚠️🔒 | Both environment layers at once. **Partly non-commercial**; see below. | the union of the two above |
 
 `owl-transferred` ships no imagery, so selecting it downloads the `base`
@@ -45,8 +45,7 @@ carry a restriction the other two do not:
 
 | layer | produced by | licence of the method | released as |
 |---|---|---|---|
-| tree positions | [DeepForest](https://github.com/weecology/DeepForest) | MIT | `environment`, CC-BY-4.0 |
-| snow | brightness/saturation threshold, in this repository | none | `environment`, CC-BY-4.0 |
+| snow, water, road, grass, rock, bare ground, roof, vehicle | [SAM 3](https://github.com/facebookresearch/sam3) | SAM License — grants use, distribution and derivative works royalty-free, with no non-commercial restriction | `environment`, CC-BY-4.0 |
 | tree cover | [Restor TCD](https://huggingface.co/restor/tcd-segformer-mit-b5) | CC-BY-NC + NVIDIA Source Code License | `environment-nc`, CC-BY-NC-4.0 |
 | deadwood | [deadtrees.earth](https://github.com/cmosig/deadtreesmodels) | MIT, but see below | `environment-nc`, CC-BY-NC-4.0 |
 
@@ -65,10 +64,15 @@ carries an explicit carve-out:
 
 so the restriction is inherited whether or not the wrapping project mentions it.
 
-Splitting on that boundary keeps the layers that are free of it genuinely free:
-tree positions and snow can be used commercially, redistributed, and combined
-with the rest of the dataset under one licence. Merging everything into a single
-non-commercial release would have restricted them for no reason.
+Splitting on that boundary keeps the layers that are free of it genuinely free.
+SAM 3 is licensed quite differently: the SAM License grants use, reproduction,
+distribution and derivative works royalty-free, and contains no non-commercial
+restriction at all — its conditions are that redistributed *SAM Materials* carry
+the licence with them, and that publications acknowledge the use. Masks produced
+by running the model are not SAM Materials. So the eight SAM 3 classes can be
+used commercially, redistributed, and combined with the rest of the dataset
+under one licence. Merging everything into a single non-commercial release would
+have restricted them for no reason.
 
 `--version environment-all` downloads both and is therefore **partly
 non-commercial**. It prints a warning before and after the download, because

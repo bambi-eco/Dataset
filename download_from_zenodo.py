@@ -112,8 +112,8 @@ LAYER_MARKERS = {
     "base": ["<id>_matched_processed.mp4"],
     "owl-transferred": ["<id>_rgb_gt.txt", "<id>_provenance.csv",
                         "<id>_owl_detections.csv"],
-    "environment": ["<id>_tree_positions.json", "<id>_snow.json"],
-    "environment-nc": ["<id>_tree_cover.json", "<id>_deadwood.json"],
+    "environment": ["<id>_environment.json"],
+    "environment-nc": ["<id>_environment_nc.json"],
 }
 
 

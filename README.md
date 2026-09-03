@@ -59,7 +59,7 @@ end, including the geo-referenced tooling.
 | [Working with annotations](docs/annotation-tools.md) | Interpolating, filtering, and converting to YOLO |
 | [Frames and visualization](docs/frames-and-visualization.md) | Extracting frames, drawing boxes on images and video |
 | [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the experimental `owl-transferred` annotations |
-| [Environment annotations](docs/environment.md) | Tree cover, tree positions, snow and deadwood per frame |
+| [Environment annotations](docs/environment.md) | Snow, water, roads, vegetation, canopy and deadwood per frame |
 | [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 
 Two notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour, and
@@ -95,15 +95,22 @@ See [docs/label-transfer.md](docs/label-transfer.md).
 *In preparation — the methods are implemented, the Zenodo records are not
 published yet.*
 
-Alongside the animals, four per-frame layers describe what they are moving
-through: **tree cover**, **individual tree positions**, **snow**, and **standing
-deadwood**. All are machine-generated and reviewed qualitatively only; there is
-no ground truth for these classes in BAMBI, so they carry no accuracy figures.
+Alongside the animals, ten per-frame classes describe what they are moving
+through: **snow**, **water**, **road**, **grass**, **rock**, **bare ground**,
+**roof** and **vehicle** from SAM 3, plus **tree cover** and standing
+**deadwood**. All are machine-generated and reviewed qualitatively only; there
+is no ground truth for these classes in BAMBI, so they carry no accuracy
+figures.
+
+The per-frame masks are published exactly as the models produced them, and on
+featureless frames they **flicker** between adjacent frames. Each flight ships a
+smoothed coverage series and three reliability flags alongside, but nothing is
+filled in — see [docs/environment.md](docs/environment.md#read-this-before-using-the-masks).
 
 They are published as **two versions, split by licence**:
 
 ```bash
-# tree positions + snow -- CC-BY-4.0, same as the rest of the dataset
+# snow, water, road, grass, rock, bare ground, roof, vehicle -- CC-BY-4.0
 python download_from_zenodo.py --version environment -f 146 --unzip
 
 # tree cover + deadwood -- CC-BY-NC-4.0, non-commercial use only
@@ -117,11 +124,11 @@ python download_from_zenodo.py --licences
 ```
 
 The split exists because the tree-cover and deadwood models are both built on
-NVIDIA's **SegFormer**, licensed for research and evaluation only, while
-DeepForest (MIT) and the snow threshold carry no such restriction. Putting them
-in one release would have made the unrestricted layers non-commercial for no
-reason. The full reasoning, including the non-obvious case where an MIT-licensed
-package carries an NVIDIA carve-out internally, is in
+NVIDIA's **SegFormer**, licensed for research and evaluation only, while SAM 3
+carries no non-commercial restriction. Putting them in one release would have
+made the unrestricted classes non-commercial for no reason. The full reasoning,
+including the non-obvious case where an MIT-licensed package carries an NVIDIA
+carve-out internally, is in
 [docs/dataset-versions.md](docs/dataset-versions.md#licensing-and-why-the-environment-layers-are-split-in-two).
 
 See [docs/environment.md](docs/environment.md) for what each class means, how it

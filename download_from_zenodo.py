@@ -54,7 +54,10 @@ import requests
 ZENODO_API = "https://zenodo.org/api"
 ZENODO_SANDBOX_API = "https://sandbox.zenodo.org/api"
 
-METADATA_DIR = Path("./flight_metadata")
+# Resolved against this file, not the working directory: these summaries ship
+# with the repository, and `--version` has to keep working when the script is
+# called by path from somewhere else, as the notebooks do.
+METADATA_DIR = Path(__file__).resolve().parent / "flight_metadata"
 
 # Dataset versions and the summary file each one is described by.
 VERSION_SUMMARIES = {
@@ -233,20 +236,28 @@ def download_file(url: str, dest: Path, token: Optional[str]) -> None:
     downloaded = 0
     chunk_size = 8 * 1024 * 1024  # 8 MB chunks
 
+    # A carriage-return progress meter only redraws in place on a terminal.
+    # Piped to a file, a log or a notebook cell it accumulates into one endless
+    # line, so there it is reported at intervals on separate lines instead.
+    interactive = sys.stdout.isatty()
+    step = max(total // 10, 1) if total else 0
+    next_report = step
+
     with open(dest, "wb") as f:
         for chunk in r.iter_content(chunk_size=chunk_size):
             f.write(chunk)
             downloaded += len(chunk)
-            if total:
-                pct = downloaded / total * 100
-                mb = downloaded / 1e6
-                total_mb = total / 1e6
-                print(
-                    f"\r     {mb:.1f} / {total_mb:.1f} MB ({pct:.0f}%)",
-                    end="",
-                    flush=True,
-                )
-    print()
+            if not total:
+                continue
+            if interactive:
+                print(f"\r     {downloaded / 1e6:.1f} / {total / 1e6:.1f} MB "
+                      f"({downloaded / total * 100:.0f}%)", end="", flush=True)
+            elif downloaded >= next_report:
+                print(f"     {downloaded / 1e6:.1f} / {total / 1e6:.1f} MB "
+                      f"({downloaded / total * 100:.0f}%)", flush=True)
+                next_report += step
+    if interactive:
+        print()
 
 
 def extract_and_remove_zip(zip_path: Path, output_dir: Path) -> int:
@@ -331,8 +342,9 @@ def main():
     parser.add_argument(
         "--splits-file",
         type=Path,
-        default=Path("./flight_metadata/splits.json"),
-        help="Path to splits.json used by --split (default: ./flight_metadata/splits.json)",
+        default=METADATA_DIR / "splits.json",
+        help="Path to splits.json used by --split "
+             "(default: the splits.json shipped next to this script)",
     )
     parser.add_argument(
         "--list", "-l",

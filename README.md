@@ -59,6 +59,7 @@ end, including the geo-referenced tooling.
 | [Working with annotations](docs/annotation-tools.md) | Interpolating, filtering, and converting to YOLO |
 | [Frames and visualization](docs/frames-and-visualization.md) | Extracting frames, drawing boxes on images and video |
 | [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the experimental `owl-transferred` annotations |
+| [Environment annotations](docs/environment.md) | Tree cover, tree positions, snow and deadwood per frame |
 | [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 
 Two notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour, and
@@ -88,6 +89,43 @@ python download_from_zenodo.py --version owl-transferred -f 146 --unzip
 ```
 
 See [docs/label-transfer.md](docs/label-transfer.md).
+
+## Environment annotations
+
+*In preparation — the methods are implemented, the Zenodo records are not
+published yet.*
+
+Alongside the animals, four per-frame layers describe what they are moving
+through: **tree cover**, **individual tree positions**, **snow**, and **standing
+deadwood**. All are machine-generated and reviewed qualitatively only; there is
+no ground truth for these classes in BAMBI, so they carry no accuracy figures.
+
+They are published as **two versions, split by licence**:
+
+```bash
+# tree positions + snow -- CC-BY-4.0, same as the rest of the dataset
+python download_from_zenodo.py --version environment -f 146 --unzip
+
+# tree cover + deadwood -- CC-BY-NC-4.0, non-commercial use only
+python download_from_zenodo.py --version environment-nc -f 146 --unzip
+
+# both at once; prints a warning because the result is then partly NC
+python download_from_zenodo.py --version environment-all -f 146 --unzip
+
+# what every version is licensed under
+python download_from_zenodo.py --licences
+```
+
+The split exists because the tree-cover and deadwood models are both built on
+NVIDIA's **SegFormer**, licensed for research and evaluation only, while
+DeepForest (MIT) and the snow threshold carry no such restriction. Putting them
+in one release would have made the unrestricted layers non-commercial for no
+reason. The full reasoning, including the non-obvious case where an MIT-licensed
+package carries an NVIDIA carve-out internally, is in
+[docs/dataset-versions.md](docs/dataset-versions.md#licensing-and-why-the-environment-layers-are-split-in-two).
+
+See [docs/environment.md](docs/environment.md) for what each class means, how it
+was produced, and where each one fails.
 
 ## Additional related repositories:
 

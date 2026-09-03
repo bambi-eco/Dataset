@@ -66,7 +66,27 @@ VERSION_SUMMARIES = {
     "matched": METADATA_DIR / "zenodo_upload_summary_matched.json",
     "orthographic": METADATA_DIR / "zenodo_upload_summary_orthographic.json",
     "owl-transferred": METADATA_DIR / "zenodo_upload_summary_owl_transferred.json",
+    "environment": METADATA_DIR / "zenodo_upload_summary_environment.json",
+    "environment-nc": METADATA_DIR / "zenodo_upload_summary_environment_nc.json",
 }
+
+# The licence each layer is published under. The environment layers are split
+# by licence rather than by subject: the models behind tree cover and deadwood
+# both descend from NVIDIA's SegFormer, whose Source Code License permits
+# research and evaluation use only, so anything derived from them is released
+# non-commercially. Tree positions come from DeepForest (MIT) and the snow mask
+# from a plain threshold, so neither carries that restriction and both stay
+# under the same licence as the rest of the dataset.
+LAYER_LICENCES = {
+    "base": "CC-BY-4.0",
+    "raw": "CC-BY-4.0",
+    "matched": "CC-BY-4.0",
+    "orthographic": "CC-BY-4.0",
+    "owl-transferred": "CC-BY-4.0",
+    "environment": "CC-BY-4.0",
+    "environment-nc": "CC-BY-NC-4.0",
+}
+NON_COMMERCIAL = {"environment-nc"}
 
 # Some versions are a LAYER on top of another rather than a standalone release.
 # `owl-transferred` ships only the transferred RGB annotations, which are of no
@@ -75,6 +95,11 @@ VERSION_SUMMARIES = {
 # Layers are fetched in the order listed.
 VERSION_LAYERS = {
     "owl-transferred": ["base", "owl-transferred"],
+    "environment": ["base", "environment"],
+    "environment-nc": ["base", "environment-nc"],
+    # Everything, at the cost of a mixed licence -- see the warning printed
+    # when this is selected.
+    "environment-all": ["base", "environment", "environment-nc"],
 }
 
 # Layers of the same flight share an output directory, so their archives must
@@ -87,7 +112,45 @@ LAYER_MARKERS = {
     "base": ["<id>_matched_processed.mp4"],
     "owl-transferred": ["<id>_rgb_gt.txt", "<id>_provenance.csv",
                         "<id>_owl_detections.csv"],
+    "environment": ["<id>_tree_positions.json", "<id>_snow.json"],
+    "environment-nc": ["<id>_tree_cover.json", "<id>_deadwood.json"],
 }
+
+
+def licence_of(version: str) -> str:
+    """The effective licence of a version, given the layers it pulls."""
+    layers = layers_of(version)
+    if any(l in NON_COMMERCIAL for l in layers):
+        return "CC-BY-NC-4.0 (mixed)"
+    return "CC-BY-4.0"
+
+
+def print_licence_notice(version: str, layers: list[str]) -> None:
+    """Say plainly what may be done with what is about to be downloaded.
+
+    A mixed download is the case worth being loud about: the files land in one
+    directory and nothing about a mask file says which licence it came under,
+    so the distinction has to be made here or it is lost.
+    """
+    nc = [l for l in layers if l in NON_COMMERCIAL]
+    if not nc:
+        return
+    ok = [l for l in layers if l not in NON_COMMERCIAL]
+    print()
+    print("  " + "!" * 68)
+    print("  !  This download is NOT uniformly licensed.")
+    print("  !")
+    for l in nc:
+        print(f"  !  {l:<18} {LAYER_LICENCES.get(l, '?'):<16} "
+              f"NON-COMMERCIAL USE ONLY")
+    for l in ok:
+        print(f"  !  {l:<18} {LAYER_LICENCES.get(l, '?'):<16} ")
+    print("  !")
+    print("  !  The non-commercial layers derive from models built on NVIDIA's")
+    print("  !  SegFormer, licensed for research and evaluation only. Files from")
+    print("  !  all layers land in the same directory, so if you redistribute or")
+    print("  !  use this commercially, keep them apart.")
+    print("  " + "!" * 68)
 
 
 def layers_of(version: str) -> list[str]:
@@ -303,11 +366,20 @@ def main():
     )
     parser.add_argument(
         "--version", "-v",
-        choices=sorted(VERSION_SUMMARIES),
+        # Some versions are composites with no summary of their own, so the
+        # choices are the union of both tables.
+        choices=sorted(set(VERSION_SUMMARIES) | set(VERSION_LAYERS)),
         default="base",
         help="Dataset version to download (default: base). "
-             "'owl-transferred' is a layer on the base release and pulls both: "
-             "the recordings and the transferred RGB annotations.",
+             "'owl-transferred', 'environment' and 'environment-nc' are layers "
+             "on the base release and pull the recordings too. "
+             "'environment-all' pulls both environment layers and is therefore "
+             "partly non-commercial -- see --licences.",
+    )
+    parser.add_argument(
+        "--licences",
+        action="store_true",
+        help="Print the licence of every dataset version and exit.",
     )
     parser.add_argument(
         "--summary", "-s",
@@ -380,6 +452,15 @@ def main():
     )
     args = parser.parse_args()
 
+    if args.licences:
+        print(f"\n{'version':<18}{'licence':<24}layers")
+        for v in sorted(set(VERSION_SUMMARIES) | set(VERSION_LAYERS)):
+            print(f"{v:<18}{licence_of(v):<24}{' + '.join(layers_of(v))}")
+        print("\nNon-commercial layers: " + ", ".join(sorted(NON_COMMERCIAL)))
+        print("They derive from models built on NVIDIA's SegFormer, which is\n"
+              "licensed for research and evaluation use only.")
+        return
+
     # ── Resolve the layer(s) this version is made of ─────────────────────────
     # An explicit --summary is always a single, self-contained layer.
     if args.summary:
@@ -409,6 +490,8 @@ def main():
     if len(layer_names) > 1:
         print(f"ℹ  Version '{args.version}' is layered: "
               f"{' + '.join(layer_names)}")
+    if not args.summary:
+        print_licence_notice(args.version, layer_names)
 
     # ── List mode ────────────────────────────────────────────────────────────
     if args.list:
@@ -576,6 +659,10 @@ def main():
               + (" …" if len(absent) > 12 else ""))
 
     print(f"   Files saved to {args.output_dir.resolve()}")
+    # Repeated at the end as well as the start: on a long download the opening
+    # notice has scrolled well out of sight by the time it finishes.
+    if not args.summary:
+        print_licence_notice(args.version, layer_names)
 
 
 if __name__ == "__main__":

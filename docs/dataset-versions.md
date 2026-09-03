@@ -12,11 +12,18 @@ fetched with the same script, via `--version`; see
 | `matched` | A red deer subset carrying human-accepted **RGB** boxes produced by the template-matching toolkit, plus extracted frames. | `<id>_accepted_thermal_mot.txt`, `<id>_accepted_rgb_mot.txt` |
 | `orthographic` | The matched subset reprojected to an orthographic view. | |
 | `owl-transferred` ⚠️ | **Experimental.** RGB boxes for the `base` annotations, transferred from thermal with OWL. An **annotation layer**, not a standalone release. | `<id>_rgb_gt.txt`, `<id>_provenance.csv`, `<id>_owl_detections.csv` |
+| `environment` ⚠️ | **Experimental.** Where the trees are and where the snow is, per frame. An annotation layer. | `<id>_tree_positions.json`, `<id>_snow.json` |
+| `environment-nc` ⚠️🔒 | **Experimental, non-commercial.** Canopy extent and standing deadwood, per frame. An annotation layer. | `<id>_tree_cover.json`, `<id>_deadwood.json` |
+| `environment-all` ⚠️🔒 | Both environment layers at once. **Partly non-commercial**; see below. | the union of the two above |
 
 `owl-transferred` ships no imagery, so selecting it downloads the `base`
 recordings as well and both land in the same directory. It covers 238 of the
 386 flights — see [label-transfer.md](label-transfer.md) for what it contains,
 how accurate it is, and why the other flights are missing.
+
+The `environment` layers are likewise annotation-only and pull `base` with them.
+See [environment.md](environment.md) for what each class means and how it was
+produced.
 
 > ⚠️ **`owl-transferred` is experimental.** Unlike the other versions, its
 > annotations are machine-generated and have not been reviewed by hand. They
@@ -25,6 +32,60 @@ how accurate it is, and why the other flights are missing.
 > internal checks catch. Every box carries a provenance record saying where its
 > position came from — use it. Coverage and content may change in a future
 > revision, so cite the DOI you actually used.
+
+## Licensing, and why the environment layers are split in two
+
+Every version of this dataset is **CC-BY-4.0** except `environment-nc`, which is
+**CC-BY-NC-4.0**. That one exception is the reason the environment annotations
+are published as two versions rather than one, so it is worth explaining rather
+than leaving as a surprise.
+
+The environment layers are produced by four different methods, and two of them
+carry a restriction the other two do not:
+
+| layer | produced by | licence of the method | released as |
+|---|---|---|---|
+| tree positions | [DeepForest](https://github.com/weecology/DeepForest) | MIT | `environment`, CC-BY-4.0 |
+| snow | brightness/saturation threshold, in this repository | none | `environment`, CC-BY-4.0 |
+| tree cover | [Restor TCD](https://huggingface.co/restor/tcd-segformer-mit-b5) | CC-BY-NC + NVIDIA Source Code License | `environment-nc`, CC-BY-NC-4.0 |
+| deadwood | [deadtrees.earth](https://github.com/cmosig/deadtreesmodels) | MIT, but see below | `environment-nc`, CC-BY-NC-4.0 |
+
+Both restricted layers trace back to the same root: their models are built on
+**SegFormer**, which NVIDIA released under the NVIDIA Source Code License,
+permitting use "non-commercially, meaning for research or evaluation purposes
+only". Restor state this directly on their model card. The deadwood model is
+less obvious — deadtrees.earth release their work under MIT, and so is
+`segmentation_models_pytorch`, but the MiT encoder file inside that MIT package
+carries an explicit carve-out:
+
+```
+# Copyright (c) 2021, NVIDIA Corporation. All rights reserved.
+# This work is licensed under the NVIDIA Source Code License
+```
+
+so the restriction is inherited whether or not the wrapping project mentions it.
+
+Splitting on that boundary keeps the layers that are free of it genuinely free:
+tree positions and snow can be used commercially, redistributed, and combined
+with the rest of the dataset under one licence. Merging everything into a single
+non-commercial release would have restricted them for no reason.
+
+`--version environment-all` downloads both and is therefore **partly
+non-commercial**. It prints a warning before and after the download, because
+the files from all layers land in the same directory and nothing about a mask
+file itself records which licence it arrived under. `--licences` prints the
+table for every version:
+
+```bash
+python download_from_zenodo.py --licences
+```
+
+Two notes on how this may change. Restor's model cards say "CC-BY-NC; CC-BY to
+follow", so the restriction on tree cover may be lifted in future. And the
+underlying training data, [OAM-TCD](https://huggingface.co/datasets/restor/tcd),
+is itself CC-BY-4.0 with smaller CC-BY-NC and CC-BY-SA subsets — the
+non-commercial constraint here comes from the *models*, not from the imagery
+they were trained on.
 
 ## Zenodo records
 

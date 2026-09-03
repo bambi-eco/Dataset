@@ -58,7 +58,7 @@ end, including the geo-referenced tooling.
 | [Downloading](docs/downloading.md) | Installing, filtering flights by metadata, and fetching them |
 | [Working with annotations](docs/annotation-tools.md) | Interpolating, filtering, and converting to YOLO |
 | [Frames and visualization](docs/frames-and-visualization.md) | Extracting frames, drawing boxes on images and video |
-| [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the released `owl-transferred` annotations |
+| [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the experimental `owl-transferred` annotations |
 | [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 
 Two notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour, and
@@ -73,11 +73,14 @@ are RGB boxes for two different scopes:
 
 - **`matched`** — human-accepted RGB boxes for a red deer subset, produced by
   the template-matching toolkit.
-- **`owl-transferred`** — RGB boxes for 238 of the 386 flights, produced by
-  detecting the animals in RGB with OWL and re-centring each thermal box on its
-  match. Machine-generated and not reviewed by hand; 5.22 px mean centre error
-  against the accepted annotations, against 15.98 px for leaving the thermal
-  boxes alone.
+- **`owl-transferred`** — ⚠️ **experimental.** RGB boxes for 238 of the 386
+  flights, produced by detecting the animals in RGB with OWL and re-centring
+  each thermal box on its match. Machine-generated and **not reviewed by
+  hand**: 5.22 px mean centre error against the accepted annotations, against
+  15.98 px for leaving the thermal boxes alone, but individual flights can be
+  confidently wrong. Treat it as a starting point to be checked, not as ground
+  truth, and read the [known failure mode](docs/label-transfer.md#the-released-owl-transferred-annotations)
+  before training on it. The content and coverage of this version may change.
 
 ```bash
 # the recordings and the transferred RGB annotations, in one folder

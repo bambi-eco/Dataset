@@ -11,12 +11,20 @@ fetched with the same script, via `--version`; see
 | `raw` | The original, unprocessed videos as they came off the drone, with undistortion parameters, SRT subtitles and Airdata logs. | one folder per flight |
 | `matched` | A red deer subset carrying human-accepted **RGB** boxes produced by the template-matching toolkit, plus extracted frames. | `<id>_accepted_thermal_mot.txt`, `<id>_accepted_rgb_mot.txt` |
 | `orthographic` | The matched subset reprojected to an orthographic view. | |
-| `owl-transferred` | RGB boxes for the `base` annotations, transferred from thermal with OWL. An **annotation layer**, not a standalone release. | `<id>_rgb_gt.txt`, `<id>_provenance.csv`, `<id>_owl_detections.csv` |
+| `owl-transferred` ⚠️ | **Experimental.** RGB boxes for the `base` annotations, transferred from thermal with OWL. An **annotation layer**, not a standalone release. | `<id>_rgb_gt.txt`, `<id>_provenance.csv`, `<id>_owl_detections.csv` |
 
 `owl-transferred` ships no imagery, so selecting it downloads the `base`
 recordings as well and both land in the same directory. It covers 238 of the
 386 flights — see [label-transfer.md](label-transfer.md) for what it contains,
 how accurate it is, and why the other flights are missing.
+
+> ⚠️ **`owl-transferred` is experimental.** Unlike the other versions, its
+> annotations are machine-generated and have not been reviewed by hand. They
+> agree closely with the human-accepted annotations on average, but an
+> individual flight can be confidently wrong in a way none of the pipeline's
+> internal checks catch. Every box carries a provenance record saying where its
+> position came from — use it. Coverage and content may change in a future
+> revision, so cite the DOI you actually used.
 
 ## Zenodo records
 

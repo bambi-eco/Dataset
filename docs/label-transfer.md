@@ -42,6 +42,12 @@ ablations and failure modes are in the notebook.
 
 ### The released `owl-transferred` annotations
 
+> ⚠️ **Experimental.** These annotations are machine-generated and have not
+> been reviewed by hand. The aggregate numbers below are good, but they are an
+> average over 238 flights and a single flight can be confidently wrong — see
+> [what goes wrong](#what-goes-wrong) before training on them. Coverage and
+> content may change in a future revision, so cite the DOI you actually used.
+
 The method has been run over the whole base release and published as its own
 dataset version, so the labels can be downloaded rather than recomputed:
 
@@ -92,10 +98,41 @@ that reads as transfer accuracy.
 The error is higher than the 4.31 px measured on `matched` itself for a
 structural reason: the base release annotates sparse key frames rather than
 every frame, so per-track temporal smoothing spans fewer samples and 49.2% of
-boxes take the consensus curve instead of a detection of their own. These are
-machine-generated labels that have not been reviewed by hand; the provenance
-sidecar exists so that suspect flights can be triaged without re-running
-anything.
+boxes take the consensus curve instead of a detection of their own.
+
+#### What goes wrong
+
+Averages over 238 flights hide the cases that matter, and this is why the
+release is marked experimental.
+
+**An unannotated animal steals the assignment.** This is the worst failure and
+it is systematic rather than random. Where a frame holds more animals than the
+thermal annotation covers, OWL correctly detects all of them, and the nearest
+detection to a thermal box can be the *neighbouring* animal. The pipeline then
+agrees with itself: the consensus curve is built from those same wrong matches,
+so the second pass re-confirms them and the resulting shift looks stable and
+confident. Nothing internal to the method catches this — every consistency
+check it has is satisfied. Such a flight can end up worse than doing nothing.
+
+**A false positive on a distractor.** A feeding trough or similar warm, animal
+shaped object draws a detection and a box gets handed to it. The consensus
+prior suppresses most of these, because the implied shift disagrees with the
+rest of the frame.
+
+Two things help you find these without re-running anything:
+
+- `<id>_provenance.csv` gives each box its `source` (`owl`, `smoothed`,
+  `consensus` or `unchanged`), the shift applied, the assignment distance and
+  the detection score. A flight whose shifts are large, uniform and highly
+  confident, but disagree with neighbouring flights from the same site, is
+  worth a look.
+- `<id>_owl_detections.csv` lets you re-run `transfer_labels.py` with different
+  gates or a different smoothing window on CPU, and compare.
+
+Flights where the method found nothing to match at all are omitted from the
+release rather than shipped unchanged, so an `unchanged` row means a box that
+the detector missed in an otherwise-matched flight, not a whole flight that
+silently failed.
 
 ## RGB–Thermal Frame Matching
 

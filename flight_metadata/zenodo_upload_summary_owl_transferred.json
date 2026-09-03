@@ -1,0 +1,1466 @@
+[
+  {
+    "part": 1,
+    "title": "The BAMBI Dataset: OWL-Transferred RGB Annotations for Nadir UAV-Recordings of Forest Wildlife (Part 1)",
+    "deposition_id": 22271027,
+    "doi": "10.5281/zenodo.22271027",
+    "flights": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "17",
+      "18",
+      "20",
+      "21",
+      "22",
+      "26",
+      "28",
+      "29",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "40",
+      "41",
+      "42",
+      "44",
+      "46",
+      "47",
+      "48",
+      "50",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "59",
+      "60",
+      "64",
+      "66",
+      "67",
+      "70",
+      "71",
+      "72",
+      "74",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96",
+      "98",
+      "99",
+      "100",
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106",
+      "113",
+      "115",
+      "119",
+      "120",
+      "121",
+      "122",
+      "123",
+      "124",
+      "129",
+      "130",
+      "131",
+      "132",
+      "134",
+      "135",
+      "136",
+      "137",
+      "138",
+      "139",
+      "140",
+      "141",
+      "142",
+      "143",
+      "144",
+      "145",
+      "146",
+      "147",
+      "148"
+    ],
+    "num_files": 100,
+    "zip_prefix": "owl_labels_",
+    "flight_details": {
+      "1": [
+        "1_owl_detections.csv",
+        "1_provenance.csv",
+        "1_rgb_gt.txt"
+      ],
+      "2": [
+        "2_owl_detections.csv",
+        "2_provenance.csv",
+        "2_rgb_gt.txt"
+      ],
+      "3": [
+        "3_owl_detections.csv",
+        "3_provenance.csv",
+        "3_rgb_gt.txt"
+      ],
+      "4": [
+        "4_owl_detections.csv",
+        "4_provenance.csv",
+        "4_rgb_gt.txt"
+      ],
+      "5": [
+        "5_owl_detections.csv",
+        "5_provenance.csv",
+        "5_rgb_gt.txt"
+      ],
+      "6": [
+        "6_owl_detections.csv",
+        "6_provenance.csv",
+        "6_rgb_gt.txt"
+      ],
+      "8": [
+        "8_owl_detections.csv",
+        "8_provenance.csv",
+        "8_rgb_gt.txt"
+      ],
+      "9": [
+        "9_owl_detections.csv",
+        "9_provenance.csv",
+        "9_rgb_gt.txt"
+      ],
+      "10": [
+        "10_owl_detections.csv",
+        "10_provenance.csv",
+        "10_rgb_gt.txt"
+      ],
+      "11": [
+        "11_owl_detections.csv",
+        "11_provenance.csv",
+        "11_rgb_gt.txt"
+      ],
+      "12": [
+        "12_owl_detections.csv",
+        "12_provenance.csv",
+        "12_rgb_gt.txt"
+      ],
+      "13": [
+        "13_owl_detections.csv",
+        "13_provenance.csv",
+        "13_rgb_gt.txt"
+      ],
+      "14": [
+        "14_owl_detections.csv",
+        "14_provenance.csv",
+        "14_rgb_gt.txt"
+      ],
+      "15": [
+        "15_owl_detections.csv",
+        "15_provenance.csv",
+        "15_rgb_gt.txt"
+      ],
+      "17": [
+        "17_owl_detections.csv",
+        "17_provenance.csv",
+        "17_rgb_gt.txt"
+      ],
+      "18": [
+        "18_owl_detections.csv",
+        "18_provenance.csv",
+        "18_rgb_gt.txt"
+      ],
+      "20": [
+        "20_owl_detections.csv",
+        "20_provenance.csv",
+        "20_rgb_gt.txt"
+      ],
+      "21": [
+        "21_owl_detections.csv",
+        "21_provenance.csv",
+        "21_rgb_gt.txt"
+      ],
+      "22": [
+        "22_owl_detections.csv",
+        "22_provenance.csv",
+        "22_rgb_gt.txt"
+      ],
+      "26": [
+        "26_owl_detections.csv",
+        "26_provenance.csv",
+        "26_rgb_gt.txt"
+      ],
+      "28": [
+        "28_owl_detections.csv",
+        "28_provenance.csv",
+        "28_rgb_gt.txt"
+      ],
+      "29": [
+        "29_owl_detections.csv",
+        "29_provenance.csv",
+        "29_rgb_gt.txt"
+      ],
+      "31": [
+        "31_owl_detections.csv",
+        "31_provenance.csv",
+        "31_rgb_gt.txt"
+      ],
+      "32": [
+        "32_owl_detections.csv",
+        "32_provenance.csv",
+        "32_rgb_gt.txt"
+      ],
+      "33": [
+        "33_owl_detections.csv",
+        "33_provenance.csv",
+        "33_rgb_gt.txt"
+      ],
+      "34": [
+        "34_owl_detections.csv",
+        "34_provenance.csv",
+        "34_rgb_gt.txt"
+      ],
+      "35": [
+        "35_owl_detections.csv",
+        "35_provenance.csv",
+        "35_rgb_gt.txt"
+      ],
+      "40": [
+        "40_owl_detections.csv",
+        "40_provenance.csv",
+        "40_rgb_gt.txt"
+      ],
+      "41": [
+        "41_owl_detections.csv",
+        "41_provenance.csv",
+        "41_rgb_gt.txt"
+      ],
+      "42": [
+        "42_owl_detections.csv",
+        "42_provenance.csv",
+        "42_rgb_gt.txt"
+      ],
+      "44": [
+        "44_owl_detections.csv",
+        "44_provenance.csv",
+        "44_rgb_gt.txt"
+      ],
+      "46": [
+        "46_owl_detections.csv",
+        "46_provenance.csv",
+        "46_rgb_gt.txt"
+      ],
+      "47": [
+        "47_owl_detections.csv",
+        "47_provenance.csv",
+        "47_rgb_gt.txt"
+      ],
+      "48": [
+        "48_owl_detections.csv",
+        "48_provenance.csv",
+        "48_rgb_gt.txt"
+      ],
+      "50": [
+        "50_owl_detections.csv",
+        "50_provenance.csv",
+        "50_rgb_gt.txt"
+      ],
+      "52": [
+        "52_owl_detections.csv",
+        "52_provenance.csv",
+        "52_rgb_gt.txt"
+      ],
+      "53": [
+        "53_owl_detections.csv",
+        "53_provenance.csv",
+        "53_rgb_gt.txt"
+      ],
+      "54": [
+        "54_owl_detections.csv",
+        "54_provenance.csv",
+        "54_rgb_gt.txt"
+      ],
+      "55": [
+        "55_owl_detections.csv",
+        "55_provenance.csv",
+        "55_rgb_gt.txt"
+      ],
+      "56": [
+        "56_owl_detections.csv",
+        "56_provenance.csv",
+        "56_rgb_gt.txt"
+      ],
+      "57": [
+        "57_owl_detections.csv",
+        "57_provenance.csv",
+        "57_rgb_gt.txt"
+      ],
+      "59": [
+        "59_owl_detections.csv",
+        "59_provenance.csv",
+        "59_rgb_gt.txt"
+      ],
+      "60": [
+        "60_owl_detections.csv",
+        "60_provenance.csv",
+        "60_rgb_gt.txt"
+      ],
+      "64": [
+        "64_owl_detections.csv",
+        "64_provenance.csv",
+        "64_rgb_gt.txt"
+      ],
+      "66": [
+        "66_owl_detections.csv",
+        "66_provenance.csv",
+        "66_rgb_gt.txt"
+      ],
+      "67": [
+        "67_owl_detections.csv",
+        "67_provenance.csv",
+        "67_rgb_gt.txt"
+      ],
+      "70": [
+        "70_owl_detections.csv",
+        "70_provenance.csv",
+        "70_rgb_gt.txt"
+      ],
+      "71": [
+        "71_owl_detections.csv",
+        "71_provenance.csv",
+        "71_rgb_gt.txt"
+      ],
+      "72": [
+        "72_owl_detections.csv",
+        "72_provenance.csv",
+        "72_rgb_gt.txt"
+      ],
+      "74": [
+        "74_owl_detections.csv",
+        "74_provenance.csv",
+        "74_rgb_gt.txt"
+      ],
+      "78": [
+        "78_owl_detections.csv",
+        "78_provenance.csv",
+        "78_rgb_gt.txt"
+      ],
+      "79": [
+        "79_owl_detections.csv",
+        "79_provenance.csv",
+        "79_rgb_gt.txt"
+      ],
+      "80": [
+        "80_owl_detections.csv",
+        "80_provenance.csv",
+        "80_rgb_gt.txt"
+      ],
+      "81": [
+        "81_owl_detections.csv",
+        "81_provenance.csv",
+        "81_rgb_gt.txt"
+      ],
+      "82": [
+        "82_owl_detections.csv",
+        "82_provenance.csv",
+        "82_rgb_gt.txt"
+      ],
+      "83": [
+        "83_owl_detections.csv",
+        "83_provenance.csv",
+        "83_rgb_gt.txt"
+      ],
+      "84": [
+        "84_owl_detections.csv",
+        "84_provenance.csv",
+        "84_rgb_gt.txt"
+      ],
+      "85": [
+        "85_owl_detections.csv",
+        "85_provenance.csv",
+        "85_rgb_gt.txt"
+      ],
+      "86": [
+        "86_owl_detections.csv",
+        "86_provenance.csv",
+        "86_rgb_gt.txt"
+      ],
+      "92": [
+        "92_owl_detections.csv",
+        "92_provenance.csv",
+        "92_rgb_gt.txt"
+      ],
+      "93": [
+        "93_owl_detections.csv",
+        "93_provenance.csv",
+        "93_rgb_gt.txt"
+      ],
+      "94": [
+        "94_owl_detections.csv",
+        "94_provenance.csv",
+        "94_rgb_gt.txt"
+      ],
+      "95": [
+        "95_owl_detections.csv",
+        "95_provenance.csv",
+        "95_rgb_gt.txt"
+      ],
+      "96": [
+        "96_owl_detections.csv",
+        "96_provenance.csv",
+        "96_rgb_gt.txt"
+      ],
+      "98": [
+        "98_owl_detections.csv",
+        "98_provenance.csv",
+        "98_rgb_gt.txt"
+      ],
+      "99": [
+        "99_owl_detections.csv",
+        "99_provenance.csv",
+        "99_rgb_gt.txt"
+      ],
+      "100": [
+        "100_owl_detections.csv",
+        "100_provenance.csv",
+        "100_rgb_gt.txt"
+      ],
+      "101": [
+        "101_owl_detections.csv",
+        "101_provenance.csv",
+        "101_rgb_gt.txt"
+      ],
+      "102": [
+        "102_owl_detections.csv",
+        "102_provenance.csv",
+        "102_rgb_gt.txt"
+      ],
+      "103": [
+        "103_owl_detections.csv",
+        "103_provenance.csv",
+        "103_rgb_gt.txt"
+      ],
+      "104": [
+        "104_owl_detections.csv",
+        "104_provenance.csv",
+        "104_rgb_gt.txt"
+      ],
+      "105": [
+        "105_owl_detections.csv",
+        "105_provenance.csv",
+        "105_rgb_gt.txt"
+      ],
+      "106": [
+        "106_owl_detections.csv",
+        "106_provenance.csv",
+        "106_rgb_gt.txt"
+      ],
+      "113": [
+        "113_owl_detections.csv",
+        "113_provenance.csv",
+        "113_rgb_gt.txt"
+      ],
+      "115": [
+        "115_owl_detections.csv",
+        "115_provenance.csv",
+        "115_rgb_gt.txt"
+      ],
+      "119": [
+        "119_owl_detections.csv",
+        "119_provenance.csv",
+        "119_rgb_gt.txt"
+      ],
+      "120": [
+        "120_owl_detections.csv",
+        "120_provenance.csv",
+        "120_rgb_gt.txt"
+      ],
+      "121": [
+        "121_owl_detections.csv",
+        "121_provenance.csv",
+        "121_rgb_gt.txt"
+      ],
+      "122": [
+        "122_owl_detections.csv",
+        "122_provenance.csv",
+        "122_rgb_gt.txt"
+      ],
+      "123": [
+        "123_owl_detections.csv",
+        "123_provenance.csv",
+        "123_rgb_gt.txt"
+      ],
+      "124": [
+        "124_owl_detections.csv",
+        "124_provenance.csv",
+        "124_rgb_gt.txt"
+      ],
+      "129": [
+        "129_owl_detections.csv",
+        "129_provenance.csv",
+        "129_rgb_gt.txt"
+      ],
+      "130": [
+        "130_owl_detections.csv",
+        "130_provenance.csv",
+        "130_rgb_gt.txt"
+      ],
+      "131": [
+        "131_owl_detections.csv",
+        "131_provenance.csv",
+        "131_rgb_gt.txt"
+      ],
+      "132": [
+        "132_owl_detections.csv",
+        "132_provenance.csv",
+        "132_rgb_gt.txt"
+      ],
+      "134": [
+        "134_owl_detections.csv",
+        "134_provenance.csv",
+        "134_rgb_gt.txt"
+      ],
+      "135": [
+        "135_owl_detections.csv",
+        "135_provenance.csv",
+        "135_rgb_gt.txt"
+      ],
+      "136": [
+        "136_owl_detections.csv",
+        "136_provenance.csv",
+        "136_rgb_gt.txt"
+      ],
+      "137": [
+        "137_owl_detections.csv",
+        "137_provenance.csv",
+        "137_rgb_gt.txt"
+      ],
+      "138": [
+        "138_owl_detections.csv",
+        "138_provenance.csv",
+        "138_rgb_gt.txt"
+      ],
+      "139": [
+        "139_owl_detections.csv",
+        "139_provenance.csv",
+        "139_rgb_gt.txt"
+      ],
+      "140": [
+        "140_owl_detections.csv",
+        "140_provenance.csv",
+        "140_rgb_gt.txt"
+      ],
+      "141": [
+        "141_owl_detections.csv",
+        "141_provenance.csv",
+        "141_rgb_gt.txt"
+      ],
+      "142": [
+        "142_owl_detections.csv",
+        "142_provenance.csv",
+        "142_rgb_gt.txt"
+      ],
+      "143": [
+        "143_owl_detections.csv",
+        "143_provenance.csv",
+        "143_rgb_gt.txt"
+      ],
+      "144": [
+        "144_owl_detections.csv",
+        "144_provenance.csv",
+        "144_rgb_gt.txt"
+      ],
+      "145": [
+        "145_owl_detections.csv",
+        "145_provenance.csv",
+        "145_rgb_gt.txt"
+      ],
+      "146": [
+        "146_owl_detections.csv",
+        "146_provenance.csv",
+        "146_rgb_gt.txt"
+      ],
+      "147": [
+        "147_owl_detections.csv",
+        "147_provenance.csv",
+        "147_rgb_gt.txt"
+      ],
+      "148": [
+        "148_owl_detections.csv",
+        "148_provenance.csv",
+        "148_rgb_gt.txt"
+      ]
+    }
+  },
+  {
+    "part": 2,
+    "title": "The BAMBI Dataset: OWL-Transferred RGB Annotations for Nadir UAV-Recordings of Forest Wildlife (Part 2)",
+    "deposition_id": 22271042,
+    "doi": "10.5281/zenodo.22271042",
+    "flights": [
+      "149",
+      "150",
+      "151",
+      "152",
+      "155",
+      "156",
+      "158",
+      "159",
+      "160",
+      "161",
+      "162",
+      "163",
+      "164",
+      "175",
+      "176",
+      "177",
+      "178",
+      "179",
+      "180",
+      "184",
+      "186",
+      "188",
+      "189",
+      "190",
+      "191",
+      "192",
+      "193",
+      "194",
+      "195",
+      "196",
+      "197",
+      "198",
+      "199",
+      "201",
+      "202",
+      "203",
+      "204",
+      "205",
+      "206",
+      "211",
+      "212",
+      "213",
+      "215",
+      "221",
+      "222",
+      "223",
+      "224",
+      "225",
+      "226",
+      "227",
+      "228",
+      "229",
+      "230",
+      "231",
+      "232",
+      "234",
+      "235",
+      "236",
+      "237",
+      "238",
+      "240",
+      "241",
+      "242",
+      "243",
+      "244",
+      "245",
+      "246",
+      "247",
+      "248",
+      "249",
+      "250",
+      "251",
+      "252",
+      "256",
+      "262",
+      "263",
+      "265",
+      "266",
+      "267",
+      "276",
+      "277",
+      "279",
+      "280",
+      "282",
+      "283",
+      "284",
+      "291",
+      "292",
+      "293",
+      "295",
+      "297",
+      "298",
+      "299",
+      "300",
+      "302",
+      "303",
+      "309",
+      "318",
+      "320",
+      "321"
+    ],
+    "num_files": 100,
+    "zip_prefix": "owl_labels_",
+    "flight_details": {
+      "149": [
+        "149_owl_detections.csv",
+        "149_provenance.csv",
+        "149_rgb_gt.txt"
+      ],
+      "150": [
+        "150_owl_detections.csv",
+        "150_provenance.csv",
+        "150_rgb_gt.txt"
+      ],
+      "151": [
+        "151_owl_detections.csv",
+        "151_provenance.csv",
+        "151_rgb_gt.txt"
+      ],
+      "152": [
+        "152_owl_detections.csv",
+        "152_provenance.csv",
+        "152_rgb_gt.txt"
+      ],
+      "155": [
+        "155_owl_detections.csv",
+        "155_provenance.csv",
+        "155_rgb_gt.txt"
+      ],
+      "156": [
+        "156_owl_detections.csv",
+        "156_provenance.csv",
+        "156_rgb_gt.txt"
+      ],
+      "158": [
+        "158_owl_detections.csv",
+        "158_provenance.csv",
+        "158_rgb_gt.txt"
+      ],
+      "159": [
+        "159_owl_detections.csv",
+        "159_provenance.csv",
+        "159_rgb_gt.txt"
+      ],
+      "160": [
+        "160_owl_detections.csv",
+        "160_provenance.csv",
+        "160_rgb_gt.txt"
+      ],
+      "161": [
+        "161_owl_detections.csv",
+        "161_provenance.csv",
+        "161_rgb_gt.txt"
+      ],
+      "162": [
+        "162_owl_detections.csv",
+        "162_provenance.csv",
+        "162_rgb_gt.txt"
+      ],
+      "163": [
+        "163_owl_detections.csv",
+        "163_provenance.csv",
+        "163_rgb_gt.txt"
+      ],
+      "164": [
+        "164_owl_detections.csv",
+        "164_provenance.csv",
+        "164_rgb_gt.txt"
+      ],
+      "175": [
+        "175_owl_detections.csv",
+        "175_provenance.csv",
+        "175_rgb_gt.txt"
+      ],
+      "176": [
+        "176_owl_detections.csv",
+        "176_provenance.csv",
+        "176_rgb_gt.txt"
+      ],
+      "177": [
+        "177_owl_detections.csv",
+        "177_provenance.csv",
+        "177_rgb_gt.txt"
+      ],
+      "178": [
+        "178_owl_detections.csv",
+        "178_provenance.csv",
+        "178_rgb_gt.txt"
+      ],
+      "179": [
+        "179_owl_detections.csv",
+        "179_provenance.csv",
+        "179_rgb_gt.txt"
+      ],
+      "180": [
+        "180_owl_detections.csv",
+        "180_provenance.csv",
+        "180_rgb_gt.txt"
+      ],
+      "184": [
+        "184_owl_detections.csv",
+        "184_provenance.csv",
+        "184_rgb_gt.txt"
+      ],
+      "186": [
+        "186_owl_detections.csv",
+        "186_provenance.csv",
+        "186_rgb_gt.txt"
+      ],
+      "188": [
+        "188_owl_detections.csv",
+        "188_provenance.csv",
+        "188_rgb_gt.txt"
+      ],
+      "189": [
+        "189_owl_detections.csv",
+        "189_provenance.csv",
+        "189_rgb_gt.txt"
+      ],
+      "190": [
+        "190_owl_detections.csv",
+        "190_provenance.csv",
+        "190_rgb_gt.txt"
+      ],
+      "191": [
+        "191_owl_detections.csv",
+        "191_provenance.csv",
+        "191_rgb_gt.txt"
+      ],
+      "192": [
+        "192_owl_detections.csv",
+        "192_provenance.csv",
+        "192_rgb_gt.txt"
+      ],
+      "193": [
+        "193_owl_detections.csv",
+        "193_provenance.csv",
+        "193_rgb_gt.txt"
+      ],
+      "194": [
+        "194_owl_detections.csv",
+        "194_provenance.csv",
+        "194_rgb_gt.txt"
+      ],
+      "195": [
+        "195_owl_detections.csv",
+        "195_provenance.csv",
+        "195_rgb_gt.txt"
+      ],
+      "196": [
+        "196_owl_detections.csv",
+        "196_provenance.csv",
+        "196_rgb_gt.txt"
+      ],
+      "197": [
+        "197_owl_detections.csv",
+        "197_provenance.csv",
+        "197_rgb_gt.txt"
+      ],
+      "198": [
+        "198_owl_detections.csv",
+        "198_provenance.csv",
+        "198_rgb_gt.txt"
+      ],
+      "199": [
+        "199_owl_detections.csv",
+        "199_provenance.csv",
+        "199_rgb_gt.txt"
+      ],
+      "201": [
+        "201_owl_detections.csv",
+        "201_provenance.csv",
+        "201_rgb_gt.txt"
+      ],
+      "202": [
+        "202_owl_detections.csv",
+        "202_provenance.csv",
+        "202_rgb_gt.txt"
+      ],
+      "203": [
+        "203_owl_detections.csv",
+        "203_provenance.csv",
+        "203_rgb_gt.txt"
+      ],
+      "204": [
+        "204_owl_detections.csv",
+        "204_provenance.csv",
+        "204_rgb_gt.txt"
+      ],
+      "205": [
+        "205_owl_detections.csv",
+        "205_provenance.csv",
+        "205_rgb_gt.txt"
+      ],
+      "206": [
+        "206_owl_detections.csv",
+        "206_provenance.csv",
+        "206_rgb_gt.txt"
+      ],
+      "211": [
+        "211_owl_detections.csv",
+        "211_provenance.csv",
+        "211_rgb_gt.txt"
+      ],
+      "212": [
+        "212_owl_detections.csv",
+        "212_provenance.csv",
+        "212_rgb_gt.txt"
+      ],
+      "213": [
+        "213_owl_detections.csv",
+        "213_provenance.csv",
+        "213_rgb_gt.txt"
+      ],
+      "215": [
+        "215_owl_detections.csv",
+        "215_provenance.csv",
+        "215_rgb_gt.txt"
+      ],
+      "221": [
+        "221_owl_detections.csv",
+        "221_provenance.csv",
+        "221_rgb_gt.txt"
+      ],
+      "222": [
+        "222_owl_detections.csv",
+        "222_provenance.csv",
+        "222_rgb_gt.txt"
+      ],
+      "223": [
+        "223_owl_detections.csv",
+        "223_provenance.csv",
+        "223_rgb_gt.txt"
+      ],
+      "224": [
+        "224_owl_detections.csv",
+        "224_provenance.csv",
+        "224_rgb_gt.txt"
+      ],
+      "225": [
+        "225_owl_detections.csv",
+        "225_provenance.csv",
+        "225_rgb_gt.txt"
+      ],
+      "226": [
+        "226_owl_detections.csv",
+        "226_provenance.csv",
+        "226_rgb_gt.txt"
+      ],
+      "227": [
+        "227_owl_detections.csv",
+        "227_provenance.csv",
+        "227_rgb_gt.txt"
+      ],
+      "228": [
+        "228_owl_detections.csv",
+        "228_provenance.csv",
+        "228_rgb_gt.txt"
+      ],
+      "229": [
+        "229_owl_detections.csv",
+        "229_provenance.csv",
+        "229_rgb_gt.txt"
+      ],
+      "230": [
+        "230_owl_detections.csv",
+        "230_provenance.csv",
+        "230_rgb_gt.txt"
+      ],
+      "231": [
+        "231_owl_detections.csv",
+        "231_provenance.csv",
+        "231_rgb_gt.txt"
+      ],
+      "232": [
+        "232_owl_detections.csv",
+        "232_provenance.csv",
+        "232_rgb_gt.txt"
+      ],
+      "234": [
+        "234_owl_detections.csv",
+        "234_provenance.csv",
+        "234_rgb_gt.txt"
+      ],
+      "235": [
+        "235_owl_detections.csv",
+        "235_provenance.csv",
+        "235_rgb_gt.txt"
+      ],
+      "236": [
+        "236_owl_detections.csv",
+        "236_provenance.csv",
+        "236_rgb_gt.txt"
+      ],
+      "237": [
+        "237_owl_detections.csv",
+        "237_provenance.csv",
+        "237_rgb_gt.txt"
+      ],
+      "238": [
+        "238_owl_detections.csv",
+        "238_provenance.csv",
+        "238_rgb_gt.txt"
+      ],
+      "240": [
+        "240_owl_detections.csv",
+        "240_provenance.csv",
+        "240_rgb_gt.txt"
+      ],
+      "241": [
+        "241_owl_detections.csv",
+        "241_provenance.csv",
+        "241_rgb_gt.txt"
+      ],
+      "242": [
+        "242_owl_detections.csv",
+        "242_provenance.csv",
+        "242_rgb_gt.txt"
+      ],
+      "243": [
+        "243_owl_detections.csv",
+        "243_provenance.csv",
+        "243_rgb_gt.txt"
+      ],
+      "244": [
+        "244_owl_detections.csv",
+        "244_provenance.csv",
+        "244_rgb_gt.txt"
+      ],
+      "245": [
+        "245_owl_detections.csv",
+        "245_provenance.csv",
+        "245_rgb_gt.txt"
+      ],
+      "246": [
+        "246_owl_detections.csv",
+        "246_provenance.csv",
+        "246_rgb_gt.txt"
+      ],
+      "247": [
+        "247_owl_detections.csv",
+        "247_provenance.csv",
+        "247_rgb_gt.txt"
+      ],
+      "248": [
+        "248_owl_detections.csv",
+        "248_provenance.csv",
+        "248_rgb_gt.txt"
+      ],
+      "249": [
+        "249_owl_detections.csv",
+        "249_provenance.csv",
+        "249_rgb_gt.txt"
+      ],
+      "250": [
+        "250_owl_detections.csv",
+        "250_provenance.csv",
+        "250_rgb_gt.txt"
+      ],
+      "251": [
+        "251_owl_detections.csv",
+        "251_provenance.csv",
+        "251_rgb_gt.txt"
+      ],
+      "252": [
+        "252_owl_detections.csv",
+        "252_provenance.csv",
+        "252_rgb_gt.txt"
+      ],
+      "256": [
+        "256_owl_detections.csv",
+        "256_provenance.csv",
+        "256_rgb_gt.txt"
+      ],
+      "262": [
+        "262_owl_detections.csv",
+        "262_provenance.csv",
+        "262_rgb_gt.txt"
+      ],
+      "263": [
+        "263_owl_detections.csv",
+        "263_provenance.csv",
+        "263_rgb_gt.txt"
+      ],
+      "265": [
+        "265_owl_detections.csv",
+        "265_provenance.csv",
+        "265_rgb_gt.txt"
+      ],
+      "266": [
+        "266_owl_detections.csv",
+        "266_provenance.csv",
+        "266_rgb_gt.txt"
+      ],
+      "267": [
+        "267_owl_detections.csv",
+        "267_provenance.csv",
+        "267_rgb_gt.txt"
+      ],
+      "276": [
+        "276_owl_detections.csv",
+        "276_provenance.csv",
+        "276_rgb_gt.txt"
+      ],
+      "277": [
+        "277_owl_detections.csv",
+        "277_provenance.csv",
+        "277_rgb_gt.txt"
+      ],
+      "279": [
+        "279_owl_detections.csv",
+        "279_provenance.csv",
+        "279_rgb_gt.txt"
+      ],
+      "280": [
+        "280_owl_detections.csv",
+        "280_provenance.csv",
+        "280_rgb_gt.txt"
+      ],
+      "282": [
+        "282_owl_detections.csv",
+        "282_provenance.csv",
+        "282_rgb_gt.txt"
+      ],
+      "283": [
+        "283_owl_detections.csv",
+        "283_provenance.csv",
+        "283_rgb_gt.txt"
+      ],
+      "284": [
+        "284_owl_detections.csv",
+        "284_provenance.csv",
+        "284_rgb_gt.txt"
+      ],
+      "291": [
+        "291_owl_detections.csv",
+        "291_provenance.csv",
+        "291_rgb_gt.txt"
+      ],
+      "292": [
+        "292_owl_detections.csv",
+        "292_provenance.csv",
+        "292_rgb_gt.txt"
+      ],
+      "293": [
+        "293_owl_detections.csv",
+        "293_provenance.csv",
+        "293_rgb_gt.txt"
+      ],
+      "295": [
+        "295_owl_detections.csv",
+        "295_provenance.csv",
+        "295_rgb_gt.txt"
+      ],
+      "297": [
+        "297_owl_detections.csv",
+        "297_provenance.csv",
+        "297_rgb_gt.txt"
+      ],
+      "298": [
+        "298_owl_detections.csv",
+        "298_provenance.csv",
+        "298_rgb_gt.txt"
+      ],
+      "299": [
+        "299_owl_detections.csv",
+        "299_provenance.csv",
+        "299_rgb_gt.txt"
+      ],
+      "300": [
+        "300_owl_detections.csv",
+        "300_provenance.csv",
+        "300_rgb_gt.txt"
+      ],
+      "302": [
+        "302_owl_detections.csv",
+        "302_provenance.csv",
+        "302_rgb_gt.txt"
+      ],
+      "303": [
+        "303_owl_detections.csv",
+        "303_provenance.csv",
+        "303_rgb_gt.txt"
+      ],
+      "309": [
+        "309_owl_detections.csv",
+        "309_provenance.csv",
+        "309_rgb_gt.txt"
+      ],
+      "318": [
+        "318_owl_detections.csv",
+        "318_provenance.csv",
+        "318_rgb_gt.txt"
+      ],
+      "320": [
+        "320_owl_detections.csv",
+        "320_provenance.csv",
+        "320_rgb_gt.txt"
+      ],
+      "321": [
+        "321_owl_detections.csv",
+        "321_provenance.csv",
+        "321_rgb_gt.txt"
+      ]
+    }
+  },
+  {
+    "part": 3,
+    "title": "The BAMBI Dataset: OWL-Transferred RGB Annotations for Nadir UAV-Recordings of Forest Wildlife (Part 3)",
+    "deposition_id": 22271073,
+    "doi": "10.5281/zenodo.22271073",
+    "flights": [
+      "322",
+      "326",
+      "330",
+      "331",
+      "332",
+      "333",
+      "334",
+      "335",
+      "336",
+      "337",
+      "338",
+      "339",
+      "340",
+      "341",
+      "342",
+      "343",
+      "344",
+      "345",
+      "349",
+      "369",
+      "372",
+      "373",
+      "376",
+      "377",
+      "378",
+      "379",
+      "381",
+      "383",
+      "384",
+      "386",
+      "388",
+      "389",
+      "390",
+      "391",
+      "392",
+      "393",
+      "394",
+      "395"
+    ],
+    "num_files": 38,
+    "zip_prefix": "owl_labels_",
+    "flight_details": {
+      "322": [
+        "322_owl_detections.csv",
+        "322_provenance.csv",
+        "322_rgb_gt.txt"
+      ],
+      "326": [
+        "326_owl_detections.csv",
+        "326_provenance.csv",
+        "326_rgb_gt.txt"
+      ],
+      "330": [
+        "330_owl_detections.csv",
+        "330_provenance.csv",
+        "330_rgb_gt.txt"
+      ],
+      "331": [
+        "331_owl_detections.csv",
+        "331_provenance.csv",
+        "331_rgb_gt.txt"
+      ],
+      "332": [
+        "332_owl_detections.csv",
+        "332_provenance.csv",
+        "332_rgb_gt.txt"
+      ],
+      "333": [
+        "333_owl_detections.csv",
+        "333_provenance.csv",
+        "333_rgb_gt.txt"
+      ],
+      "334": [
+        "334_owl_detections.csv",
+        "334_provenance.csv",
+        "334_rgb_gt.txt"
+      ],
+      "335": [
+        "335_owl_detections.csv",
+        "335_provenance.csv",
+        "335_rgb_gt.txt"
+      ],
+      "336": [
+        "336_owl_detections.csv",
+        "336_provenance.csv",
+        "336_rgb_gt.txt"
+      ],
+      "337": [
+        "337_owl_detections.csv",
+        "337_provenance.csv",
+        "337_rgb_gt.txt"
+      ],
+      "338": [
+        "338_owl_detections.csv",
+        "338_provenance.csv",
+        "338_rgb_gt.txt"
+      ],
+      "339": [
+        "339_owl_detections.csv",
+        "339_provenance.csv",
+        "339_rgb_gt.txt"
+      ],
+      "340": [
+        "340_owl_detections.csv",
+        "340_provenance.csv",
+        "340_rgb_gt.txt"
+      ],
+      "341": [
+        "341_owl_detections.csv",
+        "341_provenance.csv",
+        "341_rgb_gt.txt"
+      ],
+      "342": [
+        "342_owl_detections.csv",
+        "342_provenance.csv",
+        "342_rgb_gt.txt"
+      ],
+      "343": [
+        "343_owl_detections.csv",
+        "343_provenance.csv",
+        "343_rgb_gt.txt"
+      ],
+      "344": [
+        "344_owl_detections.csv",
+        "344_provenance.csv",
+        "344_rgb_gt.txt"
+      ],
+      "345": [
+        "345_owl_detections.csv",
+        "345_provenance.csv",
+        "345_rgb_gt.txt"
+      ],
+      "349": [
+        "349_owl_detections.csv",
+        "349_provenance.csv",
+        "349_rgb_gt.txt"
+      ],
+      "369": [
+        "369_owl_detections.csv",
+        "369_provenance.csv",
+        "369_rgb_gt.txt"
+      ],
+      "372": [
+        "372_owl_detections.csv",
+        "372_provenance.csv",
+        "372_rgb_gt.txt"
+      ],
+      "373": [
+        "373_owl_detections.csv",
+        "373_provenance.csv",
+        "373_rgb_gt.txt"
+      ],
+      "376": [
+        "376_owl_detections.csv",
+        "376_provenance.csv",
+        "376_rgb_gt.txt"
+      ],
+      "377": [
+        "377_owl_detections.csv",
+        "377_provenance.csv",
+        "377_rgb_gt.txt"
+      ],
+      "378": [
+        "378_owl_detections.csv",
+        "378_provenance.csv",
+        "378_rgb_gt.txt"
+      ],
+      "379": [
+        "379_owl_detections.csv",
+        "379_provenance.csv",
+        "379_rgb_gt.txt"
+      ],
+      "381": [
+        "381_owl_detections.csv",
+        "381_provenance.csv",
+        "381_rgb_gt.txt"
+      ],
+      "383": [
+        "383_owl_detections.csv",
+        "383_provenance.csv",
+        "383_rgb_gt.txt"
+      ],
+      "384": [
+        "384_owl_detections.csv",
+        "384_provenance.csv",
+        "384_rgb_gt.txt"
+      ],
+      "386": [
+        "386_owl_detections.csv",
+        "386_provenance.csv",
+        "386_rgb_gt.txt"
+      ],
+      "388": [
+        "388_owl_detections.csv",
+        "388_provenance.csv",
+        "388_rgb_gt.txt"
+      ],
+      "389": [
+        "389_owl_detections.csv",
+        "389_provenance.csv",
+        "389_rgb_gt.txt"
+      ],
+      "390": [
+        "390_owl_detections.csv",
+        "390_provenance.csv",
+        "390_rgb_gt.txt"
+      ],
+      "391": [
+        "391_owl_detections.csv",
+        "391_provenance.csv",
+        "391_rgb_gt.txt"
+      ],
+      "392": [
+        "392_owl_detections.csv",
+        "392_provenance.csv",
+        "392_rgb_gt.txt"
+      ],
+      "393": [
+        "393_owl_detections.csv",
+        "393_provenance.csv",
+        "393_rgb_gt.txt"
+      ],
+      "394": [
+        "394_owl_detections.csv",
+        "394_provenance.csv",
+        "394_rgb_gt.txt"
+      ],
+      "395": [
+        "395_owl_detections.csv",
+        "395_provenance.csv",
+        "395_rgb_gt.txt"
+      ]
+    }
+  }
+]

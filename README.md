@@ -237,6 +237,11 @@ The matched, orthographic Red Deer subset:
 - Part 10:  [10.5281/zenodo.21338084](https://doi.org/10.5281/zenodo.21338084) 
 - Part 11:  [10.5281/zenodo.21342007](https://doi.org/10.5281/zenodo.21342007) 
 
+The OWL-transferred RGB annotations (an annotation layer over the processed dataset — see [Thermal → RGB Label Transfer with OWL](#thermal--rgb-label-transfer-with-owl)):
+- Part 1: [10.5281/zenodo.22271027](https://doi.org/10.5281/zenodo.22271027)
+- Part 2: [10.5281/zenodo.22271042](https://doi.org/10.5281/zenodo.22271042)
+- Part 3: [10.5281/zenodo.22271073](https://doi.org/10.5281/zenodo.22271073)
+
 ---
 
 ## Scripts
@@ -282,9 +287,14 @@ python download_from_zenodo.py --dry-run
 python download_from_zenodo.py --version raw
 python download_from_zenodo.py --version matched
 python download_from_zenodo.py --version orthographic
+
+# Recordings plus the OWL-transferred RGB annotations, side by side in one folder
+python download_from_zenodo.py --version owl-transferred -f 119 --unzip
 ```
 
-> **Note:** `--version` selects which dataset version to download and defaults to `base` (the pre-processed videos). The available versions are `base`, `raw`, `matched`, and `orthographic`; each is described by its own `flight_metadata/zenodo_upload_summary_*.json`. A summary file from a custom location can be supplied with `-s <path>`, which overrides `--version`.
+> **Note:** `--version` selects which dataset version to download and defaults to `base` (the pre-processed videos). The available versions are `base`, `raw`, `matched`, `orthographic`, and `owl-transferred`; each is described by its own `flight_metadata/zenodo_upload_summary_*.json`. A summary file from a custom location can be supplied with `-s <path>`, which overrides `--version`.
+
+> **Note:** `owl-transferred` is a **layer on top of `base`**, not a standalone release: it ships only annotation files. Selecting it downloads the `base` recordings *and* the transferred annotations into the same output directory, so a single command gives a complete, usable flight. Its archives are named `owl_labels_<id>.zip` so they cannot collide with the `flight_<id>.zip` of the base layer. Flights that the base release ships without thermal labels have nothing to transfer and are reported as a coverage gap at the end of the run.
 
 > **Note:** `--split` reads flight IDs from `flight_metadata/splits.json`. A custom path can be supplied with `--splits-file <path>`. The flag is silently ignored when `-f`, `--range`, or `--parts` is also specified.
 
@@ -427,6 +437,55 @@ Over the whole `matched` subset (252,857 boxes, 234,264 with an accepted RGB
 reference) this reduces the mean centre error from **14.97 px to 4.31 px** and
 raises the share of boxes at IoU > 0.5 from **51.5% to 95.9%**. Full tables,
 ablations and failure modes are in the notebook.
+
+#### The released `owl-transferred` annotations
+
+The method has been run over the whole base release and published as its own
+dataset version, so the labels can be downloaded rather than recomputed:
+
+```bash
+python download_from_zenodo.py --version owl-transferred -f 119 --unzip
+```
+
+Per flight it ships `<id>_rgb_gt.txt` (the transferred RGB annotations, in the
+same MOT format as the base `<id>_gt.txt`), `<id>_provenance.csv` (where each
+box's shift came from) and `<id>_owl_detections.csv` (the raw OWL points, in
+image pixels, so the transfer can be re-run without a GPU).
+
+**Coverage: 238 of the 386 flights**, 99,230 boxes. Of the rest, 85 flights
+carry no thermal annotations at all, so there is nothing to transfer, and 63
+produced no OWL detection that could be matched anywhere in the flight — the
+animals are visible in thermal but not detectable in RGB, typically under
+canopy. Those 63 are omitted rather than shipped: with no match anywhere, the
+output would be a byte-identical copy of the thermal boxes, and publishing that
+as an RGB annotation would misrepresent it.
+
+**The annotations are in lock-step with the thermal ones.** Only `bb_left` and
+`bb_top` differ. Row order, `frame`, `track_id`, `bb_width`, `bb_height` and
+every remaining column are identical to the base `<id>_gt.txt`, verified across
+all 301 transferred flights and 102,848 boxes, so the two views join directly
+on `(frame, track_id)`.
+
+Measured against the human-accepted RGB annotations of the `matched` release
+(75 flights, 17,165 boxes that could be paired):
+
+| | mean | median | p90 |
+|---|---|---|---|
+| unchanged (thermal boxes) | 15.98 px | 14.08 | 27.82 |
+| **transferred** | **5.22 px** | **3.81** | **9.19** |
+
+87.1% of boxes end up closer to the reference than leaving them alone. Centre
+error is reported rather than IoU because base v2 refined the box sizes, so an
+IoU against the older `matched` boxes would mix label revision into a number
+that reads as transfer accuracy.
+
+The error is higher than the 4.31 px measured on `matched` itself for a
+structural reason: the base release annotates sparse key frames rather than
+every frame, so per-track temporal smoothing spans fewer samples and 49.2% of
+boxes take the consensus curve instead of a detection of their own. These are
+machine-generated labels that have not been reviewed by hand; the provenance
+sidecar exists so that suspect flights can be triaged without re-running
+anything.
 
 ### Visualization
 

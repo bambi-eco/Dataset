@@ -10,12 +10,9 @@ This repository provides sample scripts for downloading, processing, and visuali
 
 > **Citation:** If you use this dataset in your research, please cite our paper (see [Citation](#citation)).
 
-If you want to make your first steps please refer to our [Jupyter Notebook](introduction.ipynb).
-For transferring thermal annotations onto the RGB view, see [`owl_label_transfer.ipynb`](owl_label_transfer.ipynb).
-
 ---
 
-## Dataset Overview
+## Overview
 
 | Property | Value |
 |---|---|
@@ -28,597 +25,66 @@ For transferring thermal annotations onto the RGB view, see [`owl_label_transfer
 | Recording period | January 2023 – November 2024 |
 | Location | Austria (Tyrol, Upper Austria, Lower Austria, Salzburg, Styria, Carinthia) |
 
-### Species
+Each flight is one video in which the **left half is thermal and the right half
+is RGB**, both 1024x1024, accompanied by an annotation file in MOT format and
+the drone poses. Annotations are made on the thermal view.
 
-The dataset covers the following 12 classes:
-
-| # | Species | Common Name | Wikidata                                                                                                  | Tracks | Key Frames |
-|---|---|---|-----------------------------------------------------------------------------------------------------------|---:|---:|
-| 1 | *Sus scrofa* | Wild boar | [Q58697](https://www.wikidata.org/wiki/Q58697)                                                            | 1,770 | 26,132 |
-| 2 | *Cervus elaphus* | Red deer | [Q1219579](https://www.wikidata.org/wiki/Q1219579)                                                        | 1,613 | 26,674 |
-| 3 | *Capreolus capreolus* | Roe deer | [Q122069](https://www.wikidata.org/wiki/Q122069)                                                          | 682 | 9,404 |
-| 4 | *Dama dama* | Fallow deer | [Q20908334](https://www.wikidata.org/wiki/Q20908334)                                                      | 297 | 20,003 |
-| 5 | *Capra ibex* | Alpine ibex | [Q168327](https://www.wikidata.org/wiki/Q168327)                                                          | 100 | 3,005 |
-| 6 | *Rupicapra rupicapra* | Chamois | [Q131340](https://www.wikidata.org/wiki/Q131340)                                                          | 15 | 747 |
-| 7 | *Aves* | Bird | [Q5113](https://www.wikidata.org/wiki/Q5113)                                                              | 75 | 942 |
-| 8 | *Homo sapiens* | Human | [Q15978631](https://www.wikidata.org/wiki/Q15978631)                                                      | 93 | 1,158 |
-| 9 | *Canis lupus familiaris* | Dog | [Q26972265](https://www.wikidata.org/wiki/Q26972265)                                                      | 7 | 95 |
-| 10 | *Sus scrofa × Sus domesticus* | Hybrid pig | [Q602666](https://www.wikidata.org/wiki/Q602666) (no matching wikidata id, so workaround with forest hog) | 44 | 1,484 |
-| 11 | — | No-animal | [Q10738](https://www.wikidata.org/wiki/Q10738) (it is not an animal, it is a rock, THE ROCK)              | 60 | 521 |
-| 12 | — | Unknown | [Q24238356](https://www.wikidata.org/wiki/Q24238356)                                                      | 344 | 2,536 |
-
-
-### Annotation Format (MOT)
-
-Annotations are stored as CSV files (no header) following a custom MOT format:
-
-```
-frame, track_id, bb_left, bb_top, bb_width, bb_height, conf, class_id, visibility, species, gender, age, is_propagated
-```
-
-| Column | Type | Description |
-|---|---|---|
-| `frame` | int | Frame index |
-| `track_id` | int | Unique track identifier |
-| `bb_left` | int | Bounding box left coordinate (px) |
-| `bb_top` | int | Bounding box top coordinate (px) |
-| `bb_width` | int | Bounding box width (px) |
-| `bb_height` | int | Bounding box height (px) |
-| `conf` | float | Confidence score |
-| `class_id` | int | Species class identifier |
-| `visibility` | float | Visibility (1.0 = fully visible, 0.0 = fully occluded) |
-| `species` | str | Species name |
-| `gender` | int | Gender (0 = unknown, 1 = male, 2 = female) |
-| `age` | int | Age (0 = unknown, 1 = juvenile, 2 = adult) |
-| `is_propagated` | int | 0 = annotated key frame, 1 = interpolated |
-
-Class_ids are defined as `<wikidata_id>-<gender>-<age>-<visibility>` with the following mapping:
-```json
-{
-  "class_mapping": {
-    "Q10738-0-0-0": 0,
-    "Q10738-0-0-1": 1,
-    "Q1219579-0-0-0": 2,
-    "Q1219579-0-0-1": 3,
-    "Q1219579-0-1-0": 4,
-    "Q1219579-0-1-1": 5,
-    "Q1219579-0-2-0": 6,
-    "Q1219579-0-2-1": 7,
-    "Q1219579-1-0-0": 8,
-    "Q1219579-1-0-1": 9,
-    "Q1219579-1-2-0": 10,
-    "Q1219579-1-2-1": 11,
-    "Q1219579-2-0-0": 12,
-    "Q1219579-2-0-1": 13,
-    "Q1219579-2-1-0": 14,
-    "Q1219579-2-2-0": 15,
-    "Q1219579-2-2-1": 16,
-    "Q122069-0-0-0": 17,
-    "Q122069-0-0-1": 18,
-    "Q122069-0-1-0": 19,
-    "Q122069-0-1-1": 20,
-    "Q122069-0-2-0": 21,
-    "Q122069-0-2-1": 22,
-    "Q131340-0-0-0": 23,
-    "Q131340-0-0-1": 24,
-    "Q131340-0-2-0": 25,
-    "Q131340-0-2-1": 26,
-    "Q15978631-0-0-0": 27,
-    "Q15978631-0-0-1": 28,
-    "Q15978631-0-2-0": 29,
-    "Q15978631-0-2-1": 30,
-    "Q15978631-2-0-0": 31,
-    "Q15978631-2-2-0": 32,
-    "Q15978631-2-2-1": 33,
-    "Q168327-0-0-0": 34,
-    "Q168327-0-0-1": 35,
-    "Q168327-0-1-0": 36,
-    "Q168327-0-1-1": 37,
-    "Q168327-0-2-0": 38,
-    "Q168327-0-2-1": 39,
-    "Q168327-2-2-0": 40,
-    "Q168327-2-2-1": 41,
-    "Q20908334-0-0-0": 42,
-    "Q20908334-0-1-0": 43,
-    "Q20908334-1-0-0": 44,
-    "Q20908334-1-1-0": 45,
-    "Q20908334-1-2-0": 46,
-    "Q20908334-2-2-0": 47,
-    "Q20908334-2-2-1": 48,
-    "Q24238356-0-0-0": 49,
-    "Q24238356-0-0-1": 50,
-    "Q24238356-0-2-0": 51,
-    "Q24238356-0-2-1": 52,
-    "Q26972265-0-0-0": 53,
-    "Q26972265-0-2-0": 54,
-    "Q26972265-0-2-1": 55,
-    "Q5113-0-0-0": 56,
-    "Q5113-0-0-1": 57,
-    "Q5113-0-2-0": 58,
-    "Q5113-0-2-1": 59,
-    "Q58697-0-0-0": 60,
-    "Q58697-0-0-1": 61,
-    "Q58697-0-1-0": 62,
-    "Q58697-0-1-1": 63,
-    "Q58697-0-2-0": 64,
-    "Q58697-0-2-1": 65,
-    "Q58697-1-2-0": 66,
-    "Q58697-1-2-1": 67,
-    "Q58697-2-2-0": 68,
-    "Q58697-2-2-1": 69,
-    "Q602666-0-0-0": 70,
-    "Q602666-0-0-1": 71,
-    "Q602666-0-1-0": 72,
-    "Q602666-0-2-0": 73,
-    "Q602666-0-2-1": 74
-  }
-}
-```
-
----
-
-## Availability
-
-The processed dataset is publicly available on Zenodo:
-
-- Part 1: [10.5281/zenodo.18692354](https://doi.org/10.5281/zenodo.18692354)
-- Part 2: [10.5281/zenodo.18698508](https://doi.org/10.5281/zenodo.18698508)
-- Part 3: [10.5281/zenodo.18703312](https://doi.org/10.5281/zenodo.18703312)
-- Part 4: [10.5281/zenodo.18705705](https://doi.org/10.5281/zenodo.18705705)
-- Part 5: [10.5281/zenodo.18707610](https://doi.org/10.5281/zenodo.18707610)
-- Part 6: [10.5281/zenodo.18711217](https://doi.org/10.5281/zenodo.18711217)
-- Part 7: [10.5281/zenodo.18715162](https://doi.org/10.5281/zenodo.18715162)
-- Part 8: [10.5281/zenodo.18717601](https://doi.org/10.5281/zenodo.18717601)
-
-The unprocessed dataset is also publicly available on Zenodo:
-
-- Part 1:  [10.5281/zenodo.18885436](https://doi.org/10.5281/zenodo.18885436 )
-- Part 2:  [10.5281/zenodo.18895587](https://doi.org/10.5281/zenodo.18895587 )
-- Part 3:  [10.5281/zenodo.18898626](https://doi.org/10.5281/zenodo.18898626 )
-- Part 4:  [10.5281/zenodo.18902130](https://doi.org/10.5281/zenodo.18902130 )
-- Part 5:  [10.5281/zenodo.18905738](https://doi.org/10.5281/zenodo.18905738 )
-- Part 6:  [10.5281/zenodo.18908258](https://doi.org/10.5281/zenodo.18908258 )
-- Part 7:  [10.5281/zenodo.18911860](https://doi.org/10.5281/zenodo.18911860 )
-- Part 8:  [10.5281/zenodo.18916791](https://doi.org/10.5281/zenodo.18916791 )
-- Part 9:  [10.5281/zenodo.18920616](https://doi.org/10.5281/zenodo.18920616 )
-- Part 10: [10.5281/zenodo.18928160](https://doi.org/10.5281/zenodo.18928160)
-- Part 11: [10.5281/zenodo.18931665](https://doi.org/10.5281/zenodo.18931665)
-- Part 12: [10.5281/zenodo.18937467](https://doi.org/10.5281/zenodo.18937467)
-- Part 13: [10.5281/zenodo.18943988](https://doi.org/10.5281/zenodo.18943988)
-- Part 14: [10.5281/zenodo.18949040](https://doi.org/10.5281/zenodo.18949040)
-- Part 15: [10.5281/zenodo.18958982](https://doi.org/10.5281/zenodo.18958982)
-- Part 16: [10.5281/zenodo.18968497](https://doi.org/10.5281/zenodo.18968497)
-- Part 17: [10.5281/zenodo.18975298](https://doi.org/10.5281/zenodo.18975298)
-- Part 18: [10.5281/zenodo.18983480](https://doi.org/10.5281/zenodo.18983480)
-- Part 19: [10.5281/zenodo.18989873](https://doi.org/10.5281/zenodo.18989873)
-- Part 20: [10.5281/zenodo.18995072](https://doi.org/10.5281/zenodo.18995072)
-- Part 21: [10.5281/zenodo.19004434](https://doi.org/10.5281/zenodo.19004434)
-- Part 22: [10.5281/zenodo.19011010](https://doi.org/10.5281/zenodo.19011010)
-- Part 23: [10.5281/zenodo.19016292](https://doi.org/10.5281/zenodo.19016292)
-- Part 24: [10.5281/zenodo.19022059](https://doi.org/10.5281/zenodo.19022059)
-- Part 25: [10.5281/zenodo.19040833](https://doi.org/10.5281/zenodo.19040833)
-- Part 26: [10.5281/zenodo.19043198](https://doi.org/10.5281/zenodo.19043198)
-- Part 27: [10.5281/zenodo.19047570](https://doi.org/10.5281/zenodo.19047570)
-- Part 28: [10.5281/zenodo.19052469](https://doi.org/10.5281/zenodo.19052469)
-- Part 29: [10.5281/zenodo.19056538](https://doi.org/10.5281/zenodo.19056538)
-- Part 30: [10.5281/zenodo.19058735](https://doi.org/10.5281/zenodo.19058735)
-- Part 31: [10.5281/zenodo.19060823](https://doi.org/10.5281/zenodo.19060823)
-- Part 32: [10.5281/zenodo.19066975](https://doi.org/10.5281/zenodo.19066975)
-- Part 33: [10.5281/zenodo.19073897](https://doi.org/10.5281/zenodo.19073897)
-- Part 34: [10.5281/zenodo.19077836](https://doi.org/10.5281/zenodo.19077836)
-- Part 35: [10.5281/zenodo.19080733](https://doi.org/10.5281/zenodo.19080733)
-- Part 36: [10.5281/zenodo.19135787](https://doi.org/10.5281/zenodo.19135787)
-- Part 37: [10.5281/zenodo.19140480](https://doi.org/10.5281/zenodo.19140480)
-- Part 38: [10.5281/zenodo.19142769](https://doi.org/10.5281/zenodo.19142769)
-- Part 39: [10.5281/zenodo.19145596](https://doi.org/10.5281/zenodo.19145596)
-- Part 40: [10.5281/zenodo.19150949](https://doi.org/10.5281/zenodo.19150949)
-- Part 41: [10.5281/zenodo.19153807](https://doi.org/10.5281/zenodo.19153807)
-- Part 42: [10.5281/zenodo.19155449](https://doi.org/10.5281/zenodo.19155449)
-- Part 43: [10.5281/zenodo.19158628](https://doi.org/10.5281/zenodo.19158628)
-- Part 44: [10.5281/zenodo.19161728](https://doi.org/10.5281/zenodo.19161728)
-- Part 45: [10.5281/zenodo.19166111](https://doi.org/10.5281/zenodo.19166111)
-- Part 46: [10.5281/zenodo.19172900](https://doi.org/10.5281/zenodo.19172900)
-- Part 47: [10.5281/zenodo.19177615](https://doi.org/10.5281/zenodo.19177615)
-
-The matched Red Deer subset:
-- Part 1: [10.5281/zenodo.21291168](https://doi.org/10.5281/zenodo.21291168)
-- Part 2: [10.5281/zenodo.21298044](https://doi.org/10.5281/zenodo.21298044)
-
-The matched, orthographic Red Deer subset:
-- Part 1:   [10.5281/zenodo.21301636](https://doi.org/10.5281/zenodo.21301636) 
-- Part 2:   [10.5281/zenodo.21304284](https://doi.org/10.5281/zenodo.21304284) 
-- Part 3:   [10.5281/zenodo.21308829](https://doi.org/10.5281/zenodo.21308829) 
-- Part 4:   [10.5281/zenodo.21313119](https://doi.org/10.5281/zenodo.21313119) 
-- Part 5:   [10.5281/zenodo.21315950](https://doi.org/10.5281/zenodo.21315950) 
-- Part 6:   [10.5281/zenodo.21318796](https://doi.org/10.5281/zenodo.21318796) 
-- Part 7:   [10.5281/zenodo.21322508](https://doi.org/10.5281/zenodo.21322508) 
-- Part 8:   [10.5281/zenodo.21326737](https://doi.org/10.5281/zenodo.21326737) 
-- Part 9:   [10.5281/zenodo.21330351](https://doi.org/10.5281/zenodo.21330351) 
-- Part 10:  [10.5281/zenodo.21338084](https://doi.org/10.5281/zenodo.21338084) 
-- Part 11:  [10.5281/zenodo.21342007](https://doi.org/10.5281/zenodo.21342007) 
-
-The OWL-transferred RGB annotations (an annotation layer over the processed dataset — see [Thermal → RGB Label Transfer with OWL](#thermal--rgb-label-transfer-with-owl)):
-- Part 1: [10.5281/zenodo.22271027](https://doi.org/10.5281/zenodo.22271027)
-- Part 2: [10.5281/zenodo.22271042](https://doi.org/10.5281/zenodo.22271042)
-- Part 3: [10.5281/zenodo.22271073](https://doi.org/10.5281/zenodo.22271073)
-
----
-
-## Scripts
-
-### Installation
+## Getting started
 
 ```bash
+git clone https://github.com/bambi-eco/Dataset.git && cd Dataset
 pip install -r requirements.txt
+
+# find the flights you care about
+python filter_flights.py --folder flight_metadata/ --species "Red deer"
+
+# fetch one, unpacked
+python download_from_zenodo.py -f 146 --unzip
+
+# pull a frame out of the video and draw the boxes on it
+python frame_extraction.py bambi_downloads/146_matched_processed.mp4 frames --start 3448 --end 3449
+python mot_frame_viewer.py frames/thermal/146_00003448.png bambi_downloads/146_gt.txt --show
 ```
 
-The scripts are tested with Python 3.10+.
+[`introduction.ipynb`](introduction.ipynb) walks through all of this end to
+end, including the geo-referenced tooling.
 
-### Automatic Download
+## Documentation
 
-Selectively download flight ZIPs from the BAMBI dataset hosted on Zenodo. Uses the zenodo_upload_summary_*.json files to resolve which depositions contain which flights, so you can grab exactly what you need without fetching entire multi-GB depositions. Use `filter_flights.py` to get a list of flight IDs for the data that you are looking for (e.g. filtered for species).
+| | |
+|---|---|
+| [Dataset versions](docs/dataset-versions.md) | What `base`, `raw`, `matched`, `orthographic` and `owl-transferred` contain, and the Zenodo DOIs |
+| [Annotation format](docs/annotation-format.md) | The MOT columns, the species table, and how `class_id` is composed |
+| [Downloading](docs/downloading.md) | Installing, filtering flights by metadata, and fetching them |
+| [Working with annotations](docs/annotation-tools.md) | Interpolating, filtering, and converting to YOLO |
+| [Frames and visualization](docs/frames-and-visualization.md) | Extracting frames, drawing boxes on images and video |
+| [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the released `owl-transferred` annotations |
+| [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 
+Two notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour, and
+[`owl_label_transfer.ipynb`](owl_label_transfer.ipynb) for the label transfer in
+detail.
+
+## RGB annotations
+
+Annotations are made on the thermal view, and the two sensors are not perfectly
+aligned, so a thermal box does not sit on the animal in the RGB frame. There
+are RGB boxes for two different scopes:
+
+- **`matched`** — human-accepted RGB boxes for a red deer subset, produced by
+  the template-matching toolkit.
+- **`owl-transferred`** — RGB boxes for 238 of the 386 flights, produced by
+  detecting the animals in RGB with OWL and re-centring each thermal box on its
+  match. Machine-generated and not reviewed by hand; 5.22 px mean centre error
+  against the accepted annotations, against 15.98 px for leaving the thermal
+  boxes alone.
 
 ```bash
-# List all available flights
-python download_from_zenodo.py --list
-
-# Download flights 0, 5, and 12
-python download_from_zenodo.py -f 0 5 12
-
-# Download flights 10 through 25
-python download_from_zenodo.py --range 10 25
-
-# Download all flights from parts 1 and 3
-python download_from_zenodo.py --parts 1 3
-
-# Download all flights of a dataset split (train / val / test)
-python download_from_zenodo.py --split train
-python download_from_zenodo.py --split val
-python download_from_zenodo.py --split test
-
-# Download everything, extract, and clean up ZIPs
-python download_from_zenodo.py --unzip
-
-# Preview what a full download would do
-python download_from_zenodo.py --dry-run
-
-# Download a different dataset version instead of the pre-processed videos (compatible with all other flags like -f, --range, --split, etc.)
-python download_from_zenodo.py --version raw
-python download_from_zenodo.py --version matched
-python download_from_zenodo.py --version orthographic
-
-# Recordings plus the OWL-transferred RGB annotations, side by side in one folder
-python download_from_zenodo.py --version owl-transferred -f 119 --unzip
+# the recordings and the transferred RGB annotations, in one folder
+python download_from_zenodo.py --version owl-transferred -f 146 --unzip
 ```
 
-> **Note:** `--version` selects which dataset version to download and defaults to `base` (the pre-processed videos). The available versions are `base`, `raw`, `matched`, `orthographic`, and `owl-transferred`; each is described by its own `flight_metadata/zenodo_upload_summary_*.json`. A summary file from a custom location can be supplied with `-s <path>`, which overrides `--version`.
-
-> **Note:** `owl-transferred` is a **layer on top of `base`**, not a standalone release: it ships only annotation files. Selecting it downloads the `base` recordings *and* the transferred annotations into the same output directory, so a single command gives a complete, usable flight. Its archives are named `owl_labels_<id>.zip` so they cannot collide with the `flight_<id>.zip` of the base layer. Flights that the base release ships without thermal labels have nothing to transfer and are reported as a coverage gap at the end of the run.
-
-> **Note:** `--split` reads flight IDs from `flight_metadata/splits.json`. A custom path can be supplied with `--splits-file <path>`. The flag is silently ignored when `-f`, `--range`, or `--parts` is also specified.
-
-
-
-### Flight filter
-
-Filter flights based on metadata JSON files by species, occlusion, sex, age, weather, date range, and drone name.
-
-All filters combine with **AND** logic between each other. Within list filters (`--species`, `--drone`, `--sex`, `--age`) values combine with **OR** logic. Weather flags combine with **AND** (all specified conditions must be present).
-
-
-```bash
-# Multiple species (OR: flights containing either)
-python filter_flights.py --species "Roe deer" "Homo sapiens" "Q122069"
-
-# Only flights with occluded frames
-python filter_flights.py --occlusion true
-
-# Flights with male or female subjects
-python filter_flights.py --sex male female
-
-# Flights with juvenile or adult animals
-python filter_flights.py --age juvenile adult
-
-# Flights that are both cloudy AND windy
-python filter_flights.py --weather cloudy windy
-
-# Flights in October 2024
-python filter_flights.py --min-date 2024-10-01 --max-date 2024-10-31
-
-# Visible roe deer in sunny weather during October 2024
-python filter_flights.py ./metadata \
-    --species "Roe deer" \
-    --occlusion false \
-    --weather sunny \
-    --min-date 2024-10-01 \
-    --max-date 2024-10-31 \
-    -v
-```
-
-### Frame Extraction
-
-Extract thermal and RGB frames from the side-by-side video files. The left half of each frame contains the thermal channel, the right half the RGB channel.
-
-```bash
-# Extract every frame
-python frame_extraction.py video.mp4 ./frames
-
-# Extract every 10th frame, RGB only
-python frame_extraction.py video.mp4 ./frames --sample-rate 10 --thermal false
-
-# Extract a specific frame range
-python frame_extraction.py video.mp4 ./frames --start 1000 --end 2000
-```
-
-Output structure:
-```
-frames/
-├── thermal/
-│   ├── video_00001000.png
-│   ├── video_00001001.png
-│   └── ...
-└── rgb/
-    ├── video_00001000.png
-    ├── video_00001001.png
-    └── ...
-```
-
-### MOT Interpolation
-
-Interpolate missing frames between annotated key frames using linear interpolation of bounding box coordinates. Interpolated entries are marked with `is_propagated=1`.
-
-```bash
-# Interpolate a single annotation file
-python mot_interpolation.py annotations.txt ./output
-
-# Interpolate all files in a folder with a custom frame step
-python mot_interpolation.py ./annotations_folder ./output --step 2
-```
-
-### MOT Filter
-
-Filter annotation files by species, class ID, visibility, bounding box size, gender, or age.
-
-```bash
-# Keep only wild boar annotations
-python mot_filter.py annotations.txt -o ./filtered --species "Sus scrofa (Wild boar)"
-
-# Filter by class ID and minimum bounding box width
-python mot_filter.py ./annotations/ -o ./filtered --class-id 50 51 --min-width 25
-
-# Combine multiple filters
-python mot_filter.py annotations.txt -o ./filtered --species "Cervus elaphus (Red deer)" --visibility 1.0 --min-width 30
-```
-
-### MOT to YOLO Conversion
-
-Convert MOT annotations to YOLO label format for training object detection models.
-
-```bash
-# Convert with default label (class_id only)
-python mot_to_yolo.py annotations.txt -o ./yolo_labels
-
-# Include species, gender, and age in the label
-python mot_to_yolo.py ./annotations/ -o ./yolo_labels --img-width 640 --img-height 512 --labels class_id gender age
-```
-
-### Thermal → RGB Label Transfer with OWL
-
-Move thermal MOT annotations onto the RGB view by detecting the animals in RGB
-with [OWL](https://github.com/microsoft/MegaDetector-Overhead) (Overhead
-Wildlife Locator) and matching its points to the thermal box centres with the
-Hungarian algorithm. See [RGB–Thermal Frame Matching](#rgbthermal-frame-matching)
-for how this relates to the template-matching toolkit, and
-[`owl_label_transfer.ipynb`](owl_label_transfer.ipynb) for a full walkthrough
-including how to produce the detections.
-
-Only `bb_left` and `bb_top` are modified; every other column is written back
-verbatim, so the output is a drop-in replacement annotation file. A
-`_provenance.csv` sidecar records where each box's shift came from.
-
-```bash
-# single flight, detections already in image pixels
-python transfer_labels.py 119_thermal_mot.txt \
-    -d examples/owl_transfer/owl_detections_flight119.csv \
-    -o 119_rgb_mot.txt
-
-# score the result against the accepted RGB annotations of the matched release
-python transfer_labels.py 119_thermal_mot.txt \
-    -d examples/owl_transfer/owl_detections_flight119.csv \
-    -o 119_rgb_mot.txt --reference 119_rgb_mot_accepted.txt
-
-# a folder of flights, raw OWL output (heatmap coordinates -> scale by 2)
-python transfer_labels.py ./labels -d ./detections -o ./labels_rgb \
-    --detection-scale 2 --report metrics.json
-```
-
-Over the whole `matched` subset (252,857 boxes, 234,264 with an accepted RGB
-reference) this reduces the mean centre error from **14.97 px to 4.31 px** and
-raises the share of boxes at IoU > 0.5 from **51.5% to 95.9%**. Full tables,
-ablations and failure modes are in the notebook.
-
-#### The released `owl-transferred` annotations
-
-The method has been run over the whole base release and published as its own
-dataset version, so the labels can be downloaded rather than recomputed:
-
-```bash
-python download_from_zenodo.py --version owl-transferred -f 119 --unzip
-```
-
-Per flight it ships `<id>_rgb_gt.txt` (the transferred RGB annotations, in the
-same MOT format as the base `<id>_gt.txt`), `<id>_provenance.csv` (where each
-box's shift came from) and `<id>_owl_detections.csv` (the raw OWL points, in
-image pixels, so the transfer can be re-run without a GPU).
-
-**Coverage: 238 of the 386 flights**, 99,230 boxes. Of the rest, 85 flights
-carry no thermal annotations at all, so there is nothing to transfer, and 63
-produced no OWL detection that could be matched anywhere in the flight — the
-animals are visible in thermal but not detectable in RGB, typically under
-canopy. Those 63 are omitted rather than shipped: with no match anywhere, the
-output would be a byte-identical copy of the thermal boxes, and publishing that
-as an RGB annotation would misrepresent it.
-
-**The annotations are in lock-step with the thermal ones.** Only `bb_left` and
-`bb_top` differ. Row order, `frame`, `track_id`, `bb_width`, `bb_height` and
-every remaining column are identical to the base `<id>_gt.txt`, verified across
-all 301 transferred flights and 102,848 boxes, so the two views join directly
-on `(frame, track_id)`.
-
-Measured against the human-accepted RGB annotations of the `matched` release
-(75 flights, 17,165 boxes that could be paired):
-
-| | mean | median | p90 |
-|---|---|---|---|
-| unchanged (thermal boxes) | 15.98 px | 14.08 | 27.82 |
-| **transferred** | **5.22 px** | **3.81** | **9.19** |
-
-87.1% of boxes end up closer to the reference than leaving them alone. Centre
-error is reported rather than IoU because base v2 refined the box sizes, so an
-IoU against the older `matched` boxes would mix label revision into a number
-that reads as transfer accuracy.
-
-The error is higher than the 4.31 px measured on `matched` itself for a
-structural reason: the base release annotates sparse key frames rather than
-every frame, so per-track temporal smoothing spans fewer samples and 49.2% of
-boxes take the consensus curve instead of a detection of their own. These are
-machine-generated labels that have not been reviewed by hand; the provenance
-sidecar exists so that suspect flights can be triaged without re-running
-anything.
-
-### Visualization
-
-#### On Extracted Frames
-
-Overlay bounding boxes on individual extracted frames:
-
-```bash
-# Visualize key frame annotations
-python mot_frame_viewer.py frame_image.png annotations.txt --show
-
-# With interpolation of in-between frames
-python mot_frame_viewer.py frame_image.png annotations.txt --interpolate --show
-
-# Save the visualization to a file
-python mot_frame_viewer.py frame_image.png annotations.txt -o output.png
-```
-
-#### On Video
-
-Overlay bounding box tracks directly on video:
-
-```bash
-# Live preview
-python mot_video_viewer.py video.mp4 annotations.txt --show
-
-# Save annotated video
-python mot_video_viewer.py video.mp4 annotations.txt -o annotated_output.mp4
-
-# With interpolated tracks
-python mot_video_viewer.py video.mp4 annotations.txt -o output.mp4 --interpolate
-```
-
-### DEM from Poses
-
-Download, merge, and clip Digital Elevation Model (DGM) data from the Austrian Federal Office of Metrology and Surveying (BEV) based on GPS coordinates from pose files. Outputs a GeoTIFF clipped to the flight area, with optional GLB mesh generation.
-
-```bash
-# From a single poses file
-python dem_from_poses.py --file recordings/0_matched_poses.json
-
-# From a folder (finds all *_poses.json recursively)
-python dem_from_poses.py --folder recordings/
-
-# Custom padding and output directory
-python dem_from_poses.py --folder recordings/ --padding 100 --output-dir /tmp/dems
-
-# Custom simplification factor and output CRS
-python dem_from_poses.py --file recording/0_matched_poses.json --simplify 1 --output-crs EPSG:32633
-
-# Skip mesh generation
-python dem_from_poses.py --file recording/0_matched_poses.json --no-mesh
-```
-
-| Option | Default | Description |
-|---|---|---|
-| `--file` / `--folder` | *(required)* | Single `*_poses.json` file or folder to scan recursively |
-| `--padding` | `50` | Padding around bounding box in metres |
-| `--output-dir` | `DEM/` subfolder | Output directory for GeoTIFF and mesh files |
-| `--output-crs` | `EPSG:32633` | Output coordinate reference system |
-| `--cache-dir` | `~/.cache/austria_dem` | Tile cache directory |
-| `--force-download` | `false` | Re-download tiles even if cached |
-| `--no-mesh` | `false` | Skip GLTF (`.glb`) mesh generation |
-| `--simplify` | `2` | Mesh simplification factor |
-
-### Add Relative DEM Position to Poses
-
-Add relative location offsets to drone pose files based on DEM origin metadata created with `dem_from_poses.py`. Converts WGS84 (lat/lng/alt) coordinates to the CRS defined in the DEM metadata, then computes relative `[x, y, z]` offsets from the DEM origin. Also adds a `rotation` field (`[pitch, roll, yaw]`) to each image entry.
-
-```bash
-# Single file pair
-python add_relative_dem_position_to_poses.py --poses 0_matched_poses.json --dem 0_matched_dem.json --output ./output
-
-# Folder mode (matches files by filename prefix)
-python add_relative_dem_position_to_poses.py --poses ./poses/ --dem ./dem_metadata/ --output ./output
-
-# Modify pose files in place
-python add_relative_dem_position_to_poses.py --poses ./poses/ --dem ./dem_metadata/ --inplace
-```
-
-| Option | Default | Description |
-|---|---|---|
-| `--poses` | *(required)* | Single pose JSON file or folder of `*_matched_poses.json` files |
-| `--dem` | *(required)* | Single DEM metadata JSON file or folder of `*_matched_dem.json` files |
-| `--output` | — | Output folder for modified pose files |
-| `--inplace` | `false` | Modify pose files in place (requires no `--output`) |
-
-In folder mode, files are matched by the prefix before the first underscore (e.g., `0_matched_poses.json` matches `0_matched_dem.json`).
-
----
-
-## RGB–Thermal Frame Matching
-
-Although the drones record RGB and thermal imagery simultaneously, the two modalities are **not temporally synchronized**. Temporal offsets vary with flight dynamics, so annotations from thermal frames cannot be directly transferred to RGB images — correspondence must be established at sequence or frame level.
-
-The dataset includes a **local patch-based matching strategy** to align thermal annotations with their RGB counterparts:
-
-1. For each thermal detection, the annotated crop is extracted.
-2. A larger search region is generated in the corresponding RGB frame by expanding the bounding box.
-3. The RGB region is converted to grayscale and processed using multiple transformations (e.g., CLAHE and edge-based filtering), producing five different variants.
-4. Each variant is matched to the thermal crop via a sliding-window approach, selecting the position with the highest matching confidence.
-5. For frames with **multiple detections**, alignment is accepted if pixel shift estimates across methods agree within ±10 pixels, and the most consistent candidate is selected.
-6. For frames with a **single detection**, a stricter majority consensus is required; otherwise the sample is discarded.
-
-The implementation is available in a separate repository:
-
-🔗 **[BAMBI BBox Corrections](https://github.com/HugoMarkoff/BAMBI_BBox_Corrections)**
-
-### Detector-based alternative
-
-A second, complementary strategy is included in this repository as
-[`transfer_labels.py`](transfer_labels.py), walked through in
-[`owl_label_transfer.ipynb`](owl_label_transfer.ipynb). Instead of matching the
-thermal appearance into the RGB frame, it **locates the animals in RGB directly**
-with [OWL](https://github.com/microsoft/MegaDetector-Overhead) (Overhead Wildlife
-Locator, Microsoft AI for Good), a point detector for aerial wildlife imagery,
-and re-centres each thermal box on the point it was assigned to.
-
-1. Per frame, thermal box centres are matched to OWL points by Hungarian
-   assignment on Euclidean distance, under a distance gate.
-2. The median shift per frame, smoothed over time, forms a consensus curve;
-   misalignment is largely a whole-frame effect that drifts slowly.
-3. The assignment is repeated with that consensus as a prior, which resolves
-   most cases where a box would otherwise be handed its neighbour's point.
-4. Each track's shift is smoothed over time; boxes with no match take the
-   consensus.
-
-The two approaches fail differently: template matching needs the animal to
-*look* similar across modalities, while the detector-based route needs it to be
-*detectable* in RGB and unambiguous among its neighbours. Measured against the
-accepted RGB annotations of the `matched` release, the detector-based transfer
-agrees to a mean centre error of 4.31 px (95.9% of boxes at IoU > 0.5), against
-14.97 px (51.5%) for using the thermal boxes unchanged.
+See [docs/label-transfer.md](docs/label-transfer.md).
 
 ## Additional related repositories:
 
@@ -626,7 +92,7 @@ agrees to a mean centre error of 4.31 px (95.9% of boxes at IoU > 0.5), against
 - [Detection](https://github.com/bambi-eco/bambi_detection): Examples on using AlfsPY for different tasks like geo-tiff generation.
 - [Geo-Referenced Tracking](https://github.com/bambi-eco/Geo-Referenced-Tracking): Implementation of tracking algorithms based on local image as well as global world coordinates.
 - [Bambi-QGIS](https://github.com/bambi-eco/Bambi-QGIS): Plugin for integrating drone video processing to the geo-information system QIGS.
-
+- [BAMBI BBox Corrections](https://github.com/HugoMarkoff/BAMBI_BBox_Corrections): Template-matching toolkit for aligning thermal and RGB annotations.
 
 ---
 

@@ -1,8 +1,15 @@
 # Environment annotations
 
-> **Status: in preparation.** The methods below are implemented and validated on
-> a 15-flight pilot, but the Zenodo records are not published yet, so
-> `--version environment` will report a missing summary file until they are.
+> ⚠️ **Experimental.** These annotations are machine-generated and have not
+> been reviewed by hand. BAMBI carries no ground truth for these classes, so no
+> accuracy figures are given and none should be inferred. Coverage and content
+> may change in a future revision, so cite the DOI you actually used.
+
+Published over **301 flights and 29,832 frames**. The non-commercial layer
+covers 294 of those flights and 27,613 frames. The seven missing flights
+(56, 57, 221, 222, 223, 247, 254) did not fail: both models ran over every frame
+and returned zero coverage throughout, so there was no mask to publish and no
+file is written.
 
 Where the animals are is only half of a scene. These layers describe what they
 are moving through: whether the ground is under snow, where the water and the
@@ -50,10 +57,10 @@ where the class is flagged, or aggregate over a window yourself.
 | `unstable` | frame × class | This frame's coverage differs from its temporal neighbourhood by more than 0.25, so it is more likely a detector dropout than a real change. |
 | `unreliable_classes` | flight | That class flips presence between consecutive frames more than 10% of the time across the flight. |
 
-Over the pilot (15 flights, 3,837 frames): **355 frames (9.3%)** are
-`undetermined`, **132 frames (3.4%)** carry at least one `unstable` class, and
-**8 class/flight pairs** are marked unreliable. Rolling-median smoothing halves
-the mean flicker rate, from 1.7% to 0.7%.
+Across the release (301 flights, 29,832 frames): **1,558 frames (5.2%)** are
+`undetermined`, **921 frames (3.1%)** carry at least one `unstable` class, and
+**171 class/flight pairs** are marked unreliable. On the 15-flight pilot,
+rolling-median smoothing halved the mean flicker rate, from 1.7% to 0.7%.
 
 The `undetermined` threshold is measured, not guessed. Two pilot flights are
 featureless — one a fog whiteout, one a flat snowfield — and their luminance
@@ -63,11 +70,18 @@ snow: a person would say so from context. But no rule separates it from the fog
 flight, where the same emptiness produced a confident and wrong `water` label
 over the whole frame, so both are declined.
 
-Only `bare ground` and `grass` ever trip the unreliable threshold, on 5 of the
-15 pilot flights. Those are the classes whose boundaries are genuinely gradual —
-there is no crisp answer to where grass ends — so the flag is describing a
-property of the class as much as a failure of the model. `snow`, `water`,
-`road`, `rock`, `roof` and `vehicle` never trip it.
+The unreliable flag falls overwhelmingly on two classes. Of the 171
+class/flight pairs it marks, `bare ground` accounts for 77 and `grass` for 74 —
+88% between them — against 9 for `road`, 5 for `snow`, 4 for `roof` and 2 for
+`water`. `rock` and `vehicle` never trip it at all. `bare ground` and `grass`
+are the classes whose boundaries are genuinely gradual — there is no crisp
+answer to where grass ends — so on those two the flag describes a property of
+the class as much as a failure of the model. On the other six it is rarer, and
+more likely to mean the detector actually dropped out.
+
+For reference, the number of flights on which each class fires at least once:
+`grass` 224, `bare ground` 206, `rock` 137, `road` 104, `roof` 103, `water` 93,
+`snow` 56, `vehicle` 46.
 
 ## Resolution, and why it shapes everything
 

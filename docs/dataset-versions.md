@@ -176,4 +176,15 @@ The OWL-transferred RGB annotations (an annotation layer over the processed data
 - Part 2: [10.5281/zenodo.22271042](https://doi.org/10.5281/zenodo.22271042)
 - Part 3: [10.5281/zenodo.22271073](https://doi.org/10.5281/zenodo.22271073)
 
+The environment annotations, CC-BY-4.0 (snow, water, road, grass, rock, bare ground, roof, vehicle):
+- Part 1: [10.5281/zenodo.22299388](https://doi.org/10.5281/zenodo.22299388)
+- Part 2: [10.5281/zenodo.22299411](https://doi.org/10.5281/zenodo.22299411)
+- Part 3: [10.5281/zenodo.22299441](https://doi.org/10.5281/zenodo.22299441)
+- Part 4: [10.5281/zenodo.22299472](https://doi.org/10.5281/zenodo.22299472)
+
+The canopy and deadwood annotations, **CC-BY-NC-4.0** (see [the licensing section](#licensing-and-why-the-environment-layers-are-split-in-two)):
+- Part 1: [10.5281/zenodo.22299437](https://doi.org/10.5281/zenodo.22299437)
+- Part 2: [10.5281/zenodo.22299478](https://doi.org/10.5281/zenodo.22299478)
+- Part 3: [10.5281/zenodo.22299509](https://doi.org/10.5281/zenodo.22299509)
+
 ---

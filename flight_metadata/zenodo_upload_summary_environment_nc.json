@@ -1,0 +1,1214 @@
+[
+  {
+    "part": 1,
+    "title": "The BAMBI Dataset: Canopy and Deadwood Annotations for Nadir UAV-Recordings of Forest Wildlife (non-commercial) (Part 1)",
+    "deposition_id": 22299437,
+    "doi": "10.5281/zenodo.22299437",
+    "flights": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "20",
+      "21",
+      "22",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "40",
+      "41",
+      "42",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "50",
+      "52",
+      "53",
+      "54",
+      "55",
+      "59",
+      "60",
+      "64",
+      "66",
+      "67",
+      "70",
+      "71",
+      "72",
+      "74",
+      "75",
+      "76",
+      "77",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "89",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96",
+      "98",
+      "99",
+      "100",
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116",
+      "117",
+      "118",
+      "119",
+      "120",
+      "121",
+      "122",
+      "123",
+      "124",
+      "129",
+      "130",
+      "131"
+    ],
+    "num_files": 100,
+    "zip_prefix": "envnc_",
+    "flight_details": {
+      "0": [
+        "0_environment_nc.json"
+      ],
+      "1": [
+        "1_environment_nc.json"
+      ],
+      "2": [
+        "2_environment_nc.json"
+      ],
+      "3": [
+        "3_environment_nc.json"
+      ],
+      "4": [
+        "4_environment_nc.json"
+      ],
+      "5": [
+        "5_environment_nc.json"
+      ],
+      "6": [
+        "6_environment_nc.json"
+      ],
+      "8": [
+        "8_environment_nc.json"
+      ],
+      "9": [
+        "9_environment_nc.json"
+      ],
+      "10": [
+        "10_environment_nc.json"
+      ],
+      "11": [
+        "11_environment_nc.json"
+      ],
+      "12": [
+        "12_environment_nc.json"
+      ],
+      "13": [
+        "13_environment_nc.json"
+      ],
+      "14": [
+        "14_environment_nc.json"
+      ],
+      "15": [
+        "15_environment_nc.json"
+      ],
+      "16": [
+        "16_environment_nc.json"
+      ],
+      "17": [
+        "17_environment_nc.json"
+      ],
+      "18": [
+        "18_environment_nc.json"
+      ],
+      "20": [
+        "20_environment_nc.json"
+      ],
+      "21": [
+        "21_environment_nc.json"
+      ],
+      "22": [
+        "22_environment_nc.json"
+      ],
+      "26": [
+        "26_environment_nc.json"
+      ],
+      "27": [
+        "27_environment_nc.json"
+      ],
+      "28": [
+        "28_environment_nc.json"
+      ],
+      "29": [
+        "29_environment_nc.json"
+      ],
+      "30": [
+        "30_environment_nc.json"
+      ],
+      "31": [
+        "31_environment_nc.json"
+      ],
+      "32": [
+        "32_environment_nc.json"
+      ],
+      "33": [
+        "33_environment_nc.json"
+      ],
+      "34": [
+        "34_environment_nc.json"
+      ],
+      "35": [
+        "35_environment_nc.json"
+      ],
+      "36": [
+        "36_environment_nc.json"
+      ],
+      "37": [
+        "37_environment_nc.json"
+      ],
+      "40": [
+        "40_environment_nc.json"
+      ],
+      "41": [
+        "41_environment_nc.json"
+      ],
+      "42": [
+        "42_environment_nc.json"
+      ],
+      "44": [
+        "44_environment_nc.json"
+      ],
+      "45": [
+        "45_environment_nc.json"
+      ],
+      "46": [
+        "46_environment_nc.json"
+      ],
+      "47": [
+        "47_environment_nc.json"
+      ],
+      "48": [
+        "48_environment_nc.json"
+      ],
+      "50": [
+        "50_environment_nc.json"
+      ],
+      "52": [
+        "52_environment_nc.json"
+      ],
+      "53": [
+        "53_environment_nc.json"
+      ],
+      "54": [
+        "54_environment_nc.json"
+      ],
+      "55": [
+        "55_environment_nc.json"
+      ],
+      "59": [
+        "59_environment_nc.json"
+      ],
+      "60": [
+        "60_environment_nc.json"
+      ],
+      "64": [
+        "64_environment_nc.json"
+      ],
+      "66": [
+        "66_environment_nc.json"
+      ],
+      "67": [
+        "67_environment_nc.json"
+      ],
+      "70": [
+        "70_environment_nc.json"
+      ],
+      "71": [
+        "71_environment_nc.json"
+      ],
+      "72": [
+        "72_environment_nc.json"
+      ],
+      "74": [
+        "74_environment_nc.json"
+      ],
+      "75": [
+        "75_environment_nc.json"
+      ],
+      "76": [
+        "76_environment_nc.json"
+      ],
+      "77": [
+        "77_environment_nc.json"
+      ],
+      "78": [
+        "78_environment_nc.json"
+      ],
+      "79": [
+        "79_environment_nc.json"
+      ],
+      "80": [
+        "80_environment_nc.json"
+      ],
+      "81": [
+        "81_environment_nc.json"
+      ],
+      "82": [
+        "82_environment_nc.json"
+      ],
+      "83": [
+        "83_environment_nc.json"
+      ],
+      "84": [
+        "84_environment_nc.json"
+      ],
+      "85": [
+        "85_environment_nc.json"
+      ],
+      "86": [
+        "86_environment_nc.json"
+      ],
+      "87": [
+        "87_environment_nc.json"
+      ],
+      "89": [
+        "89_environment_nc.json"
+      ],
+      "92": [
+        "92_environment_nc.json"
+      ],
+      "93": [
+        "93_environment_nc.json"
+      ],
+      "94": [
+        "94_environment_nc.json"
+      ],
+      "95": [
+        "95_environment_nc.json"
+      ],
+      "96": [
+        "96_environment_nc.json"
+      ],
+      "98": [
+        "98_environment_nc.json"
+      ],
+      "99": [
+        "99_environment_nc.json"
+      ],
+      "100": [
+        "100_environment_nc.json"
+      ],
+      "101": [
+        "101_environment_nc.json"
+      ],
+      "102": [
+        "102_environment_nc.json"
+      ],
+      "103": [
+        "103_environment_nc.json"
+      ],
+      "104": [
+        "104_environment_nc.json"
+      ],
+      "105": [
+        "105_environment_nc.json"
+      ],
+      "106": [
+        "106_environment_nc.json"
+      ],
+      "111": [
+        "111_environment_nc.json"
+      ],
+      "112": [
+        "112_environment_nc.json"
+      ],
+      "113": [
+        "113_environment_nc.json"
+      ],
+      "114": [
+        "114_environment_nc.json"
+      ],
+      "115": [
+        "115_environment_nc.json"
+      ],
+      "116": [
+        "116_environment_nc.json"
+      ],
+      "117": [
+        "117_environment_nc.json"
+      ],
+      "118": [
+        "118_environment_nc.json"
+      ],
+      "119": [
+        "119_environment_nc.json"
+      ],
+      "120": [
+        "120_environment_nc.json"
+      ],
+      "121": [
+        "121_environment_nc.json"
+      ],
+      "122": [
+        "122_environment_nc.json"
+      ],
+      "123": [
+        "123_environment_nc.json"
+      ],
+      "124": [
+        "124_environment_nc.json"
+      ],
+      "129": [
+        "129_environment_nc.json"
+      ],
+      "130": [
+        "130_environment_nc.json"
+      ],
+      "131": [
+        "131_environment_nc.json"
+      ]
+    }
+  },
+  {
+    "part": 2,
+    "title": "The BAMBI Dataset: Canopy and Deadwood Annotations for Nadir UAV-Recordings of Forest Wildlife (non-commercial) (Part 2)",
+    "deposition_id": 22299478,
+    "doi": "10.5281/zenodo.22299478",
+    "flights": [
+      "132",
+      "134",
+      "135",
+      "136",
+      "137",
+      "138",
+      "139",
+      "140",
+      "141",
+      "142",
+      "143",
+      "144",
+      "145",
+      "146",
+      "147",
+      "148",
+      "149",
+      "150",
+      "151",
+      "152",
+      "155",
+      "156",
+      "158",
+      "159",
+      "160",
+      "161",
+      "162",
+      "163",
+      "164",
+      "175",
+      "176",
+      "177",
+      "178",
+      "179",
+      "180",
+      "181",
+      "182",
+      "183",
+      "184",
+      "185",
+      "186",
+      "187",
+      "188",
+      "189",
+      "190",
+      "191",
+      "192",
+      "193",
+      "194",
+      "195",
+      "196",
+      "197",
+      "198",
+      "199",
+      "200",
+      "201",
+      "202",
+      "203",
+      "204",
+      "205",
+      "206",
+      "207",
+      "209",
+      "210",
+      "211",
+      "212",
+      "213",
+      "215",
+      "216",
+      "224",
+      "225",
+      "226",
+      "227",
+      "228",
+      "229",
+      "230",
+      "231",
+      "232",
+      "234",
+      "235",
+      "236",
+      "237",
+      "238",
+      "239",
+      "240",
+      "241",
+      "242",
+      "243",
+      "244",
+      "245",
+      "246",
+      "248",
+      "249",
+      "250",
+      "251",
+      "252",
+      "256",
+      "259",
+      "260",
+      "261"
+    ],
+    "num_files": 100,
+    "zip_prefix": "envnc_",
+    "flight_details": {
+      "132": [
+        "132_environment_nc.json"
+      ],
+      "134": [
+        "134_environment_nc.json"
+      ],
+      "135": [
+        "135_environment_nc.json"
+      ],
+      "136": [
+        "136_environment_nc.json"
+      ],
+      "137": [
+        "137_environment_nc.json"
+      ],
+      "138": [
+        "138_environment_nc.json"
+      ],
+      "139": [
+        "139_environment_nc.json"
+      ],
+      "140": [
+        "140_environment_nc.json"
+      ],
+      "141": [
+        "141_environment_nc.json"
+      ],
+      "142": [
+        "142_environment_nc.json"
+      ],
+      "143": [
+        "143_environment_nc.json"
+      ],
+      "144": [
+        "144_environment_nc.json"
+      ],
+      "145": [
+        "145_environment_nc.json"
+      ],
+      "146": [
+        "146_environment_nc.json"
+      ],
+      "147": [
+        "147_environment_nc.json"
+      ],
+      "148": [
+        "148_environment_nc.json"
+      ],
+      "149": [
+        "149_environment_nc.json"
+      ],
+      "150": [
+        "150_environment_nc.json"
+      ],
+      "151": [
+        "151_environment_nc.json"
+      ],
+      "152": [
+        "152_environment_nc.json"
+      ],
+      "155": [
+        "155_environment_nc.json"
+      ],
+      "156": [
+        "156_environment_nc.json"
+      ],
+      "158": [
+        "158_environment_nc.json"
+      ],
+      "159": [
+        "159_environment_nc.json"
+      ],
+      "160": [
+        "160_environment_nc.json"
+      ],
+      "161": [
+        "161_environment_nc.json"
+      ],
+      "162": [
+        "162_environment_nc.json"
+      ],
+      "163": [
+        "163_environment_nc.json"
+      ],
+      "164": [
+        "164_environment_nc.json"
+      ],
+      "175": [
+        "175_environment_nc.json"
+      ],
+      "176": [
+        "176_environment_nc.json"
+      ],
+      "177": [
+        "177_environment_nc.json"
+      ],
+      "178": [
+        "178_environment_nc.json"
+      ],
+      "179": [
+        "179_environment_nc.json"
+      ],
+      "180": [
+        "180_environment_nc.json"
+      ],
+      "181": [
+        "181_environment_nc.json"
+      ],
+      "182": [
+        "182_environment_nc.json"
+      ],
+      "183": [
+        "183_environment_nc.json"
+      ],
+      "184": [
+        "184_environment_nc.json"
+      ],
+      "185": [
+        "185_environment_nc.json"
+      ],
+      "186": [
+        "186_environment_nc.json"
+      ],
+      "187": [
+        "187_environment_nc.json"
+      ],
+      "188": [
+        "188_environment_nc.json"
+      ],
+      "189": [
+        "189_environment_nc.json"
+      ],
+      "190": [
+        "190_environment_nc.json"
+      ],
+      "191": [
+        "191_environment_nc.json"
+      ],
+      "192": [
+        "192_environment_nc.json"
+      ],
+      "193": [
+        "193_environment_nc.json"
+      ],
+      "194": [
+        "194_environment_nc.json"
+      ],
+      "195": [
+        "195_environment_nc.json"
+      ],
+      "196": [
+        "196_environment_nc.json"
+      ],
+      "197": [
+        "197_environment_nc.json"
+      ],
+      "198": [
+        "198_environment_nc.json"
+      ],
+      "199": [
+        "199_environment_nc.json"
+      ],
+      "200": [
+        "200_environment_nc.json"
+      ],
+      "201": [
+        "201_environment_nc.json"
+      ],
+      "202": [
+        "202_environment_nc.json"
+      ],
+      "203": [
+        "203_environment_nc.json"
+      ],
+      "204": [
+        "204_environment_nc.json"
+      ],
+      "205": [
+        "205_environment_nc.json"
+      ],
+      "206": [
+        "206_environment_nc.json"
+      ],
+      "207": [
+        "207_environment_nc.json"
+      ],
+      "209": [
+        "209_environment_nc.json"
+      ],
+      "210": [
+        "210_environment_nc.json"
+      ],
+      "211": [
+        "211_environment_nc.json"
+      ],
+      "212": [
+        "212_environment_nc.json"
+      ],
+      "213": [
+        "213_environment_nc.json"
+      ],
+      "215": [
+        "215_environment_nc.json"
+      ],
+      "216": [
+        "216_environment_nc.json"
+      ],
+      "224": [
+        "224_environment_nc.json"
+      ],
+      "225": [
+        "225_environment_nc.json"
+      ],
+      "226": [
+        "226_environment_nc.json"
+      ],
+      "227": [
+        "227_environment_nc.json"
+      ],
+      "228": [
+        "228_environment_nc.json"
+      ],
+      "229": [
+        "229_environment_nc.json"
+      ],
+      "230": [
+        "230_environment_nc.json"
+      ],
+      "231": [
+        "231_environment_nc.json"
+      ],
+      "232": [
+        "232_environment_nc.json"
+      ],
+      "234": [
+        "234_environment_nc.json"
+      ],
+      "235": [
+        "235_environment_nc.json"
+      ],
+      "236": [
+        "236_environment_nc.json"
+      ],
+      "237": [
+        "237_environment_nc.json"
+      ],
+      "238": [
+        "238_environment_nc.json"
+      ],
+      "239": [
+        "239_environment_nc.json"
+      ],
+      "240": [
+        "240_environment_nc.json"
+      ],
+      "241": [
+        "241_environment_nc.json"
+      ],
+      "242": [
+        "242_environment_nc.json"
+      ],
+      "243": [
+        "243_environment_nc.json"
+      ],
+      "244": [
+        "244_environment_nc.json"
+      ],
+      "245": [
+        "245_environment_nc.json"
+      ],
+      "246": [
+        "246_environment_nc.json"
+      ],
+      "248": [
+        "248_environment_nc.json"
+      ],
+      "249": [
+        "249_environment_nc.json"
+      ],
+      "250": [
+        "250_environment_nc.json"
+      ],
+      "251": [
+        "251_environment_nc.json"
+      ],
+      "252": [
+        "252_environment_nc.json"
+      ],
+      "256": [
+        "256_environment_nc.json"
+      ],
+      "259": [
+        "259_environment_nc.json"
+      ],
+      "260": [
+        "260_environment_nc.json"
+      ],
+      "261": [
+        "261_environment_nc.json"
+      ]
+    }
+  },
+  {
+    "part": 3,
+    "title": "The BAMBI Dataset: Canopy and Deadwood Annotations for Nadir UAV-Recordings of Forest Wildlife (non-commercial) (Part 3)",
+    "deposition_id": 22299509,
+    "doi": "10.5281/zenodo.22299509",
+    "flights": [
+      "262",
+      "263",
+      "264",
+      "265",
+      "266",
+      "267",
+      "276",
+      "277",
+      "278",
+      "279",
+      "280",
+      "281",
+      "282",
+      "283",
+      "284",
+      "291",
+      "292",
+      "293",
+      "294",
+      "295",
+      "296",
+      "297",
+      "298",
+      "299",
+      "300",
+      "301",
+      "302",
+      "303",
+      "304",
+      "305",
+      "306",
+      "307",
+      "308",
+      "309",
+      "310",
+      "314",
+      "315",
+      "318",
+      "320",
+      "321",
+      "322",
+      "324",
+      "326",
+      "327",
+      "329",
+      "330",
+      "331",
+      "332",
+      "333",
+      "334",
+      "335",
+      "336",
+      "337",
+      "338",
+      "339",
+      "340",
+      "341",
+      "342",
+      "343",
+      "344",
+      "345",
+      "346",
+      "347",
+      "348",
+      "349",
+      "367",
+      "368",
+      "369",
+      "370",
+      "371",
+      "372",
+      "373",
+      "374",
+      "375",
+      "376",
+      "377",
+      "378",
+      "379",
+      "380",
+      "381",
+      "382",
+      "383",
+      "384",
+      "385",
+      "386",
+      "387",
+      "388",
+      "389",
+      "390",
+      "391",
+      "392",
+      "393",
+      "394",
+      "395"
+    ],
+    "num_files": 94,
+    "zip_prefix": "envnc_",
+    "flight_details": {
+      "262": [
+        "262_environment_nc.json"
+      ],
+      "263": [
+        "263_environment_nc.json"
+      ],
+      "264": [
+        "264_environment_nc.json"
+      ],
+      "265": [
+        "265_environment_nc.json"
+      ],
+      "266": [
+        "266_environment_nc.json"
+      ],
+      "267": [
+        "267_environment_nc.json"
+      ],
+      "276": [
+        "276_environment_nc.json"
+      ],
+      "277": [
+        "277_environment_nc.json"
+      ],
+      "278": [
+        "278_environment_nc.json"
+      ],
+      "279": [
+        "279_environment_nc.json"
+      ],
+      "280": [
+        "280_environment_nc.json"
+      ],
+      "281": [
+        "281_environment_nc.json"
+      ],
+      "282": [
+        "282_environment_nc.json"
+      ],
+      "283": [
+        "283_environment_nc.json"
+      ],
+      "284": [
+        "284_environment_nc.json"
+      ],
+      "291": [
+        "291_environment_nc.json"
+      ],
+      "292": [
+        "292_environment_nc.json"
+      ],
+      "293": [
+        "293_environment_nc.json"
+      ],
+      "294": [
+        "294_environment_nc.json"
+      ],
+      "295": [
+        "295_environment_nc.json"
+      ],
+      "296": [
+        "296_environment_nc.json"
+      ],
+      "297": [
+        "297_environment_nc.json"
+      ],
+      "298": [
+        "298_environment_nc.json"
+      ],
+      "299": [
+        "299_environment_nc.json"
+      ],
+      "300": [
+        "300_environment_nc.json"
+      ],
+      "301": [
+        "301_environment_nc.json"
+      ],
+      "302": [
+        "302_environment_nc.json"
+      ],
+      "303": [
+        "303_environment_nc.json"
+      ],
+      "304": [
+        "304_environment_nc.json"
+      ],
+      "305": [
+        "305_environment_nc.json"
+      ],
+      "306": [
+        "306_environment_nc.json"
+      ],
+      "307": [
+        "307_environment_nc.json"
+      ],
+      "308": [
+        "308_environment_nc.json"
+      ],
+      "309": [
+        "309_environment_nc.json"
+      ],
+      "310": [
+        "310_environment_nc.json"
+      ],
+      "314": [
+        "314_environment_nc.json"
+      ],
+      "315": [
+        "315_environment_nc.json"
+      ],
+      "318": [
+        "318_environment_nc.json"
+      ],
+      "320": [
+        "320_environment_nc.json"
+      ],
+      "321": [
+        "321_environment_nc.json"
+      ],
+      "322": [
+        "322_environment_nc.json"
+      ],
+      "324": [
+        "324_environment_nc.json"
+      ],
+      "326": [
+        "326_environment_nc.json"
+      ],
+      "327": [
+        "327_environment_nc.json"
+      ],
+      "329": [
+        "329_environment_nc.json"
+      ],
+      "330": [
+        "330_environment_nc.json"
+      ],
+      "331": [
+        "331_environment_nc.json"
+      ],
+      "332": [
+        "332_environment_nc.json"
+      ],
+      "333": [
+        "333_environment_nc.json"
+      ],
+      "334": [
+        "334_environment_nc.json"
+      ],
+      "335": [
+        "335_environment_nc.json"
+      ],
+      "336": [
+        "336_environment_nc.json"
+      ],
+      "337": [
+        "337_environment_nc.json"
+      ],
+      "338": [
+        "338_environment_nc.json"
+      ],
+      "339": [
+        "339_environment_nc.json"
+      ],
+      "340": [
+        "340_environment_nc.json"
+      ],
+      "341": [
+        "341_environment_nc.json"
+      ],
+      "342": [
+        "342_environment_nc.json"
+      ],
+      "343": [
+        "343_environment_nc.json"
+      ],
+      "344": [
+        "344_environment_nc.json"
+      ],
+      "345": [
+        "345_environment_nc.json"
+      ],
+      "346": [
+        "346_environment_nc.json"
+      ],
+      "347": [
+        "347_environment_nc.json"
+      ],
+      "348": [
+        "348_environment_nc.json"
+      ],
+      "349": [
+        "349_environment_nc.json"
+      ],
+      "367": [
+        "367_environment_nc.json"
+      ],
+      "368": [
+        "368_environment_nc.json"
+      ],
+      "369": [
+        "369_environment_nc.json"
+      ],
+      "370": [
+        "370_environment_nc.json"
+      ],
+      "371": [
+        "371_environment_nc.json"
+      ],
+      "372": [
+        "372_environment_nc.json"
+      ],
+      "373": [
+        "373_environment_nc.json"
+      ],
+      "374": [
+        "374_environment_nc.json"
+      ],
+      "375": [
+        "375_environment_nc.json"
+      ],
+      "376": [
+        "376_environment_nc.json"
+      ],
+      "377": [
+        "377_environment_nc.json"
+      ],
+      "378": [
+        "378_environment_nc.json"
+      ],
+      "379": [
+        "379_environment_nc.json"
+      ],
+      "380": [
+        "380_environment_nc.json"
+      ],
+      "381": [
+        "381_environment_nc.json"
+      ],
+      "382": [
+        "382_environment_nc.json"
+      ],
+      "383": [
+        "383_environment_nc.json"
+      ],
+      "384": [
+        "384_environment_nc.json"
+      ],
+      "385": [
+        "385_environment_nc.json"
+      ],
+      "386": [
+        "386_environment_nc.json"
+      ],
+      "387": [
+        "387_environment_nc.json"
+      ],
+      "388": [
+        "388_environment_nc.json"
+      ],
+      "389": [
+        "389_environment_nc.json"
+      ],
+      "390": [
+        "390_environment_nc.json"
+      ],
+      "391": [
+        "391_environment_nc.json"
+      ],
+      "392": [
+        "392_environment_nc.json"
+      ],
+      "393": [
+        "393_environment_nc.json"
+      ],
+      "394": [
+        "394_environment_nc.json"
+      ],
+      "395": [
+        "395_environment_nc.json"
+      ]
+    }
+  }
+]

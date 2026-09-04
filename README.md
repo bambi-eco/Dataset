@@ -53,13 +53,13 @@ end, including the geo-referenced tooling.
 
 | | |
 |---|---|
-| [Dataset versions](docs/dataset-versions.md) | What `base`, `raw`, `matched`, `orthographic` and `owl-transferred` contain, and the Zenodo DOIs |
+| [Dataset versions](docs/dataset-versions.md) | What each `--version` contains, how the licences differ, and the Zenodo DOIs |
 | [Annotation format](docs/annotation-format.md) | The MOT columns, the species table, and how `class_id` is composed |
 | [Downloading](docs/downloading.md) | Installing, filtering flights by metadata, and fetching them |
 | [Working with annotations](docs/annotation-tools.md) | Interpolating, filtering, and converting to YOLO |
 | [Frames and visualization](docs/frames-and-visualization.md) | Extracting frames, drawing boxes on images and video |
-| [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the experimental `owl-transferred` annotations |
-| [Environment annotations](docs/environment.md) | Snow, water, roads, vegetation, canopy and deadwood per frame |
+| [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the ⚠️ experimental `owl-transferred` annotations |
+| [Environment annotations](docs/environment.md) | ⚠️ Experimental. Snow, water, roads, vegetation, canopy and deadwood per frame |
 | [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 
 Two notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour, and
@@ -92,20 +92,29 @@ See [docs/label-transfer.md](docs/label-transfer.md).
 
 ## Environment annotations
 
-*In preparation — the methods are implemented, the Zenodo records are not
-published yet.*
-
 Alongside the animals, ten per-frame classes describe what they are moving
-through: **snow**, **water**, **road**, **grass**, **rock**, **bare ground**,
-**roof** and **vehicle** from SAM 3, plus **tree cover** and standing
-**deadwood**. All are machine-generated and reviewed qualitatively only; there
-is no ground truth for these classes in BAMBI, so they carry no accuracy
-figures.
+through, over **301 flights and 29,832 frames**:
 
-The per-frame masks are published exactly as the models produced them, and on
-featureless frames they **flicker** between adjacent frames. Each flight ships a
-smoothed coverage series and three reliability flags alongside, but nothing is
-filled in — see [docs/environment.md](docs/environment.md#read-this-before-using-the-masks).
+- ⚠️ **`environment`** — **experimental.** **snow**, **water**, **road**,
+  **grass**, **rock**, **bare ground**, **roof** and **vehicle**, from SAM 3
+  prompted with each class name. Machine-generated and **not reviewed by
+  hand**; BAMBI has no ground truth for these classes, so no accuracy figures
+  are given and none should be inferred. Treat it as a starting point to be
+  checked, not as ground truth.
+- ⚠️🔒 **`environment-nc`** — **experimental and non-commercial.** **tree
+  cover** and standing **deadwood**. Same caveats, plus a CC-BY-NC licence.
+
+**The per-frame masks are the raw model output and are not smoothed.** On
+frames that are one material edge to edge — a flat snowfield, a fog whiteout —
+detection is unstable and the masks **flicker** between adjacent frames. Each
+flight ships a smoothed coverage series and three flags (`undetermined`,
+`unstable`, `unreliable_classes`), but nothing is filled in and no mask pixel is
+invented, so a reader who ignores the flags will see the flicker. Read
+[the note on the masks](docs/environment.md#read-this-before-using-the-masks)
+before training on them.
+
+Across the release, 5.2% of frames are `undetermined` — too little visible
+content to classify at all — and 3.1% carry at least one unstable class.
 
 They are published as **two versions, split by licence**:
 

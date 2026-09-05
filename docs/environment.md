@@ -145,6 +145,42 @@ tracks.
 **`snow` and `water` can be confused on featureless frames**, which is what the
 `undetermined` flag exists to catch.
 
+## Running it on other frames
+
+The published layers stop at the key frames, and the models are not part of the
+Zenodo release, so anything you want on the frames in between you compute
+yourself. [`environment_segmentation.py`](../environment_segmentation.py) in
+the repository root is the code the release was produced with, and
+[`environment_segmentation.ipynb`](../environment_segmentation.ipynb) walks
+through using it.
+
+The notebook checks that claim rather than asserting it: it re-runs the module
+over five published key frames of flight 332 and compares all 29 masks against
+the released ones. Every one is pixel-identical. So masks you compute this way
+sit on the same footing as the release, with the same caveats and the same
+licences — including the non-commercial restriction on tree cover and deadwood,
+which follows any mask you produce with those two models.
+
+Three things to get right, all of them measured rather than stylistic:
+
+* **Crop the letterbox.** `es.valid_rows` does it, and every model in the
+  module runs on the strip alone. Skipping it is the 8.2%-coverage failure
+  above.
+* **Pass a per-flight `gsd_cm`.** Both SegFormer models resample relative to
+  it, so a wrong value feeds them a scale they were not trained on. Per-flight
+  GSD spans 1.4 to 9.8 cm against a median of 3.5.
+* **Recompute the flags rather than interpolating them.** `unstable` compares
+  a frame against its temporal neighbourhood; adding frames changes the
+  neighbourhood, so the published flags no longer describe it. The smoothing
+  window is defined in frames, so it also covers far more samples on a dense
+  run than on key frames alone — which is a good reason to compute the
+  in-between frames even when you only care about the key ones.
+
+On one V100 and a 1024x1024 frame, SAM 3 with all eight prompts costs roughly
+2 s, and each SegFormer a few hundred milliseconds. A whole flight at every
+frame is several hours on one card, which is why the release stops where it
+does.
+
 ## Validation
 
 There is no ground truth for these classes in BAMBI, so unlike the transferred

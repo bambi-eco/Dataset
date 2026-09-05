@@ -62,9 +62,11 @@ end, including the geo-referenced tooling.
 | [Environment annotations](docs/environment.md) | ⚠️ Experimental. Snow, water, roads, vegetation, canopy and deadwood per frame |
 | [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 
-Two notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour, and
+Three notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour,
 [`owl_label_transfer.ipynb`](owl_label_transfer.ipynb) for the label transfer in
-detail.
+detail, and
+[`environment_segmentation.ipynb`](environment_segmentation.ipynb) for running
+the environment models yourself.
 
 ## RGB annotations
 
@@ -139,6 +141,29 @@ made the unrestricted classes non-commercial for no reason. The full reasoning,
 including the non-obvious case where an MIT-licensed package carries an NVIDIA
 carve-out internally, is in
 [docs/dataset-versions.md](docs/dataset-versions.md#licensing-and-why-the-environment-layers-are-split-in-two).
+
+### Running it on the frames in between
+
+The layers cover the **key frames** — the frames carrying animal annotations —
+so an environment mask can be read against an animal box with nothing
+interpolated. That is 77 frames out of 10,634 on flight 332, and about 2% of
+the release. For the frames in between you run the models yourself, and
+[`environment_segmentation.py`](environment_segmentation.py) is the code the
+release was produced with:
+
+```python
+import environment_segmentation as es
+
+sam3 = es.Sam3Segmenter("sam3.pt")       # snow, water, road, grass, rock, ...
+masks = sam3(frame)                      # all eight, one backbone pass
+masks["tree cover"] = es.TreeCoverSegmenter()(frame, gsd_cm=3.5)
+```
+
+[`environment_segmentation.ipynb`](environment_segmentation.ipynb) walks
+through it — the letterbox, the resampling, the flags — and checks the claim by
+re-running the module on published key frames: all 29 masks come back
+pixel-identical. It runs without a GPU from the masks in
+[`examples/environment/`](examples/environment/).
 
 See [docs/environment.md](docs/environment.md) for what each class means, how it
 was produced, and where each one fails.

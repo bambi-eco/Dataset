@@ -206,3 +206,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Notebook working directories: the notebooks download recordings and extract
+# frames into these, and none of it belongs in the repository.
+bambi_downloads/
+owl_transfer_demo/
+environment_demo/

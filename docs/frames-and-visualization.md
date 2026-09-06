@@ -67,8 +67,8 @@ python mot_video_viewer.py video.mp4 annotations.txt -o output.mp4 --interpolate
 `frame_dem_animation.py` renders a short video that shows how one frame relates
 to the terrain it was recorded over. You first see the plain thermal or RGB
 frame. The viewpoint then turns around the image's x-axis until the image is
-seen edge-on as a one-pixel-thick line, with the camera frustum above it and
-the relief line of the digital elevation model (DEM) below it; the DEM surface
+seen edge-on as a one-pixel-thick line, with the camera frustum and the flight
+route above it and the relief line of the digital elevation model (DEM) below it; the DEM surface
 is visible in the background while the view turns. After a short pause the
 image falls: every pixel stops the moment it touches the relief, the rest keep
 falling until all of them rest on the terrain. With `--neighbors` the frames
@@ -119,6 +119,8 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--hold`, `--roll-duration`, `--pause`, `--fall-duration`, `--end-hold` | `1`, `2.5`, `0.6`, `3`, `1.5` | Phase durations in seconds |
 | `--neighbor-delay`, `--neighbor-fade`, `--neighbor-fall`, `--neighbor-stagger` | `0.4`, `0.5`, `1.8`, `0` | Timing of the neighbour frames; by default they all appear and fall in sync, a stagger > 0 drops them one after another |
 | `--return-view`, `--return-delay`, `--return-duration` | off, `0.8`, `2.5` | After the last landing, turn the view back to straight down: a single frame ends as its orthographic projection, neighbours as the ALFS integral (overlapping frames averaged) |
+| `--no-route` | route on | Hide the flight route, the continuous line through the camera positions of the whole leg the central frame lies on |
+| `--no-caption` / `--no-text` | caption on | Hide the text bar in the top-left corner |
 | `--fit` | `scene` | Final framing: whole scene with the camera, or `image` to zoom onto image and relief |
 | `--dem-alpha-behind`, `--dem-alpha-fall` | `0.3`, `0` | Edge-on view: opacity of the terrain behind the cross-section after the roll, and of the terrain while the frames fall (fully transparent by default so the landed pixels stay visible) |
 | `--theme`, `--bg`, `--dem-cmap` | `dark`, theme, `gist_earth` | Colours |

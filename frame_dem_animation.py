@@ -637,24 +637,66 @@ def screen_basis(pose: CameraPose, roll_axis: str):
     return fwd, up, -right
 
 
-def choose_roll_axis(poses: list[CameraPose]) -> str:
+def choose_roll_axis(poses: list[CameraPose], all_poses: Optional[list[CameraPose]] = None) -> str:
     """
     'x' or 'y': the image axis about which the view turns so that the flight
-    direction (from the neighbour positions) runs across the screen.  Along the
-    image's right axis it is 'x', along the image's up axis 'y'.
+    direction runs across the screen.  Along the image's right axis it is 'x',
+    along the image's up axis 'y'.  The direction comes from the neighbour
+    positions, or from the surrounding poses of the flight for a single view.
     """
-    if len(poses) < 2:
-        return "x"
     central = poses[0]
     fwd, right, up = central.basis
     flight = np.zeros(3)
-    for p in poses[1:]:
-        d = p.position - central.position
-        flight += d * (1.0 if p.index > central.index else -1.0)
+    if len(poses) > 1:
+        for p in poses[1:]:
+            d = p.position - central.position
+            flight += d * (1.0 if p.index > central.index else -1.0)
+    elif all_poses is not None and len(all_poses) > 1:
+        i = central.index
+        lo, hi = max(0, i - 8), min(len(all_poses) - 1, i + 8)
+        flight = all_poses[hi].position - all_poses[lo].position
     flight[2] = 0.0
     if np.linalg.norm(flight) < 1e-6:
         return "x"
     return "x" if abs(flight @ right) >= abs(flight @ up) else "y"
+
+
+def flight_route(all_poses: list[CameraPose], central_index: int, reach: float) -> np.ndarray:
+    """
+    Camera positions (M, 3) of the flight leg the central frame lies on: the
+    contiguous stretch around ``central_index`` that keeps heading the same way,
+    up to ``reach`` metres to either side, so the route spans the screen instead
+    of stopping at the first or last shown frame.
+    """
+    n = len(all_poses)
+    pos = np.array([p.position for p in all_poses])
+    c = pos[central_index]
+    lo, hi = max(0, central_index - 8), min(n - 1, central_index + 8)
+    d = pos[hi] - pos[lo]
+    d[2] = 0.0
+    if np.linalg.norm(d) < 1e-6:
+        return pos[max(0, central_index - 1):central_index + 2]
+    d = d / np.linalg.norm(d)
+    window = 6
+
+    def keep(j: int, step: int) -> bool:
+        k = j + step * window
+        if not (0 <= k < n):
+            return False
+        rel = pos[j] - c
+        if abs(rel @ d) > reach:
+            return False
+        motion = (pos[k] - pos[j]) * step
+        motion[2] = 0.0
+        return (motion @ d) > 0.0
+
+    a = central_index
+    while a - 1 >= 0 and keep(a - 1, -1):
+        a -= 1
+    b = central_index
+    while b + 1 < n and keep(b + 1, 1):
+        b += 1
+    return pos[a:b + 1]
 
 
 def view_axes(fwd: np.ndarray, right: np.ndarray, up: np.ndarray, rho_deg: float):
@@ -837,6 +879,7 @@ class Style:
     frustum_color_central: np.ndarray
     frustum_color_neighbor: np.ndarray
     profile_color: np.ndarray
+    route_color: np.ndarray
     fill_color: np.ndarray
     fill_alpha: float
     pixel_size: int
@@ -847,7 +890,8 @@ class Style:
 class Animation:
     def __init__(self, shots: list[ShotGeometry], dem: DEM, timeline: Timeline, style: Style,
                  *, width: int, height: int, roll_deg: float, roll_axis: str,
-                 dem_margin: float, caption_text: str, fit: str = "scene"):
+                 dem_margin: float, caption_text: str, fit: str = "scene",
+                 route: Optional[np.ndarray] = None):
         self.shots = shots
         self.central = next(s for s in shots if s.is_central)
         self.neighbors = [s for s in shots if not s.is_central]
@@ -859,6 +903,7 @@ class Animation:
         self.roll_axis = roll_axis
         self.edge_on = abs(roll_deg - 90.0) < EDGE_ON_TOLERANCE_DEG
         self.caption_text = caption_text
+        self.route = route
 
         self.basis = screen_basis(self.central.pose, roll_axis)
         self.axes0 = view_axes(*self.basis, 0.0)
@@ -1072,13 +1117,19 @@ class Animation:
 
         bgr = canvas.to_bgr8()
 
-        # --- frustums, cameras and captions (drawn on top) ----------------------
+        # --- flight route, frustums, cameras and captions (drawn on top) --------
+        overlay_alpha = clamp01(0.15 + rho / max(self.roll_deg, 1e-6)) * (1.0 - clamp01(k_ret / 0.6))
+        if self.route is not None and len(self.route) > 1:
+            px, py, _ = view.project(self.route, W, H)
+            pts = np.round(np.stack([px, py], axis=1) * 16).astype(np.int32).reshape(-1, 1, 2)
+            col = to_cv_color(st.route_color)
+            blend_overlay(bgr, lambda im: cv2.polylines(im, [pts], False, col, 2, cv2.LINE_AA, shift=4),
+                          overlay_alpha)
         for s in self.shots:
             if s.alpha <= 0.005:
                 continue
             color = st.frustum_color_central if s.is_central else st.frustum_color_neighbor
-            self._draw_frustum(bgr, view, s, color,
-                               s.alpha * clamp01(0.15 + rho / max(self.roll_deg, 1e-6)) * (1.0 - clamp01(k_ret / 0.6)))
+            self._draw_frustum(bgr, view, s, color, s.alpha * overlay_alpha)
 
         if st.caption:
             self._draw_caption(bgr, t, rho)
@@ -1376,7 +1427,9 @@ def build_parser() -> argparse.ArgumentParser:
     out.add_argument("--fit", choices=["scene", "image"], default="scene",
                      help="final framing: whole scene with the camera, or only image and relief (frustum runs off-screen)")
     out.add_argument("--dem-point-size", type=int, default=2)
-    out.add_argument("--no-caption", action="store_true")
+    out.add_argument("--no-caption", "--no-text", dest="no_caption", action="store_true",
+                     help="hide the text bar in the top-left corner")
+    out.add_argument("--no-route", action="store_true", help="do not draw the flight route through the cameras")
     out.add_argument("--caption", default=None, help="caption text (default: file name and frame index)")
     out.add_argument("--preview", type=float, default=None,
                      help="render only the frame at this time (seconds) as a PNG next to --output")
@@ -1474,11 +1527,11 @@ def main(argv=None):
     downsample = args.image_downsample or (1 if edge_on else 2)
 
     poses = [pose_from_entry(pose_entries[idx]) for idx in indices]
+    all_poses = [pose_from_entry(e) for e in pose_entries]
     roll_axis = args.roll_axis
     if roll_axis == "auto":
-        roll_axis = choose_roll_axis(poses)
-        if len(poses) > 1:
-            print(f"roll axis: {roll_axis} (flight direction across the screen)")
+        roll_axis = choose_roll_axis(poses, all_poses)
+        print(f"roll axis: {roll_axis} (flight direction across the screen)")
 
     shots = []
     for n, (idx, pose) in enumerate(zip(indices, poses)):
@@ -1504,15 +1557,24 @@ def main(argv=None):
         frustum_color_central=parse_color("#4fc3f7") if dark else parse_color("#0277bd"),
         frustum_color_neighbor=parse_color("#ffb74d") if dark else parse_color("#ef6c00"),
         profile_color=parse_color("#8d939a") if dark else parse_color("#8d6e63"),
+        route_color=parse_color("#b0bec5") if dark else parse_color("#607d8b"),
         fill_color=parse_color("#3a3f45") if dark else parse_color("#d7ccc8"),
         fill_alpha=0.85,
         pixel_size=args.pixel_size or 0, dem_point_size=max(1, args.dem_point_size),
         caption=not args.no_caption,
     )
 
+    route = None
+    if not args.no_route:
+        foot = float(np.linalg.norm(shots[0].corners[1] - shots[0].corners[0]))
+        route = flight_route(all_poses, central_index, reach=max(6.0 * foot, 150.0))
+
     anim = Animation(shots, dem, timeline, style, width=args.width, height=args.height,
                      roll_deg=args.roll, roll_axis=roll_axis, dem_margin=args.dem_margin,
-                     caption_text=args.caption if args.caption is not None else caption_default, fit=args.fit)
+                     caption_text=args.caption if args.caption is not None else caption_default, fit=args.fit,
+                     route=route)
+    if route is not None:
+        print(f"flight route: {len(route)} poses along the leg")
     if style.pixel_size <= 0:
         # an image pixel's size on screen at the end of the roll, but at least 2 px so the line stays closed
         h, w = shots[0].image.shape[:2]

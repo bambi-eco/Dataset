@@ -86,10 +86,10 @@ python frame_dem_animation.py --video bambi_downloads/146_matched_processed.mp4 
     --dem bambi_downloads/146_matched_dem.tif --dem-json bambi_downloads/146_matched_dem.json \
     --frame 2125 -o 146_thermal.mp4
 
-# RGB, ALFS-style: 10 frames before and 10 after (every 3rd frame) fall in together;
+# RGB, ALFS-style: 8 frames before and 8 after (every 20th frame) fall in together;
 # the view turns so that the flight direction runs across the screen (neighbours left and right)
 python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \
-    --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 -o 146_alfs.mp4
+    --frame 2125 --modality rgb --neighbors 8 --neighbor-step 20 -o 146_alfs.mp4
 
 # 45 degree roll instead of 90: the image stays a textured plane, animated in 3D
 python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4
@@ -105,7 +105,7 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--dem-json` | derived from the GeoTIFF | DEM origin metadata written next to the `.glb` |
 | `--modality` | `thermal` | `thermal` or `rgb` |
 | `--neighbors` | `0` | Frames before *and* after the central one that fall in afterwards (`0` = single view) |
-| `--neighbor-step` | `1` | Frame stride between neighbours |
+| `--neighbor-step` | `1` | Frame stride between neighbours. Flight 146 moves about 0.18 m per frame, so a stride of 20 puts the cameras 3.5 m apart |
 | `--roll` | `90` | How far the viewpoint turns; `90` gives the edge-on line, e.g. `45` animates in 3D |
 | `--roll-axis` | `auto` | Turn about the image's x-axis (line = a row) or y-axis (line = a column). `auto` picks the axis that puts the flight direction across the screen, so neighbour frames sit left and right of the central one |
 | `--fall-mode` | `vertical` | Pixels fall straight down, or `ray`: slide along their camera rays |

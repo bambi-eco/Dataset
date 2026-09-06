@@ -41,9 +41,9 @@ Examples::
         --poses bambi_downloads/146_matched_poses.json \\
         --dem bambi_downloads/146_matched_dem.tif --frame 2125 -o 146_thermal.mp4
 
-    # RGB, ALFS-style: 10 frames before and after (every 3rd frame) fall in sync
+    # RGB, ALFS-style: 8 frames before and after (every 20th frame) fall in sync
     python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \\
-        --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 -o 146_alfs.mp4
+        --frame 2125 --modality rgb --neighbors 8 --neighbor-step 20 -o 146_alfs.mp4
 
     # 45 degree roll, animated in 3D
     python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4

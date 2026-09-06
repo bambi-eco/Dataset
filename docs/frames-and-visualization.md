@@ -87,9 +87,9 @@ python frame_dem_animation.py --video bambi_downloads/146_matched_processed.mp4 
     --frame 2125 -o 146_thermal.mp4
 
 # RGB, ALFS-style: 10 frames before and 10 after (every 3rd frame) fall in together;
-# --roll-axis y puts the flight direction across the screen so the cameras spread out
+# the view turns so that the flight direction runs across the screen (neighbours left and right)
 python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \
-    --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 --roll-axis y -o 146_alfs.mp4
+    --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 -o 146_alfs.mp4
 
 # 45 degree roll instead of 90: the image stays a textured plane, animated in 3D
 python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4
@@ -107,7 +107,7 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--neighbors` | `0` | Frames before *and* after the central one that fall in afterwards (`0` = single view) |
 | `--neighbor-step` | `1` | Frame stride between neighbours |
 | `--roll` | `90` | How far the viewpoint turns; `90` gives the edge-on line, e.g. `45` animates in 3D |
-| `--roll-axis` | `x` | Turn about the image's x-axis (line = a row) or y-axis (line = a column; the flight direction then runs across the screen, which spreads the neighbour cameras out) |
+| `--roll-axis` | `auto` | Turn about the image's x-axis (line = a row) or y-axis (line = a column). `auto` picks the axis that puts the flight direction across the screen, so neighbour frames sit left and right of the central one |
 | `--fall-mode` | `vertical` | Pixels fall straight down, or `ray`: slide along their camera rays |
 | `--fall-easing` | `gravity` | Accelerating or `linear` fall |
 | `--plane-height` | `0.35` | Start height of the image plane as a fraction of the height above ground |
@@ -115,6 +115,7 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--hold`, `--roll-duration`, `--pause`, `--fall-duration`, `--end-hold` | `1`, `2.5`, `0.6`, `3`, `1.5` | Phase durations in seconds |
 | `--neighbor-delay`, `--neighbor-fade`, `--neighbor-fall`, `--neighbor-stagger` | `0.4`, `0.5`, `1.8`, `0` | Timing of the neighbour frames; by default they all appear and fall in sync, a stagger > 0 drops them one after another |
 | `--fit` | `scene` | Final framing: whole scene with the camera, or `image` to zoom onto image and relief |
+| `--dem-alpha-behind`, `--dem-alpha-fall` | `0.3`, `0` | Edge-on view: opacity of the terrain behind the cross-section after the roll, and of the terrain while the frames fall (fully transparent by default so the landed pixels stay visible) |
 | `--theme`, `--bg`, `--dem-cmap` | `dark`, theme, `gist_earth` | Colours |
 | `--width`, `--height`, `--fps` | `1280`, `720`, `30` | Output format; `-o` takes `.mp4`, `.gif` or a folder for PNG frames |
 | `--preview T` | | Render only the frame at `T` seconds as a PNG, handy for tuning |

@@ -19,8 +19,10 @@ The animation has four phases:
    sits on the relief.  Optionally (``--neighbors K``) the neighbouring frames
    before and after the central one then fade in together with their own
    frustums and fall onto the terrain in sync, which is what an ALFS (airborne
-   light-field sampling) integral rendering does.  ``--roll-axis y`` shows the
-   flight direction across the screen so the neighbour cameras spread out.
+   light-field sampling) integral rendering does.  The view turns about the
+   image axis that puts the flight direction across the screen, so the
+   neighbour frames sit left and right of the central one.  While the frames
+   fall the DEM surface is faded out so the landed pixels stay visible.
 
 Inputs are the artefacts the rest of this repository produces:
 
@@ -41,7 +43,7 @@ Examples::
 
     # RGB, ALFS-style: 10 frames before and after (every 3rd frame) fall in sync
     python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \\
-        --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 --roll-axis y -o 146_alfs.mp4
+        --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 -o 146_alfs.mp4
 
     # 45 degree roll, animated in 3D
     python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4
@@ -569,6 +571,26 @@ def screen_basis(pose: CameraPose, roll_axis: str):
     return fwd, up, -right
 
 
+def choose_roll_axis(poses: list[CameraPose]) -> str:
+    """
+    'x' or 'y': the image axis about which the view turns so that the flight
+    direction (from the neighbour positions) runs across the screen.  Along the
+    image's right axis it is 'x', along the image's up axis 'y'.
+    """
+    if len(poses) < 2:
+        return "x"
+    central = poses[0]
+    fwd, right, up = central.basis
+    flight = np.zeros(3)
+    for p in poses[1:]:
+        d = p.position - central.position
+        flight += d * (1.0 if p.index > central.index else -1.0)
+    flight[2] = 0.0
+    if np.linalg.norm(flight) < 1e-6:
+        return "x"
+    return "x" if abs(flight @ right) >= abs(flight @ up) else "y"
+
+
 def view_axes(fwd: np.ndarray, right: np.ndarray, up: np.ndarray, rho_deg: float):
     """Screen axes after turning the viewpoint by rho about the screen's x-axis."""
     c, s = math.cos(math.radians(rho_deg)), math.sin(math.radians(rho_deg))
@@ -718,6 +740,7 @@ class Style:
     fg: np.ndarray
     dem_cmap: str
     dem_alpha_behind: float
+    dem_alpha_fall: float
     frustum_color_central: np.ndarray
     frustum_color_neighbor: np.ndarray
     profile_color: np.ndarray
@@ -839,6 +862,9 @@ class Animation:
         else:
             w_cut = 0.0
         surface_alpha = 1.0 - w_cut * (1.0 - st.dem_alpha_behind)
+        # once the roll is over, fade the surface to its opacity for the fall during the pause
+        w_fall = clamp01((t - self.tl.t_roll1) / self.tl.pause) if self.tl.pause > 0 else float(t >= self.tl.t_roll1)
+        surface_alpha = surface_alpha * (1.0 - w_fall) + st.dem_alpha_fall * w_fall
         line_alpha = w_cut if self.edge_on else clamp01(rho / max(self.roll_deg, 1e-6))
 
         # --- DEM surface ----------------------------------------------------
@@ -882,7 +908,7 @@ class Animation:
             col = to_cv_color(st.profile_color)
             for poly, a in lines:
                 pts = np.round(poly * 16).astype(np.int32).reshape(-1, 1, 2)
-                blend_overlay(bgr, lambda im, pts=pts: cv2.polylines(im, [pts], False, col, 2, cv2.LINE_AA, shift=4), a)
+                blend_overlay(bgr, lambda im, pts=pts: cv2.polylines(im, [pts], False, col, 1, cv2.LINE_AA, shift=4), a)
             canvas.fb[:] = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
 
         # --- the images -----------------------------------------------------
@@ -1102,8 +1128,10 @@ def build_parser() -> argparse.ArgumentParser:
     what.add_argument("--neighbor-step", type=int, default=1, help="frame stride between neighbours")
     what.add_argument("--roll", type=float, default=90.0,
                       help="how far the viewpoint turns (degrees); 90 = edge-on line, e.g. 45 = 3D")
-    what.add_argument("--roll-axis", choices=["x", "y"], default="x",
-                      help="turn about the image's x-axis (line = a row) or y-axis (line = a column)")
+    what.add_argument("--roll-axis", choices=["auto", "x", "y"], default="auto",
+                      help="turn about the image's x-axis (line = a row) or y-axis (line = a column); "
+                           "'auto' picks the axis that puts the flight direction across the screen, so "
+                           "neighbour frames sit left and right of the central one (x for a single view)")
     what.add_argument("--line-index", type=int, default=None,
                       help="row (or column for --roll-axis y) shown in the edge-on view; default: centre")
     what.add_argument("--fall-mode", choices=["vertical", "ray"], default="vertical",
@@ -1140,6 +1168,9 @@ def build_parser() -> argparse.ArgumentParser:
     out.add_argument("--dem-cmap", default="gist_earth", help="matplotlib colormap of the DEM surface")
     out.add_argument("--dem-alpha-behind", type=float, default=0.3,
                      help="edge-on view: opacity of the terrain behind the cross-section (0 = hide)")
+    out.add_argument("--dem-alpha-fall", type=float, default=None,
+                     help="opacity of the DEM surface while the frames fall (default: 0 = fully transparent "
+                          "for the edge-on view, 1 for 3D rolls)")
     out.add_argument("--dem-margin", type=float, default=0.6,
                      help="terrain shown around the frames, as a fraction of the footprint width")
     out.add_argument("--pixel-size", type=int, default=None, help="screen size of an image pixel (default: auto)")
@@ -1195,14 +1226,20 @@ def main(argv=None):
     edge_on = abs(args.roll - 90.0) < EDGE_ON_TOLERANCE_DEG
     downsample = args.image_downsample or (1 if edge_on else 2)
 
+    poses = [pose_from_entry(pose_entries[idx]) for idx in indices]
+    roll_axis = args.roll_axis
+    if roll_axis == "auto":
+        roll_axis = choose_roll_axis(poses)
+        if len(poses) > 1:
+            print(f"roll axis: {roll_axis} (flight direction across the screen)")
+
     shots = []
-    for n, idx in enumerate(indices):
-        pose = pose_from_entry(pose_entries[idx])
+    for n, (idx, pose) in enumerate(zip(indices, poses)):
         print(f"frame {idx:6d}: position {np.round(pose.position, 1).tolist()}  "
               f"tilt {pose.tilt:.1f}  roll {pose.roll:.1f}  heading {pose.heading:.1f}")
         image = frame_getter(idx)
         shots.append(build_shot(pose, image, dem, plane_height_frac=args.plane_height,
-                                downsample=downsample, roll_axis=args.roll_axis,
+                                downsample=downsample, roll_axis=roll_axis,
                                 line_index=args.line_index, fall_mode=args.fall_mode, is_central=(n == 0)))
 
     timeline = Timeline(args.hold, args.roll_duration, args.pause, args.fall_duration,
@@ -1214,9 +1251,10 @@ def main(argv=None):
     fg = parse_color("#e8e8e8") if dark else parse_color("#202020")
     style = Style(
         bg=bg, fg=fg, dem_cmap=args.dem_cmap, dem_alpha_behind=args.dem_alpha_behind,
+        dem_alpha_fall=(0.0 if edge_on else 1.0) if args.dem_alpha_fall is None else args.dem_alpha_fall,
         frustum_color_central=parse_color("#4fc3f7") if dark else parse_color("#0277bd"),
         frustum_color_neighbor=parse_color("#ffb74d") if dark else parse_color("#ef6c00"),
-        profile_color=parse_color("#d0d0d0") if dark else parse_color("#3e2723"),
+        profile_color=parse_color("#8d939a") if dark else parse_color("#8d6e63"),
         fill_color=parse_color("#3a3f45") if dark else parse_color("#d7ccc8"),
         fill_alpha=0.85,
         pixel_size=args.pixel_size or 0, dem_point_size=max(1, args.dem_point_size),
@@ -1224,13 +1262,13 @@ def main(argv=None):
     )
 
     anim = Animation(shots, dem, timeline, style, width=args.width, height=args.height,
-                     roll_deg=args.roll, roll_axis=args.roll_axis, dem_margin=args.dem_margin,
+                     roll_deg=args.roll, roll_axis=roll_axis, dem_margin=args.dem_margin,
                      caption_text=args.caption if args.caption is not None else caption_default, fit=args.fit)
     if style.pixel_size <= 0:
         # an image pixel's size on screen at the end of the roll, but at least 2 px so the line stays closed
         h, w = shots[0].image.shape[:2]
         px_world = np.linalg.norm(shots[0].corners[1] - shots[0].corners[0]) / w
-        style.pixel_size = int(np.clip(math.ceil(px_world * anim.scale1 * 1.2), 3 if edge_on else 2, 8))
+        style.pixel_size = int(np.clip(math.ceil(px_world * anim.scale1 * 1.2), 4 if edge_on else 2, 8))
 
     n_frames = int(math.ceil(timeline.total * args.fps))
     print(f"phases: hold {timeline.hold}s, roll {timeline.roll}s, pause {timeline.pause}s, "

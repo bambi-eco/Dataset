@@ -17,9 +17,10 @@ The animation has four phases:
 4. **Fall** -- the image drops towards the terrain.  Each pixel comes to rest
    the moment it touches the DEM, the others keep falling until every pixel
    sits on the relief.  Optionally (``--neighbors K``) the neighbouring frames
-   before and after the central one then fade in with their own frustums and
-   fall onto the terrain as well, which is what an ALFS (airborne light-field
-   sampling) integral rendering does.
+   before and after the central one then fade in together with their own
+   frustums and fall onto the terrain in sync, which is what an ALFS (airborne
+   light-field sampling) integral rendering does.  ``--roll-axis y`` shows the
+   flight direction across the screen so the neighbour cameras spread out.
 
 Inputs are the artefacts the rest of this repository produces:
 
@@ -38,9 +39,9 @@ Examples::
         --poses bambi_downloads/146_matched_poses.json \\
         --dem bambi_downloads/146_matched_dem.tif --frame 2125 -o 146_thermal.mp4
 
-    # RGB, ALFS-style with 5 frames before and after (every 3rd frame)
+    # RGB, ALFS-style: 10 frames before and after (every 3rd frame) fall in sync
     python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \\
-        --frame 2125 --modality rgb --neighbors 5 --neighbor-step 3 -o 146_alfs.mp4
+        --frame 2125 --modality rgb --neighbors 10 --neighbor-step 3 --roll-axis y -o 146_alfs.mp4
 
     # 45 degree roll, animated in 3D
     python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4
@@ -993,7 +994,7 @@ class Writer:
 # Demo data
 # ============================================================================
 
-def make_demo(rng: np.random.Generator, modality: str, n_frames: int = 61):
+def make_demo(rng: np.random.Generator, modality: str, n_frames: int = 121):
     """A synthetic hilly terrain, a straight flight over it and frames rendered from a procedural texture."""
     size, step = 320.0, 1.0
     xs = np.arange(0, size + step, step)
@@ -1012,7 +1013,7 @@ def make_demo(rng: np.random.Generator, modality: str, n_frames: int = 61):
     heading = 35.0
     hr = math.radians(heading)
     start = np.array([120.0, 100.0])
-    step_m = 0.9
+    step_m = 1.2
     poses = []
     # procedural ground texture, sampled at the pixel footprints
     for i in range(n_frames):
@@ -1125,7 +1126,8 @@ def build_parser() -> argparse.ArgumentParser:
     tim.add_argument("--neighbor-delay", type=float, default=0.4, help="after the central frame has landed")
     tim.add_argument("--neighbor-fade", type=float, default=0.5)
     tim.add_argument("--neighbor-fall", type=float, default=1.8)
-    tim.add_argument("--neighbor-stagger", type=float, default=0.45, help="0 = all neighbours at once")
+    tim.add_argument("--neighbor-stagger", type=float, default=0.0,
+                     help="delay between consecutive neighbours; 0 = all appear and fall in sync")
     tim.add_argument("--end-hold", type=float, default=1.5)
 
     out = p.add_argument_group("output and style")

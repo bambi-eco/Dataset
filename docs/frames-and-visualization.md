@@ -77,7 +77,8 @@ and fall in sync, which is what an ALFS integral rendering does.
 
 It needs the DEM from [`dem_from_poses.py`](geospatial.md) and the poses file;
 frames come from the split video or from a folder written by
-`frame_extraction.py`.
+`frame_extraction.py`. The flight's `_mask_t.png` or `_mask_w.png` is picked up
+automatically so the black undistortion borders do not fall with the image.
 
 ```bash
 # thermal, single central frame, 90 degree roll (the default)
@@ -103,6 +104,7 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--video` / `--frames-dir` / `--image` | *(one required)* | Split video, `frame_extraction.py` output folder, or a single extracted frame |
 | `--poses`, `--dem`, `--frame` | *(required)* | Poses JSON, DEM GeoTIFF, index of the central frame |
 | `--dem-json` | derived from the GeoTIFF | DEM origin metadata written next to the `.glb` |
+| `--mask`, `--no-mask` | `<id>_mask_t.png` / `<id>_mask_w.png` next to the input | Validity mask; pixels outside it (the black undistortion borders) are left out of the falling image |
 | `--modality` | `thermal` | `thermal` or `rgb` |
 | `--neighbors` | `0` | Frames before *and* after the central one that fall in afterwards (`0` = single view) |
 | `--neighbor-step` | `1` | Frame stride between neighbours. Flight 146 moves about 0.18 m per frame, so a stride of 20 puts the cameras 3.5 m apart |

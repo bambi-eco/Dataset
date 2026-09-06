@@ -32,7 +32,9 @@ Inputs are the artefacts the rest of this repository produces:
   ``yaw``, or the ``location``/``rotation`` fields added by
   ``add_relative_dem_position_to_poses.py``);
 * ``<id>_matched_dem.tif`` and optionally ``<id>_matched_dem.json`` from
-  ``dem_from_poses.py``.
+  ``dem_from_poses.py``;
+* ``<id>_mask_t.png`` / ``<id>_mask_w.png``, picked up automatically next to the
+  video, so the black undistortion borders are not part of the falling image.
 
 Examples::
 
@@ -432,7 +434,7 @@ class ShotGeometry:
 
 def build_shot(pose: CameraPose, image: np.ndarray, dem: DEM, *, plane_height_frac: float,
                downsample: int, roll_axis: str, line_index: Optional[int], fall_mode: str,
-               is_central: bool) -> ShotGeometry:
+               is_central: bool, mask: Optional[np.ndarray] = None) -> ShotGeometry:
     fwd, right, up = pose.basis
     if fwd[2] >= -1e-3:
         sys.exit(f"frame {pose.index}: camera does not look downwards (tilt {pose.tilt:.1f} deg); "
@@ -440,6 +442,11 @@ def build_shot(pose: CameraPose, image: np.ndarray, dem: DEM, *, plane_height_fr
 
     img = image[::downsample, ::downsample] if downsample > 1 else image
     h, w = img.shape[:2]
+    if mask is not None:
+        if mask.shape[:2] != image.shape[:2]:
+            mask = cv2.resize(mask.astype(np.uint8), (image.shape[1], image.shape[0]),
+                              interpolation=cv2.INTER_NEAREST).astype(bool)
+        mask = mask[::downsample, ::downsample] if downsample > 1 else mask
 
     # --- where does the plane start? --------------------------------------
     # mean terrain height under the camera's nadir footprint, then place the
@@ -483,6 +490,11 @@ def build_shot(pose: CameraPose, image: np.ndarray, dem: DEM, *, plane_height_fr
         line_mask = (np.tile(np.arange(w), h) == li)
         line_dir, line_extent = up, half_y
         line_center = center + ((li + 0.5) / w * 2.0 - 1.0) * half_x * right
+
+    # --- drop masked-out pixels (undistortion borders) ---------------------------
+    if mask is not None:
+        valid = mask.reshape(-1)
+        p0, colors, line_mask = p0[valid], colors[valid], line_mask[valid]
 
     # --- landing positions ---------------------------------------------------
     shot = ShotGeometry(pose, img, center, corners, p0, colors, np.empty_like(p0),
@@ -818,8 +830,9 @@ class Animation:
             self.fine_colors = self._dem_colors(self.fine_pts[:, 2], fine_shade)
             fx0, fx1 = self.fine_pts[:, 0].min(), self.fine_pts[:, 0].max()
             fy0, fy1 = self.fine_pts[:, 1].min(), self.fine_pts[:, 1].max()
-            self.coarse_outside = ~((self.dem_pts[:, 0] > fx0) & (self.dem_pts[:, 0] < fx1)
-                                    & (self.dem_pts[:, 1] > fy0) & (self.dem_pts[:, 1] < fy1))
+            # coarse points stay within one coarse spacing of the fine region's border, so the two clouds overlap
+            self.coarse_outside = ~((self.dem_pts[:, 0] > fx0 + spacing) & (self.dem_pts[:, 0] < fx1 - spacing)
+                                    & (self.dem_pts[:, 1] > fy0 + spacing) & (self.dem_pts[:, 1] < fy1 - spacing))
         # depth offset that keeps lines and landed pixels in front of the terrain they rest on
         self.bias = 0.005 * foot + 1.5 * spacing
 
@@ -1145,6 +1158,10 @@ def build_parser() -> argparse.ArgumentParser:
     src.add_argument("--dem-json", type=Path,
                      help="<id>_matched_dem.json with the DEM origin (default: derived from the GeoTIFF)")
     src.add_argument("--frame", type=int, help="index of the central frame")
+    src.add_argument("--mask", type=Path,
+                     help="validity mask (white = valid) that removes the undistortion borders; default: the "
+                          "<id>_mask_t.png (thermal) or <id>_mask_w.png (RGB) next to the video or frames folder")
+    src.add_argument("--no-mask", action="store_true", help="keep the black undistortion borders")
     src.add_argument("--demo", action="store_true", help="use a synthetic terrain and flight instead of data")
     src.add_argument("--seed", type=int, default=7, help="random seed of the demo data")
 
@@ -1211,6 +1228,29 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+def load_mask(args) -> Optional[np.ndarray]:
+    """The validity mask for the chosen modality, explicit or found next to the input."""
+    if args.no_mask:
+        return None
+    path = args.mask
+    if path is None:
+        anchor = args.video or args.frames_dir or args.image
+        folder = anchor if anchor.is_dir() else anchor.parent
+        flight_id = anchor.name.split("_")[0]
+        suffix = "t" if args.modality == "thermal" else "w"
+        for cand in (folder / f"{flight_id}_mask_{suffix}.png", folder.parent / f"{flight_id}_mask_{suffix}.png"):
+            if cand.is_file():
+                path = cand
+                break
+        if path is None:
+            return None
+    m = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+    if m is None:
+        sys.exit(f"cannot read mask {path}")
+    print(f"mask: {path} ({(m > 127).mean():.0%} of the frame valid)")
+    return m > 127
+
+
 def main(argv=None):
     args = build_parser().parse_args(argv)
 
@@ -1240,6 +1280,8 @@ def main(argv=None):
     if args.image is not None and args.neighbors > 0:
         sys.exit("--image holds a single frame; use --video or --frames-dir for --neighbors")
 
+    mask = None if args.demo else load_mask(args)
+
     # which frames take part, ordered by distance from the centre (1 before, 1 after, 2 before, ...)
     indices = [central_index]
     for k in range(1, args.neighbors + 1):
@@ -1266,8 +1308,8 @@ def main(argv=None):
               f"tilt {pose.tilt:.1f}  roll {pose.roll:.1f}  heading {pose.heading:.1f}")
         image = frame_getter(idx)
         shots.append(build_shot(pose, image, dem, plane_height_frac=args.plane_height,
-                                downsample=downsample, roll_axis=roll_axis,
-                                line_index=args.line_index, fall_mode=args.fall_mode, is_central=(n == 0)))
+                                downsample=downsample, roll_axis=roll_axis, line_index=args.line_index,
+                                fall_mode=args.fall_mode, is_central=(n == 0), mask=mask))
 
     timeline = Timeline(args.hold, args.roll_duration, args.pause, args.fall_duration,
                         args.neighbor_fade, args.neighbor_fall, args.neighbor_stagger, args.neighbor_delay,

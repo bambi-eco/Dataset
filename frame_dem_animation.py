@@ -211,8 +211,9 @@ class DEM:
 
     # --- queries --------------------------------------------------------------
 
-    def sample(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
-        """Bilinear elevation at (x, y); coordinates are clamped to the grid."""
+    def sample(self, x: np.ndarray, y: np.ndarray, grid: Optional[np.ndarray] = None) -> np.ndarray:
+        """Bilinear value of ``grid`` (default: elevation) at (x, y); coordinates are clamped to the grid."""
+        z = self.z if grid is None else grid
         fx = (np.asarray(x, dtype=np.float64) - self.xs[0]) / self.dx
         fy = (np.asarray(y, dtype=np.float64) - self.ys[0]) / self.dy
         fx = np.clip(fx, 0, len(self.xs) - 1.000001)
@@ -221,10 +222,22 @@ class DEM:
         r0 = np.floor(fy).astype(np.int64)
         tx = (fx - c0).astype(np.float32)
         ty = (fy - r0).astype(np.float32)
-        z = self.z
         top = z[r0, c0] * (1 - tx) + z[r0, c0 + 1] * tx
         bot = z[r0 + 1, c0] * (1 - tx) + z[r0 + 1, c0 + 1] * tx
         return top * (1 - ty) + bot * ty
+
+    @property
+    def hillshade(self) -> np.ndarray:
+        """Hillshade on the native grid, light from the north-west, 45 degrees up."""
+        if getattr(self, "_shade", None) is None:
+            dzdx = np.gradient(self.z.astype(np.float64), self.dx, axis=1)
+            dzdy = np.gradient(self.z.astype(np.float64), self.dy, axis=0)
+            az, alt = math.radians(315.0), math.radians(45.0)
+            nx_, ny_, nz_ = -dzdx, -dzdy, np.ones_like(dzdx)
+            nrm = np.sqrt(nx_ ** 2 + ny_ ** 2 + nz_ ** 2)
+            lx, ly, lz = math.sin(az) * math.cos(alt), math.cos(az) * math.cos(alt), math.sin(alt)
+            self._shade = np.clip((nx_ * lx + ny_ * ly + nz_ * lz) / nrm, 0, 1).astype(np.float32)
+        return self._shade
 
     def crop_points(self, xmin, xmax, ymin, ymax, spacing: float):
         """Regular point cloud (N,3) of the DEM inside a box, plus hillshade (N,)."""
@@ -236,14 +249,7 @@ class DEM:
         gy = np.linspace(ymin, ymax, ny)
         X, Y = np.meshgrid(gx, gy)
         Z = self.sample(X, Y)
-        # hillshade, light from the north-west, 45 degrees up
-        dzdx = np.gradient(Z, gx, axis=1)
-        dzdy = np.gradient(Z, gy, axis=0)
-        az, alt = math.radians(315.0), math.radians(45.0)
-        nx_, ny_, nz_ = -dzdx, -dzdy, np.ones_like(Z)
-        nrm = np.sqrt(nx_ ** 2 + ny_ ** 2 + nz_ ** 2)
-        lx, ly, lz = math.sin(az) * math.cos(alt), math.cos(az) * math.cos(alt), math.sin(alt)
-        shade = np.clip((nx_ * lx + ny_ * ly + nz_ * lz) / nrm, 0, 1)
+        shade = self.sample(X, Y, self.hillshade)
         pts = np.stack([X.ravel(), Y.ravel(), Z.ravel()], axis=1).astype(np.float32)
         return pts, shade.ravel().astype(np.float32)
 
@@ -786,17 +792,34 @@ class Animation:
         self.scale1, cx, cy = fit_framing(key_pts, self.axes1[0], self.axes1[1], width, height, margin=0.06)
         self.center1 = self._center_from_screen(self.axes1, cx, cy, self.central.plane_center)
 
-        # DEM point cloud around the action
+        # DEM point clouds: a coarse one over the whole terrain crop (sized for the
+        # final zoom level and wide enough to span the screen) and a fine one
+        # around the footprint for the zoomed-in start of the animation
         all_xy = np.concatenate([s.landing[:, :2] for s in shots] + [s.corners[:, :2] for s in shots]
                                 + [s.pose.position[None, :2] for s in shots])
         foot = float(np.linalg.norm(self.central.corners[1] - self.central.corners[0]))
-        pad = dem_margin * foot
+        pad = max(dem_margin * foot, 0.65 * width / self.scale1)
         self.crop = (max(all_xy[:, 0].min() - pad, dem.xs[0]), min(all_xy[:, 0].max() + pad, dem.xs[-1]),
                      max(all_xy[:, 1].min() - pad, dem.ys[0]), min(all_xy[:, 1].max() + pad, dem.ys[-1]))
         spacing = max(1.35 * style.dem_point_size / self.scale1, min(dem.dx, dem.dy) * 0.5)
         self.dem_pts, shade = dem.crop_points(*self.crop, spacing)
         self.dem_colors = self._dem_colors(self.dem_pts[:, 2], shade)
         self.dem_spacing = spacing
+
+        near_xy = np.concatenate([s.landing[:, :2] for s in shots] + [s.corners[:, :2] for s in shots])
+        near_pad = 0.4 * foot
+        near_spacing = max(2.5 / self.scale0, min(dem.dx, dem.dy) * 0.1)
+        self.fine_spacing = near_spacing if near_spacing < spacing * 0.9 else None
+        if self.fine_spacing is not None:
+            self.fine_pts, fine_shade = dem.crop_points(
+                max(near_xy[:, 0].min() - near_pad, dem.xs[0]), min(near_xy[:, 0].max() + near_pad, dem.xs[-1]),
+                max(near_xy[:, 1].min() - near_pad, dem.ys[0]), min(near_xy[:, 1].max() + near_pad, dem.ys[-1]),
+                near_spacing)
+            self.fine_colors = self._dem_colors(self.fine_pts[:, 2], fine_shade)
+            fx0, fx1 = self.fine_pts[:, 0].min(), self.fine_pts[:, 0].max()
+            fy0, fy1 = self.fine_pts[:, 1].min(), self.fine_pts[:, 1].max()
+            self.coarse_outside = ~((self.dem_pts[:, 0] > fx0) & (self.dem_pts[:, 0] < fx1)
+                                    & (self.dem_pts[:, 1] > fy0) & (self.dem_pts[:, 1] < fy1))
         # depth offset that keeps lines and landed pixels in front of the terrain they rest on
         self.bias = 0.005 * foot + 1.5 * spacing
 
@@ -869,16 +892,19 @@ class Animation:
 
         # --- DEM surface ----------------------------------------------------
         if surface_alpha > 0.005:
-            pts = self.dem_pts
-            cols = self.dem_colors
-            if self.edge_on and w_cut > 0:
-                # sweep a cutting plane from the far edge to the cross-section
-                thr = self.dem_cut_min * (1.0 - w_cut)
-                keep = ((pts @ self.cut_normal) - self.cut_offset) >= thr
-                pts, cols = pts[keep], cols[keep]
-            px, py, depth = view.project(pts, W, H)
-            size = int(np.clip(math.ceil(self.dem_spacing * view.scale * 1.6), st.dem_point_size, 12))
-            canvas.splat(px, py, depth, cols, size, surface_alpha)
+            clouds = [(self.dem_pts, self.dem_colors, self.dem_spacing, 0.0)]
+            if self.fine_spacing is not None and self.dem_spacing * view.scale > 4.0:
+                clouds = [(self.dem_pts[self.coarse_outside], self.dem_colors[self.coarse_outside], self.dem_spacing, 0.0),
+                          (self.fine_pts, self.fine_colors, self.fine_spacing, 0.0)]
+            for pts, cols, spacing, dbias in clouds:
+                if self.edge_on and w_cut > 0:
+                    # sweep a cutting plane from the far edge to the cross-section
+                    thr = self.dem_cut_min * (1.0 - w_cut)
+                    keep = ((pts @ self.cut_normal) - self.cut_offset) >= thr
+                    pts, cols = pts[keep], cols[keep]
+                px, py, depth = view.project(pts, W, H)
+                size = int(np.clip(math.ceil(spacing * view.scale * 1.6), st.dem_point_size, 16))
+                canvas.splat(px, py, depth - dbias, cols, size, surface_alpha)
 
         # ground fill (2D look) below the central relief line
         if self.edge_on and w_cut > 0:
@@ -970,6 +996,7 @@ class Animation:
                  "pause" if t < self.tl.t_fall0 else
                  "projection" if t < self.tl.t_fall1 or not self.neighbors else "ALFS integral")
         text = f"{self.caption_text}   {phase}   roll {rho:5.1f} deg"
+        cv2.putText(bgr, text, (14, 26), cv2.FONT_HERSHEY_SIMPLEX, 0.6, to_cv_color(st.bg), 3, cv2.LINE_AA)
         cv2.putText(bgr, text, (14, 26), cv2.FONT_HERSHEY_SIMPLEX, 0.6, col, 1, cv2.LINE_AA)
 
 

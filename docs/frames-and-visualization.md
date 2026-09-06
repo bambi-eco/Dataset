@@ -90,7 +90,7 @@ python frame_dem_animation.py --video bambi_downloads/146_matched_processed.mp4 
 # RGB, ALFS-style: 8 frames before and 8 after (every 20th frame) fall in together;
 # the view turns so that the flight direction runs across the screen (neighbours left and right)
 python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \
-    --frame 2125 --modality rgb --neighbors 8 --neighbor-step 20 -o 146_alfs.mp4
+    --frame 2125 --modality rgb --neighbors 8 --neighbor-step 20 --return-view -o 146_alfs.mp4
 
 # 45 degree roll instead of 90: the image stays a textured plane, animated in 3D
 python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4
@@ -116,6 +116,7 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--pitch-convention` | `nadir` | BAMBI poses store the tilt from nadir; use `dji` for raw gimbal pitch (-90 = down) |
 | `--hold`, `--roll-duration`, `--pause`, `--fall-duration`, `--end-hold` | `1`, `2.5`, `0.6`, `3`, `1.5` | Phase durations in seconds |
 | `--neighbor-delay`, `--neighbor-fade`, `--neighbor-fall`, `--neighbor-stagger` | `0.4`, `0.5`, `1.8`, `0` | Timing of the neighbour frames; by default they all appear and fall in sync, a stagger > 0 drops them one after another |
+| `--return-view`, `--return-delay`, `--return-duration` | off, `0.8`, `2.5` | After the last landing, turn the view back to straight down: a single frame ends as its orthographic projection, neighbours as the ALFS integral (overlapping frames averaged) |
 | `--fit` | `scene` | Final framing: whole scene with the camera, or `image` to zoom onto image and relief |
 | `--dem-alpha-behind`, `--dem-alpha-fall` | `0.3`, `0` | Edge-on view: opacity of the terrain behind the cross-section after the roll, and of the terrain while the frames fall (fully transparent by default so the landed pixels stay visible) |
 | `--theme`, `--bg`, `--dem-cmap` | `dark`, theme, `gist_earth` | Colours |

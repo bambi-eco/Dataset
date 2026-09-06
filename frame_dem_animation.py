@@ -23,6 +23,9 @@ The animation has four phases:
    image axis that puts the flight direction across the screen, so the
    neighbour frames sit left and right of the central one.  While the frames
    fall the DEM surface is faded out so the landed pixels stay visible.
+5. **Return** (``--return-view``) -- after a delay the view turns back to
+   straight down and shows the result: the orthographic projection of the
+   frame, or with neighbours the ALFS integral (overlapping frames averaged).
 
 Inputs are the artefacts the rest of this repository produces:
 
@@ -45,7 +48,7 @@ Examples::
 
     # RGB, ALFS-style: 8 frames before and after (every 20th frame) fall in sync
     python frame_dem_animation.py --frames-dir 146_frames --poses ... --dem ... \\
-        --frame 2125 --modality rgb --neighbors 8 --neighbor-step 20 -o 146_alfs.mp4
+        --frame 2125 --modality rgb --neighbors 8 --neighbor-step 20 --return-view -o 146_alfs.mp4
 
     # 45 degree roll, animated in 3D
     python frame_dem_animation.py ... --roll 45 -o 146_3d.mp4
@@ -409,6 +412,9 @@ class ShotGeometry:
     line_mask: np.ndarray                   # (N,) bool: pixels of the edge-on line
     is_central: bool
     fall_mode: str
+    rows: Optional[np.ndarray] = None       # (N,) pixel row / column of every point
+    cols: Optional[np.ndarray] = None
+    ortho_sel: Optional[np.ndarray] = None  # (N,) bool: subset drawn in the top-down return view
     # ray mode: parameter s at which each pixel lands, and the maximum
     s_land: Optional[np.ndarray] = None
     s_max: float = 1.0
@@ -478,6 +484,8 @@ def build_shot(pose: CameraPose, image: np.ndarray, dem: DEM, *, plane_height_fr
           + (U[..., None] * half_x) * right[None, None, :]
           - (V[..., None] * half_y) * up[None, None, :]).reshape(-1, 3).astype(np.float64)
     colors = img.reshape(-1, 3).astype(np.float32)
+    rows = np.repeat(np.arange(h), w)
+    cols_idx = np.tile(np.arange(w), h)
 
     # --- which pixels form the edge-on line? ---------------------------------
     if roll_axis == "x":
@@ -495,10 +503,11 @@ def build_shot(pose: CameraPose, image: np.ndarray, dem: DEM, *, plane_height_fr
     if mask is not None:
         valid = mask.reshape(-1)
         p0, colors, line_mask = p0[valid], colors[valid], line_mask[valid]
+        rows, cols_idx = rows[valid], cols_idx[valid]
 
     # --- landing positions ---------------------------------------------------
     shot = ShotGeometry(pose, img, center, corners, p0, colors, np.empty_like(p0),
-                        line_mask, is_central, fall_mode)
+                        line_mask, is_central, fall_mode, rows=rows, cols=cols_idx)
     if fall_mode == "vertical":
         landing = p0.copy()
         landing[:, 2] = dem.sample(p0[:, 0], p0[:, 1])
@@ -641,8 +650,8 @@ class Canvas:
         self.fb[:] = bg
         self.zbuf = np.full((height, width), np.inf, dtype=np.float32)
 
-    def splat(self, px, py, depth, colors, size: int, alpha: float = 1.0):
-        """Draw points with a size x size footprint, nearest depth wins."""
+    def splat(self, px, py, depth, colors, size: int, alpha: float = 1.0, depth_tol: float = 0.0):
+        """Draw points with a size x size footprint, nearest depth wins (within ``depth_tol``)."""
         if alpha <= 0.0 or len(px) == 0:
             return
         W, H = self.w, self.h
@@ -672,13 +681,26 @@ class Canvas:
                 lin = y[inside] * W + x[inside]
                 d = depth[inside]
                 c = colors[inside]
-                pass_z = d < zb[lin]
+                pass_z = d < zb[lin] + depth_tol
                 lin, d, c = lin[pass_z], d[pass_z], c[pass_z]
                 if alpha >= 1.0:
                     fb[lin] = c
                 else:
                     fb[lin] = fb[lin] * (1.0 - alpha) + c * alpha
-                zb[lin] = d
+                zb[lin] = np.minimum(zb[lin], d)
+
+    def splat_layer(self, px, py, depth, colors, size: int, alpha: float = 1.0, depth_tol: float = 0.0):
+        """Like ``splat``, but a semi-transparent set of points is composited once, as a layer."""
+        if alpha >= 1.0:
+            self.splat(px, py, depth, colors, size, 1.0, depth_tol)
+            return
+        if alpha <= 0.0 or len(px) == 0:
+            return
+        layer = Canvas(self.w, self.h, np.zeros(3, dtype=np.float32))
+        layer.splat(px, py, depth, colors, size, 1.0)
+        hit = (layer.zbuf < np.inf) & (layer.zbuf < self.zbuf + depth_tol)
+        self.fb[hit] = self.fb[hit] * (1.0 - alpha) + layer.fb[hit] * alpha
+        self.zbuf[hit] = np.minimum(self.zbuf[hit], layer.zbuf[hit])
 
     def to_bgr8(self) -> np.ndarray:
         return cv2.cvtColor((np.clip(self.fb, 0, 1) * 255.0 + 0.5).astype(np.uint8), cv2.COLOR_RGB2BGR)
@@ -713,6 +735,9 @@ class Timeline:
     end_hold: float
     n_neighbors: int
     fall_easing: str
+    return_view: bool = False
+    return_delay: float = 0.8
+    return_duration: float = 2.5
 
     def __post_init__(self):
         self.t_roll0 = self.hold
@@ -723,7 +748,18 @@ class Timeline:
                                 for i in range(self.n_neighbors)]
         last = self.t_fall1 if not self.neighbor_starts else \
             self.neighbor_starts[-1] + self.neighbor_fade + self.neighbor_fall
-        self.total = last + self.end_hold
+        self.t_landed = last
+        self.t_return0 = last + self.return_delay
+        self.t_return1 = self.t_return0 + self.return_duration
+        self.total = (self.t_return1 if self.return_view else last) + self.end_hold
+
+    def return_progress(self, t: float) -> float:
+        """0 before the view starts turning back, 1 when it looks straight down again."""
+        if not self.return_view or t < self.t_return0:
+            return 0.0
+        if self.return_duration <= 0:
+            return 1.0
+        return float(smoothstep((t - self.t_return0) / self.return_duration))
 
     def roll_progress(self, t: float) -> float:
         if self.roll <= 0:
@@ -804,6 +840,18 @@ class Animation:
         self.scale1, cx, cy = fit_framing(key_pts, self.axes1[0], self.axes1[1], width, height, margin=0.06)
         self.center1 = self._center_from_screen(self.axes1, cx, cy, self.central.plane_center)
 
+        # top-down return view: every landed frame, subsampled to a point budget
+        n_total = sum(len(s.landing) for s in shots)
+        k = max(1, int(math.ceil(math.sqrt(n_total / 1.5e6))))
+        self.ortho_step = k
+        for s in shots:
+            s.ortho_sel = (s.rows % k == 0) & (s.cols % k == 0)
+        land_pts = np.concatenate([s.landing[s.ortho_sel] for s in shots])
+        self.scale2, cx, cy = fit_framing(land_pts, self.axes0[0], self.axes0[1], width, height, margin=0.05)
+        self.center2 = self._center_from_screen(self.axes0, cx, cy, self.central.plane_center)
+        h_img, w_img = self.central.image.shape[:2]
+        self.px_world = float(np.linalg.norm(self.central.corners[1] - self.central.corners[0])) / w_img
+
         # DEM point clouds: a coarse one over the whole terrain crop (sized for the
         # final zoom level and wide enough to span the screen) and a fine one
         # around the footprint for the zoomed-in start of the animation
@@ -873,15 +921,22 @@ class Animation:
     # ---------------------------------------------------------------------
 
     def view_at(self, t: float) -> tuple[View, float]:
-        k = self.tl.roll_progress(t)
-        rho = self.roll_deg * k
+        k_ret = self.tl.return_progress(t)
+        if k_ret > 0:
+            rho = self.roll_deg * (1 - k_ret)
+            scale = self.scale1 * (1 - k_ret) + self.scale2 * k_ret
+            center = self.center1 * (1 - k_ret) + self.center2 * k_ret
+        else:
+            k = self.tl.roll_progress(t)
+            rho = self.roll_deg * k
+            scale = self.scale0 * (1 - k) + self.scale1 * k
+            center = self.center0 * (1 - k) + self.center1 * k
         e_x, e_y, d = view_axes(*self.basis, rho)
-        scale = self.scale0 * (1 - k) + self.scale1 * k
-        center = self.center0 * (1 - k) + self.center1 * k
         return View(e_x, e_y, d, center, scale), rho
 
     def render(self, t: float) -> np.ndarray:
         view, rho = self.view_at(t)
+        k_ret = self.tl.return_progress(t)
         st = self.style
         W, H = self.w, self.h
         canvas = Canvas(W, H, st.bg)
@@ -894,12 +949,13 @@ class Animation:
 
         # --- edge-on cross-fade: DEM surface -> relief line + ground fill ------
         if self.edge_on:
-            w_cut = clamp01((rho - 0.7 * self.roll_deg) / (0.3 * self.roll_deg))
+            w_cut = clamp01((rho - 0.8 * self.roll_deg) / (0.2 * self.roll_deg))
         else:
             w_cut = 0.0
         surface_alpha = 1.0 - w_cut * (1.0 - st.dem_alpha_behind)
         # once the roll is over, fade the surface to its opacity for the fall during the pause
         w_fall = clamp01((t - self.tl.t_roll1) / self.tl.pause) if self.tl.pause > 0 else float(t >= self.tl.t_roll1)
+        w_fall *= 1.0 - clamp01(k_ret / 0.5)          # the terrain comes back while the view turns back
         surface_alpha = surface_alpha * (1.0 - w_fall) + st.dem_alpha_fall * w_fall
         line_alpha = w_cut if self.edge_on else clamp01(rho / max(self.roll_deg, 1e-6))
 
@@ -917,7 +973,7 @@ class Animation:
                     pts, cols = pts[keep], cols[keep]
                 px, py, depth = view.project(pts, W, H)
                 size = int(np.clip(math.ceil(spacing * view.scale * 1.6), st.dem_point_size, 16))
-                canvas.splat(px, py, depth - dbias, cols, size, surface_alpha)
+                canvas.splat_layer(px, py, depth - dbias, cols, size, surface_alpha)
 
         # ground fill (2D look) below the central relief line
         if self.edge_on and w_cut > 0:
@@ -952,8 +1008,10 @@ class Animation:
 
         # --- the images -----------------------------------------------------
         bias = self.bias
+        if k_ret > 0:
+            self._render_landed(canvas, view, t, k_ret)
         for s in self.shots:
-            if s.alpha <= 0.005:
+            if s.alpha <= 0.005 or k_ret > 0:
                 continue
             pts = s.positions()
             cols = s.colors
@@ -961,14 +1019,14 @@ class Animation:
             if self.edge_on and (falling or rho >= self.roll_deg - 1e-6):
                 pts, cols = pts[s.line_mask], cols[s.line_mask]
                 px, py, depth = view.project(pts, W, H)
-                canvas.splat(px, py, depth - 2 * bias, cols, st.pixel_size, s.alpha)
+                canvas.splat_layer(px, py, depth - 2 * bias, cols, st.pixel_size, s.alpha)
             else:
                 px, py, depth = view.project(pts, W, H)
                 depth = depth - bias
                 if self.edge_on:
                     # keep the future line row on top so the collapse is seamless
                     depth = depth - np.where(s.line_mask, bias, 0.0)
-                canvas.splat(px, py, depth, cols, st.pixel_size, s.alpha)
+                canvas.splat_layer(px, py, depth, cols, st.pixel_size, s.alpha)
 
         bgr = canvas.to_bgr8()
 
@@ -977,11 +1035,52 @@ class Animation:
             if s.alpha <= 0.005:
                 continue
             color = st.frustum_color_central if s.is_central else st.frustum_color_neighbor
-            self._draw_frustum(bgr, view, s, color, s.alpha * clamp01(0.15 + rho / max(self.roll_deg, 1e-6)))
+            self._draw_frustum(bgr, view, s, color,
+                               s.alpha * clamp01(0.15 + rho / max(self.roll_deg, 1e-6)) * (1.0 - clamp01(k_ret / 0.6)))
 
         if st.caption:
             self._draw_caption(bgr, t, rho)
         return bgr
+
+    def _render_landed(self, canvas: Canvas, view: View, t: float, k_ret: float):
+        """
+        The return view: every landed frame seen from above.  Where frames overlap
+        the colour goes from "the last one wins" (as during the fall) to the mean
+        of all covering frames, which is the ALFS integral.
+        """
+        st = self.style
+        W, H = self.w, self.h
+        bias = self.bias
+        fade_in = clamp01(k_ret / 0.3)            # the whole landed frame appears as the view turns back
+        w_mean = clamp01(k_ret / 0.4)             # overlapping frames go from "last wins" to their mean
+        size = int(np.clip(math.ceil(self.px_world * self.ortho_step * view.scale * 1.3), 2, 12))
+
+        acc_sum = np.zeros((H, W, 3), dtype=np.float32)
+        acc_cnt = np.zeros((H, W), dtype=np.float32)
+        last = np.zeros((H, W, 3), dtype=np.float32)
+        z_near = np.full((H, W), np.inf, dtype=np.float32)
+        for s in self.shots:
+            if s.alpha <= 0.005:
+                continue
+            if self.edge_on and fade_in < 1.0:
+                lp, lc = s.landing[s.line_mask], s.colors[s.line_mask]
+                px, py, depth = view.project(lp, W, H)
+                canvas.splat_layer(px, py, depth - 3 * bias, lc, st.pixel_size, s.alpha * (1.0 - fade_in))
+            sel = s.ortho_sel
+            px, py, depth = view.project(s.landing[sel], W, H)
+            layer = Canvas(W, H, np.zeros(3, dtype=np.float32))
+            layer.splat(px, py, depth - 2 * bias, s.colors[sel], size, 1.0)
+            hit = layer.zbuf < np.inf
+            acc_sum[hit] += layer.fb[hit] * s.alpha
+            acc_cnt[hit] += s.alpha
+            last[hit] = layer.fb[hit]
+            z_near[hit] = np.minimum(z_near[hit], layer.zbuf[hit])
+
+        hit = (acc_cnt > 0) & (z_near < canvas.zbuf + bias)
+        mean = acc_sum[hit] / acc_cnt[hit][:, None]
+        colour = last[hit] * (1.0 - w_mean) + mean * w_mean
+        canvas.fb[hit] = canvas.fb[hit] * (1.0 - fade_in) + colour * fade_in
+        canvas.zbuf[hit] = np.minimum(canvas.zbuf[hit], z_near[hit])
 
     def _draw_frustum(self, bgr, view: View, s: ShotGeometry, color, alpha):
         W, H = self.w, self.h
@@ -1007,7 +1106,11 @@ class Animation:
         phase = ("frame" if t < self.tl.t_roll0 else
                  "roll" if t < self.tl.t_roll1 else
                  "pause" if t < self.tl.t_fall0 else
-                 "projection" if t < self.tl.t_fall1 or not self.neighbors else "ALFS integral")
+                 "projection" if t < self.tl.t_fall1 or not self.neighbors else
+                 "ALFS frames" if t < self.tl.t_return0 or not self.tl.return_view else
+                 "ALFS integral")
+        if self.tl.return_view and t >= self.tl.t_return0 and not self.neighbors:
+            phase = "orthographic frame"
         text = f"{self.caption_text}   {phase}   roll {rho:5.1f} deg"
         cv2.putText(bgr, text, (14, 26), cv2.FONT_HERSHEY_SIMPLEX, 0.6, to_cv_color(st.bg), 3, cv2.LINE_AA)
         cv2.putText(bgr, text, (14, 26), cv2.FONT_HERSHEY_SIMPLEX, 0.6, col, 1, cv2.LINE_AA)
@@ -1200,6 +1303,11 @@ def build_parser() -> argparse.ArgumentParser:
     tim.add_argument("--neighbor-fall", type=float, default=1.8)
     tim.add_argument("--neighbor-stagger", type=float, default=0.0,
                      help="delay between consecutive neighbours; 0 = all appear and fall in sync")
+    tim.add_argument("--return-view", action="store_true",
+                     help="after everything has landed, turn the view back to straight down and show the "
+                          "orthographic frame (or the ALFS integral of all landed frames)")
+    tim.add_argument("--return-delay", type=float, default=0.8, help="wait after the last landing")
+    tim.add_argument("--return-duration", type=float, default=2.5, help="how long the view takes to turn back")
     tim.add_argument("--end-hold", type=float, default=1.5)
 
     out = p.add_argument_group("output and style")
@@ -1313,7 +1421,9 @@ def main(argv=None):
 
     timeline = Timeline(args.hold, args.roll_duration, args.pause, args.fall_duration,
                         args.neighbor_fade, args.neighbor_fall, args.neighbor_stagger, args.neighbor_delay,
-                        args.end_hold, len(indices) - 1, args.fall_easing)
+                        args.end_hold, len(indices) - 1, args.fall_easing,
+                        return_view=args.return_view, return_delay=args.return_delay,
+                        return_duration=args.return_duration)
 
     dark = args.theme == "dark"
     bg = args.bg if args.bg is not None else (parse_color("#101418") if dark else parse_color("white"))
@@ -1341,7 +1451,8 @@ def main(argv=None):
 
     n_frames = int(math.ceil(timeline.total * args.fps))
     print(f"phases: hold {timeline.hold}s, roll {timeline.roll}s, pause {timeline.pause}s, "
-          f"fall {timeline.fall}s, neighbours {len(indices) - 1}, total {timeline.total:.1f}s "
+          f"fall {timeline.fall}s, neighbours {len(indices) - 1}, "
+          f"return {'at %.1fs' % timeline.t_return0 if timeline.return_view else 'off'}, total {timeline.total:.1f}s "
           f"({n_frames} frames at {args.fps:g} fps), edge-on: {edge_on}, pixel size {style.pixel_size}")
 
     if args.preview is not None:

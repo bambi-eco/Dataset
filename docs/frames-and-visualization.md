@@ -78,7 +78,8 @@ and fall in sync, which is what an ALFS integral rendering does.
 It needs the DEM from [`dem_from_poses.py`](geospatial.md) and the poses file;
 frames come from the split video or from a folder written by
 `frame_extraction.py`. The flight's `_mask_t.png` or `_mask_w.png` is picked up
-automatically so the black undistortion borders do not fall with the image.
+automatically so the black undistortion borders do not fall with the image, and
+the flight's `_correction.json` is applied to the camera poses.
 
 ```bash
 # thermal, single central frame, 90 degree roll (the default)
@@ -105,12 +106,13 @@ python frame_dem_animation.py --demo -o demo.mp4
 | `--poses`, `--dem`, `--frame` | *(required)* | Poses JSON, DEM GeoTIFF, index of the central frame |
 | `--dem-json` | derived from the GeoTIFF | DEM origin metadata written next to the `.glb` |
 | `--mask`, `--no-mask` | `<id>_mask_t.png` / `<id>_mask_w.png` next to the input | Validity mask; pixels outside it (the black undistortion borders) are left out of the falling image |
+| `--correction`, `--no-correction` | `<id>_correction.json` next to the input | Camera translation/rotation correction, applied per frame exactly as the BAMBI tooling does, frame-range overrides included |
 | `--modality` | `thermal` | `thermal` or `rgb` |
 | `--neighbors` | `0` | Frames before *and* after the central one that fall in afterwards (`0` = single view) |
 | `--neighbor-step` | `1` | Frame stride between neighbours. Flight 146 moves about 0.18 m per frame, so a stride of 20 puts the cameras 3.5 m apart |
 | `--roll` | `90` | How far the viewpoint turns; `90` gives the edge-on line, e.g. `45` animates in 3D |
 | `--roll-axis` | `auto` | Turn about the image's x-axis (line = a row) or y-axis (line = a column). `auto` picks the axis that puts the flight direction across the screen, so neighbour frames sit left and right of the central one |
-| `--fall-mode` | `vertical` | Pixels fall straight down, or `ray`: slide along their camera rays |
+| `--fall-mode` | `ray` | Pixels slide along their camera rays and land where the camera saw them, so neighbouring frames overlap correctly; `vertical` drops them straight down |
 | `--fall-easing` | `gravity` | Accelerating or `linear` fall |
 | `--plane-height` | `0.35` | Start height of the image plane as a fraction of the height above ground |
 | `--pitch-convention` | `nadir` | BAMBI poses store the tilt from nadir; use `dji` for raw gimbal pitch (-90 = down) |

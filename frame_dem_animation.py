@@ -289,6 +289,37 @@ def _pose_entry(i, img, dem, pitch_convention, fovy_default):
 _transformer_cache: dict = {}
 
 
+def load_corrections(path: Path, n_frames: int) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Per-frame translation (N, 3) in metres and rotation (N, 3) in radians from a
+    ``<id>_correction.json``: the defaults, overridden inside ``fine_corrections``
+    frame ranges (first matching range wins, as the BAMBI tooling resolves it).
+    """
+    with open(path) as f:
+        data = json.load(f)
+
+    def xyz(d):
+        d = d or {}
+        return np.array([float(d.get("x", 0.0)), float(d.get("y", 0.0)), float(d.get("z", 0.0))])
+
+    default = data.get("default", data)
+    t = np.tile(xyz(default.get("translation")), (n_frames, 1))
+    r = np.tile(xyz(default.get("rotation")), (n_frames, 1))
+    assigned = np.zeros(n_frames, dtype=bool)
+    idx = np.arange(n_frames)
+    entries = (data.get("fine_corrections") or data.get("corrections") or data.get("additional")
+               or data.get("additional_corrections") or [])
+    for e in entries:
+        start = int(e.get("start_frame", e.get("start", e.get("start frame", 0))))
+        end = e.get("end_frame", e.get("end", e.get("end frame")))
+        end = int(end) if end is not None else n_frames
+        sel = (idx >= start) & (idx <= end) & ~assigned
+        t[sel] = xyz(e.get("translation", default.get("translation")))
+        r[sel] = xyz(e.get("rotation", default.get("rotation")))
+        assigned |= sel
+    return t, r
+
+
 def pose_from_entry(entry: dict) -> CameraPose:
     img, dem = entry["raw"], entry["dem"]
     if "location" in img:
@@ -314,6 +345,14 @@ def pose_from_entry(entry: dict) -> CameraPose:
         tilt, roll, heading = float(img.get("pitch", 0)), float(img.get("roll", 0)), float(img.get("yaw", 0))
     if entry["pitch_convention"] == "dji":
         tilt = tilt + 90.0            # DJI gimbal pitch: -90 = straight down
+
+    # camera correction, applied exactly as bambi_detection / the QGIS plugin do:
+    # translation added to the DEM-local position, rotation (radians) subtracted from the eulers
+    corr = entry.get("correction")
+    if corr is not None:
+        ct, cr = corr
+        pos = pos + ct
+        tilt, roll, heading = (a - math.degrees(c) for a, c in zip((tilt, roll, heading), cr))
 
     fov = img.get("fovy", entry["fovy_default"])
     if isinstance(fov, (list, tuple)):
@@ -538,7 +577,7 @@ def march_rays(cam: np.ndarray, p0: np.ndarray, dem: DEM) -> np.ndarray:
     z_floor = float(dem.z.min()) - 1.0
     s_end = (z_floor - cam[2]) / dz                     # per-ray s at which z reaches the floor
     s_end = np.maximum(s_end, 1.0 + 1e-6)
-    n_coarse = 64
+    n_coarse = 32
     lo = np.ones(len(p0))
     hi = s_end.copy()
     found = np.zeros(len(p0), dtype=bool)
@@ -552,7 +591,7 @@ def march_rays(cam: np.ndarray, p0: np.ndarray, dem: DEM) -> np.ndarray:
         hi[newly] = s[newly]
         found |= newly
         prev = s
-    for _ in range(12):
+    for _ in range(11):
         mid = 0.5 * (lo + hi)
         pts = cam[None, :] + d * mid[:, None]
         below = pts[:, 2] <= dem.sample(pts[:, 0], pts[:, 1])
@@ -851,6 +890,9 @@ class Animation:
         self.center2 = self._center_from_screen(self.axes0, cx, cy, self.central.plane_center)
         h_img, w_img = self.central.image.shape[:2]
         self.px_world = float(np.linalg.norm(self.central.corners[1] - self.central.corners[0])) / w_img
+        if self.central.fall_mode == "ray" and self.central.s_land is not None:
+            # pixels spread out as they slide down their rays: size them by the median stretch
+            self.px_world *= float(np.median(self.central.s_land))
 
         # DEM point clouds: a coarse one over the whole terrain crop (sized for the
         # final zoom level and wide enough to span the screen) and a fine one
@@ -1265,6 +1307,10 @@ def build_parser() -> argparse.ArgumentParser:
                      help="validity mask (white = valid) that removes the undistortion borders; default: the "
                           "<id>_mask_t.png (thermal) or <id>_mask_w.png (RGB) next to the video or frames folder")
     src.add_argument("--no-mask", action="store_true", help="keep the black undistortion borders")
+    src.add_argument("--correction", type=Path,
+                     help="<id>_correction.json with the camera translation/rotation correction; default: the "
+                          "file next to the video or frames folder")
+    src.add_argument("--no-correction", action="store_true", help="ignore the camera correction")
     src.add_argument("--demo", action="store_true", help="use a synthetic terrain and flight instead of data")
     src.add_argument("--seed", type=int, default=7, help="random seed of the demo data")
 
@@ -1281,8 +1327,9 @@ def build_parser() -> argparse.ArgumentParser:
                            "neighbour frames sit left and right of the central one (x for a single view)")
     what.add_argument("--line-index", type=int, default=None,
                       help="row (or column for --roll-axis y) shown in the edge-on view; default: centre")
-    what.add_argument("--fall-mode", choices=["vertical", "ray"], default="vertical",
-                      help="pixels fall straight down or slide along their camera rays")
+    what.add_argument("--fall-mode", choices=["ray", "vertical"], default="ray",
+                      help="'ray': pixels slide along their camera rays and land where the camera saw them "
+                           "(a true projection, frames overlap correctly); 'vertical': straight down")
     what.add_argument("--fall-easing", choices=["gravity", "linear"], default="gravity")
     what.add_argument("--plane-height", type=float, default=0.35,
                       help="start height of the image plane as a fraction of the height above ground")
@@ -1334,6 +1381,27 @@ def build_parser() -> argparse.ArgumentParser:
     out.add_argument("--preview", type=float, default=None,
                      help="render only the frame at this time (seconds) as a PNG next to --output")
     return p
+
+
+def apply_corrections(args, pose_entries: list) -> None:
+    """Attach the per-frame camera correction to the pose entries, if a correction file is found."""
+    if args.no_correction:
+        return
+    path = args.correction
+    if path is None:
+        anchor = args.video or args.frames_dir or args.image
+        folder = anchor if anchor.is_dir() else anchor.parent
+        flight_id = anchor.name.split("_")[0]
+        for cand in (folder / f"{flight_id}_correction.json", folder.parent / f"{flight_id}_correction.json"):
+            if cand.is_file():
+                path = cand
+                break
+        if path is None:
+            return
+    t, r = load_corrections(path, len(pose_entries))
+    for e, ct, cr in zip(pose_entries, t, r):
+        e["correction"] = (ct, cr)
+    print(f"correction: {path} (default {t[0].round(2).tolist()} m, {np.degrees(r[0]).round(3).tolist()} deg)")
 
 
 def load_mask(args) -> Optional[np.ndarray]:
@@ -1389,6 +1457,8 @@ def main(argv=None):
         sys.exit("--image holds a single frame; use --video or --frames-dir for --neighbors")
 
     mask = None if args.demo else load_mask(args)
+    if not args.demo:
+        apply_corrections(args, pose_entries)
 
     # which frames take part, ordered by distance from the centre (1 before, 1 after, 2 before, ...)
     indices = [central_index]

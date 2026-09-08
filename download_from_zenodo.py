@@ -34,6 +34,15 @@ Usage:
     # Recordings plus the OWL-transferred RGB annotations, in one directory
     python download_from_zenodo.py --version owl-transferred -f 119 --unzip
 
+    # Only the annotation, pose and metadata files, never the video: reads the
+    # members straight out of the archive on Zenodo with HTTP range requests,
+    # a few MB per flight instead of a gigabyte or more
+    python download_from_zenodo.py --annotations-only -f 146
+
+    # The same for a whole annotation study: every flight that has an
+    # environment layer, with its boxes, but without a single video
+    python download_from_zenodo.py --version environment-all --annotations-only
+
     # Use a summary file from a custom location
     python download_from_zenodo.py -s /path/to/zenodo_upload_summary.json
 
@@ -42,9 +51,11 @@ Environment variable ZENODO_TOKEN can be used for restricted depositions.
 
 import argparse
 import glob
+import io
 import json
 import os
 import sys
+import time
 import zipfile
 from pathlib import Path
 from typing import Optional
@@ -115,6 +126,16 @@ LAYER_MARKERS = {
     "environment": ["<id>_environment.json"],
     "environment-nc": ["<id>_environment_nc.json"],
 }
+
+# With --annotations-only the video and the masks are never fetched, so the
+# base layer is "present" once its annotation files are.
+ANNOTATION_MARKERS = dict(LAYER_MARKERS)
+ANNOTATION_MARKERS["base"] = ["<id>_gt.txt", "<id>_matched_poses.json",
+                              "<id>_metadata.json"]
+
+# What --annotations-only leaves in the archive: anything that is imagery.
+MEDIA_SUFFIXES = {".mp4", ".mov", ".avi", ".mkv", ".png", ".jpg", ".jpeg",
+                  ".tif", ".tiff", ".bmp"}
 
 
 def licence_of(version: str) -> str:
@@ -286,6 +307,97 @@ def get_deposition_files(api_base: str, deposition_id: int, token: Optional[str]
     return file_map
 
 
+class RemoteFile(io.RawIOBase):
+    """A file-like view of a URL, read with HTTP range requests.
+
+    A zip archive keeps its table of contents at the very end and stores every
+    member at a known offset, so `zipfile` only ever needs a handful of
+    `seek` + `read` calls to pull one member out. Zenodo serves ranges, which
+    turns "download 1.5 GB and keep 3 MB of it" into three or four small
+    requests. Every read is one GET with a `Range` header; a transient error
+    is retried with backoff.
+    """
+
+    def __init__(self, url: str, token: Optional[str] = None):
+        self.url = url
+        self.headers = {"Authorization": f"Bearer {token}"} if token else {}
+        self.session = requests.Session()
+        self.pos = 0
+        probe = self.session.get(url, headers={**self.headers, "Range": "bytes=0-0"},
+                                 stream=True)
+        probe.raise_for_status()
+        content_range = probe.headers.get("Content-Range", "")
+        if probe.status_code != 206 or "/" not in content_range:
+            raise RuntimeError("server does not honour HTTP range requests")
+        self.size = int(content_range.rsplit("/", 1)[1])
+        probe.close()
+
+    def readable(self) -> bool:
+        return True
+
+    def seekable(self) -> bool:
+        return True
+
+    def tell(self) -> int:
+        return self.pos
+
+    def seek(self, offset: int, whence: int = io.SEEK_SET) -> int:
+        if whence == io.SEEK_SET:
+            self.pos = offset
+        elif whence == io.SEEK_CUR:
+            self.pos += offset
+        else:
+            self.pos = self.size + offset
+        return self.pos
+
+    def read(self, n: int = -1) -> bytes:
+        if n is None or n < 0:
+            n = self.size - self.pos
+        if n <= 0 or self.pos >= self.size:
+            return b""
+        end = min(self.pos + n, self.size) - 1
+        headers = {**self.headers, "Range": f"bytes={self.pos}-{end}"}
+        last_error: Optional[Exception] = None
+        for attempt in range(5):
+            try:
+                r = self.session.get(self.url, headers=headers, timeout=120)
+                r.raise_for_status()
+                data = r.content
+                self.pos += len(data)
+                return data
+            except (requests.RequestException, OSError) as e:
+                last_error = e
+                time.sleep(2 ** attempt)
+        raise RuntimeError(f"range read failed after retries: {last_error}")
+
+
+def download_members(url: str, output_dir: Path, token: Optional[str],
+                     skip_suffixes: set[str] = MEDIA_SUFFIXES) -> list[str]:
+    """Extract the non-media members of a remote archive straight to disk.
+
+    Returns the names written. Directory structure inside the archive is
+    flattened to the basename, as the files of one flight are meant to sit
+    side by side in one directory.
+    """
+    remote = RemoteFile(url, token)
+    written = []
+    with zipfile.ZipFile(remote) as zf:
+        for info in zf.infolist():
+            if info.is_dir():
+                continue
+            if Path(info.filename).suffix.lower() in skip_suffixes:
+                continue
+            dest = output_dir / Path(info.filename).name
+            with zf.open(info) as src, open(dest, "wb") as dst:
+                while True:
+                    chunk = src.read(8 * 1024 * 1024)
+                    if not chunk:
+                        break
+                    dst.write(chunk)
+            written.append(dest.name)
+    return written
+
+
 def download_file(url: str, dest: Path, token: Optional[str]) -> None:
     """Stream-download a file with progress indication."""
     headers = {}
@@ -450,7 +562,18 @@ def main():
         action="store_true",
         help="Extract ZIPs after download and delete the ZIP files",
     )
+    parser.add_argument(
+        "--annotations-only", "-a",
+        action="store_true",
+        help="Fetch only the annotation, pose and metadata files of each "
+             "flight and never the video or the masks. The members are read "
+             "straight out of the archive on Zenodo with HTTP range requests, "
+             "a few MB per flight instead of the full archive, and land "
+             "extracted in the output directory. Implies --unzip.",
+    )
     args = parser.parse_args()
+    if args.annotations_only:
+        args.unzip = True
 
     if args.licences:
         print(f"\n{'version':<18}{'licence':<24}layers")
@@ -542,7 +665,8 @@ def main():
 
     for name in layer_names:
         this_index = layer_index[name]
-        markers = LAYER_MARKERS.get(name)
+        markers = (ANNOTATION_MARKERS if args.annotations_only
+                   else LAYER_MARKERS).get(name)
 
         # A layer need not carry every requested flight.
         wanted = [p for p in prefixes if p in this_index]
@@ -587,7 +711,10 @@ def main():
 
         print(f"\n📥 Downloading {len(to_download)} flight(s) from "
               f"{len(by_deposition)} deposition(s)")
-        if args.unzip:
+        if args.annotations_only:
+            print("✂  Annotations only: video and masks are left on Zenodo, "
+                  "the other files are read out of each archive in place")
+        elif args.unzip:
             print("📦 ZIPs will be extracted and removed after download")
 
         if args.dry_run:
@@ -624,6 +751,19 @@ def main():
                     continue
 
                 print(f"  ⬇  {zip_name}")
+                if args.annotations_only:
+                    try:
+                        names = download_members(file_map[zip_name],
+                                                 args.output_dir, args.token)
+                        print(f"     ✂  {len(names)} file(s): "
+                              f"{', '.join(names)}")
+                        totals["downloaded"] += 1
+                        totals["extracted"] += 1
+                    except (requests.RequestException, zipfile.BadZipFile,
+                            RuntimeError, OSError) as e:
+                        print(f"     ❌ Download failed: {e}")
+                        failed.append(prefix)
+                    continue
                 try:
                     download_file(file_map[zip_name], dest_path, args.token)
                     totals["downloaded"] += 1

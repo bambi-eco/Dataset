@@ -47,11 +47,17 @@ python download_from_zenodo.py --version orthographic
 
 # Recordings plus the OWL-transferred RGB annotations, side by side in one folder
 python download_from_zenodo.py --version owl-transferred -f 119 --unzip
+
+# Annotations, poses and metadata only, never the video: a few MB per flight
+python download_from_zenodo.py --annotations-only -f 146
+python download_from_zenodo.py --version environment-all --annotations-only
 ```
 
 > **Note:** `--version` selects which dataset version to download and defaults to `base` (the pre-processed videos). The available versions are `base`, `raw`, `matched`, `orthographic`, and `owl-transferred`; each is described by its own `flight_metadata/zenodo_upload_summary_*.json`. A summary file from a custom location can be supplied with `-s <path>`, which overrides `--version`.
 
 > **Note:** `owl-transferred` is a **layer on top of `base`**, not a standalone release: it ships only annotation files. Selecting it downloads the `base` recordings *and* the transferred annotations into the same output directory, so a single command gives a complete, usable flight. Its archives are named `owl_labels_<id>.zip` so they cannot collide with the `flight_<id>.zip` of the base layer. Flights that the base release ships without thermal labels have nothing to transfer and are reported as a coverage gap at the end of the run.
+
+> **Note:** `--annotations-only` (`-a`) leaves the video and the mask images on Zenodo and fetches everything else in the archive: `<id>_gt.txt`, `<id>_matched_poses.json`, `<id>_metadata.json`, `<id>_correction.json`, `<id>_track_mapping.json`, and whatever an annotation layer adds. It works because a zip archive keeps its table of contents at the end and every member at a known offset, and Zenodo honours HTTP range requests, so the script opens the archive in place and reads only the members it wants: three or four small requests and about 3 MB for a base flight whose archive is 1.5 GB. A study that joins the animal boxes with the environment layers over all 301 flights needs about 1.3 GB this way, against roughly 400 GB with the videos. The files land extracted, and a flight counts as present once its `<id>_gt.txt`, poses and metadata are there, so a rerun skips it. `--annotations-only` implies `--unzip`.
 
 > **Note:** `--split` reads flight IDs from `flight_metadata/splits.json`. A custom path can be supplied with `--splits-file <path>`. The flag is silently ignored when `-f`, `--range`, or `--parts` is also specified.
 

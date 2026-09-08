@@ -60,6 +60,7 @@ end, including the geo-referenced tooling.
 | [Frames and visualization](docs/frames-and-visualization.md) | Extracting frames, drawing boxes on images and video |
 | [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the ⚠️ experimental `owl-transferred` annotations |
 | [Environment annotations](docs/environment.md) | ⚠️ Experimental. Snow, water, roads, vegetation, canopy and deadwood per frame |
+| [Environment × animals](docs/environment-insights.md) | What the environment layers say about the animal labels: occlusion against canopy, species against ground cover, group size, track ends |
 | [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
 | [Frame-to-terrain animation](docs/frames-and-visualization.md#frame-to-terrain-animation) | Roll a frame edge-on over the DEM and drop its pixels onto the relief, single-view or ALFS-style |
 
@@ -168,6 +169,25 @@ pixel-identical. It runs without a GPU from the masks in
 
 See [docs/environment.md](docs/environment.md) for what each class means, how it
 was produced, and where each one fails.
+
+### Reading the layers against the animals
+
+The layers sit on the same key frames as the animal boxes, so the two can be
+joined without interpolation. [`environment_features.py`](environment_features.py)
+does the join (one row per box with the fraction of every class inside it, in a
+ring around it, and the distance to the nearest pixel of it) and
+[`environment_insights.py`](environment_insights.py) turns the tables into the
+figures of [docs/environment-insights.md](docs/environment-insights.md). The
+headline: a box with no canopy inside it is half visible 14% of the time, a box
+fully under canopy 80%, and the neighbourhood canopy predicts it better than the
+box overlap. Neither script needs a video: `--annotations-only` fetches just the
+annotation files out of each archive.
+
+```bash
+python download_from_zenodo.py --version environment-all --annotations-only -o env_study/
+python environment_features.py env_study/ --out features/
+python environment_insights.py features/ --figures figures/ --report insights.md
+```
 
 ## Additional related repositories:
 

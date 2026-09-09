@@ -61,7 +61,7 @@ end, including the geo-referenced tooling.
 | [Thermal to RGB label transfer](docs/label-transfer.md) | Moving thermal boxes onto the RGB view, and the ⚠️ experimental `owl-transferred` annotations |
 | [Environment annotations](docs/environment.md) | ⚠️ Experimental. Snow, water, roads, vegetation, canopy and deadwood per frame |
 | [Environment × animals](docs/environment-insights.md) | What the environment layers say about the animal labels: occlusion against canopy, species against ground cover, group size, track ends |
-| [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses |
+| [Geospatial tools](docs/geospatial.md) | Terrain models from flight poses, and an overview map of every recording site |
 | [Frame-to-terrain animation](docs/frames-and-visualization.md#frame-to-terrain-animation) | Roll a frame edge-on over the DEM and drop its pixels onto the relief, single-view or ALFS-style |
 
 Three notebooks: [`introduction.ipynb`](introduction.ipynb) for a first tour,

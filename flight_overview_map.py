@@ -728,6 +728,12 @@ def main(argv=None):
     torn = [k for k, v in split_places.items() if v > 1]
     print(f"agreement with the named recording sites: {len(mixed)} site(s) merge several names, "
           f"{len(torn)} name(s) split over several sites")
+    missing = Counter(f.place or "(unknown)" for f in flights
+                      if not f.located and not any(f in s.inferred for s in sites))
+    if missing:
+        print(f"{sum(missing.values())} flight(s) could not be placed; no log for these campaigns:")
+        for pl, c in missing.most_common():
+            print(f"  {c:4d} flights  {pretty_place(pl) if pl != '(unknown)' else pl}")
 
     render(sites, flights, args, THEME[args.theme])
     write_tables(sites, args)

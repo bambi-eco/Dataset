@@ -254,7 +254,7 @@ def main():
             cv2.putText(frame, "same animals, all frames: mean radius of each animal's cluster", (612, 56), font, 0.55, (30, 30, 30), 1, cv2.LINE_AA)
             cv2.putText(frame, f"SRT + AirData {spread['combined']:.2f} m     AirData only {spread['airdata']:.2f} m     SRT only {spread['srt']:.2f} m",
                         (612, 84), font, 0.55, (30, 30, 30), 1, cv2.LINE_AA)
-            cv2.putText(frame, "AirData only: frames timed from the isVideo flag, which comes on 0.49 s after the first frame",
+            cv2.putText(frame, "AirData only: frames timed from the isVideo flag, here 0.49 s late",
                         (612, 110), font, 0.48, (90, 90, 90), 1, cv2.LINE_AA)
         if args.preview is not None:
             cv2.imwrite(str(args.output.with_suffix(".png")), frame)

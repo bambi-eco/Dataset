@@ -256,6 +256,7 @@ class Site:
     lon: float
     flights: list = field(default_factory=list)
     inferred: list = field(default_factory=list)     # flights placed via their campaign, no own log
+    name: str = ""                                   # label, made unique across sites
 
     @property
     def n(self) -> int:
@@ -263,6 +264,8 @@ class Site:
 
     @property
     def label(self) -> str:
+        if self.name:
+            return self.name
         names = Counter(f.place for f in self.flights + self.inferred if f.place)
         return pretty_place(names.most_common(1)[0][0]) if names else f"site {self.sid}"
 
@@ -370,6 +373,11 @@ def cluster(flights: list[Flight], radius_m: float) -> list[Site]:
     sites.sort(key=lambda s: -s.n)
     for i, s in enumerate(sites, start=1):
         s.sid = i
+    seen = Counter()                                 # the same campaign name can sit at two places
+    for s in sites:
+        base = s.label
+        seen[base] += 1
+        s.name = base if seen[base] == 1 else f"{base} ({seen[base]})"
     return sites
 
 
@@ -495,8 +503,8 @@ def render(sites, flights, args, th):
     kx = math.cos(math.radians(lat0))                     # equirectangular, x scaled so shapes are true
 
     fig = plt.figure(figsize=(args.width / 100, args.height / 100), dpi=args.dpi, facecolor=th["surface"])
-    gs = fig.add_gridspec(2, 2, width_ratios=[1.9, 1.0], height_ratios=[1, 0.16],
-                          left=0.035, right=0.985, top=0.855, bottom=0.065, wspace=0.115, hspace=0.02)
+    gs = fig.add_gridspec(2, 2, width_ratios=[1.8, 1.0], height_ratios=[1, 0.16],
+                          left=0.035, right=0.985, top=0.855, bottom=0.065, wspace=0.20, hspace=0.02)
     ax = fig.add_subplot(gs[0, 0]); ax.set_facecolor(th["surface"])
     bx = fig.add_subplot(gs[:, 1]); bx.set_facecolor(th["surface"])
 
@@ -726,8 +734,17 @@ def main(argv=None):
         for pl in {f.place for f in s.flights if f.place}:
             split_places[pl] += 1
     torn = [k for k, v in split_places.items() if v > 1]
-    print(f"agreement with the named recording sites: {len(mixed)} site(s) merge several names, "
+    print(f"agreement with the named recording campaigns: {len(mixed)} site(s) merge several names, "
           f"{len(torn)} name(s) split over several sites")
+    for s in mixed[:6]:
+        names = Counter(f.place for f in s.flights if f.place)
+        print(f"  site {s.sid:2d} {s.label:22s} holds " +
+              ", ".join(f"{pretty_place(k)} x{v}" for k, v in names.most_common()))
+    for pl in torn[:6]:
+        where = [(s.label, sum(1 for f in s.flights if f.place == pl)) for s in sites
+                 if any(f.place == pl for f in s.flights)]
+        print(f"  campaign {pretty_place(pl):22s} sits at " +
+              ", ".join(f"{lab} x{c}" for lab, c in where))
     missing = Counter(f.place or "(unknown)" for f in flights
                       if not f.located and not any(f in s.inferred for s in sites))
     if missing:

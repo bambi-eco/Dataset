@@ -43,6 +43,16 @@ Usage:
     # environment layer, with its boxes, but without a single video
     python download_from_zenodo.py --version environment-all --annotations-only
 
+    # Pick single files out of a flight's archive, in any version: glob
+    # patterns match the path inside the archive or just the file name
+    python download_from_zenodo.py -f 146 --include '*_gt.txt' '*_poses.json'
+    python download_from_zenodo.py --version raw -f 1 --include '*.SRT' air_data.csv
+    python download_from_zenodo.py --version matched -f 1 --include 'labels/*'
+    python download_from_zenodo.py --version raw -f 1 --exclude '*_V_*.MP4'
+
+    # See what a flight's archive holds before choosing (sizes, no download)
+    python download_from_zenodo.py --version orthographic -f 1 --list-files
+
     # Use a summary file from a custom location
     python download_from_zenodo.py -s /path/to/zenodo_upload_summary.json
 
@@ -50,6 +60,7 @@ Environment variable ZENODO_TOKEN can be used for restricted depositions.
 """
 
 import argparse
+import fnmatch
 import glob
 import io
 import json
@@ -133,9 +144,19 @@ ANNOTATION_MARKERS = dict(LAYER_MARKERS)
 ANNOTATION_MARKERS["base"] = ["<id>_gt.txt", "<id>_matched_poses.json",
                               "<id>_metadata.json"]
 
-# What --annotations-only leaves in the archive: anything that is imagery.
+# What --annotations-only leaves in the archive: anything that is imagery,
+# plus the Windows thumbnail caches that slipped into some archives.
 MEDIA_SUFFIXES = {".mp4", ".mov", ".avi", ".mkv", ".png", ".jpg", ".jpeg",
                   ".tif", ".tiff", ".bmp"}
+JUNK_NAMES = {"thumbs.db", ".ds_store"}
+
+# Layers whose archives do not carry the flight id in their file names (raw:
+# `air_data.csv`, `T_calib.json`; matched / orthographic: `rgb/`, `thermal/`,
+# `manifest.json`). One flight unpacks fine into its own directory, but two
+# into the same one would overwrite each other, so with more than one flight
+# each is unpacked into `<output>/<id>/` instead. The flight-prefixed layers
+# stay flat, as their files are meant to sit side by side across layers.
+NESTED_LAYERS = {"raw", "matched", "orthographic"}
 
 
 def licence_of(version: str) -> str:
@@ -214,6 +235,7 @@ def flight_already_exists(
     unzip_mode: bool,
     zip_name: Optional[str] = None,
     marker_files: Optional[list[str]] = None,
+    nested: bool = False,
 ) -> bool:
     """
     Check whether a flight has already been downloaded (or extracted).
@@ -231,6 +253,12 @@ def flight_already_exists(
 
     if zip_path.exists():
         return True
+
+    if nested:
+        # The flight has a directory of its own; anything in it means a
+        # previous run got as far as extracting.
+        return unzip_mode and zip_path.parent.is_dir() and \
+            any(zip_path.parent.iterdir())
 
     if unzip_mode:
         if marker_files:
@@ -371,31 +399,109 @@ class RemoteFile(io.RawIOBase):
         raise RuntimeError(f"range read failed after retries: {last_error}")
 
 
-def download_members(url: str, output_dir: Path, token: Optional[str],
-                     skip_suffixes: set[str] = MEDIA_SUFFIXES) -> list[str]:
-    """Extract the non-media members of a remote archive straight to disk.
+def member_selected(name: str, include: Optional[list[str]],
+                    exclude: Optional[list[str]], annotations_only: bool) -> bool:
+    """Whether the archive member *name* is wanted.
 
-    Returns the names written. Directory structure inside the archive is
-    flattened to the basename, as the files of one flight are meant to sit
-    side by side in one directory.
+    A pattern matches either the full path inside the archive
+    (`labels/1_rgb_mot.txt`) or just the file name (`1_rgb_mot.txt`), so
+    `'*_gt.txt'` works whether or not the archive has directories.
+    `<id>` in a pattern is not expanded here; the caller does that per flight.
+    """
+    base = name.rsplit("/", 1)[-1]
+
+    def hit(patterns: list[str]) -> bool:
+        # Case-insensitive: the raw archives say `.MP4` and `.SRT`, the
+        # processed ones `.mp4`, and nobody should have to know which.
+        return any(fnmatch.fnmatchcase(name.lower(), p.lower())
+                   or fnmatch.fnmatchcase(base.lower(), p.lower())
+                   for p in patterns)
+
+    if annotations_only and (Path(base).suffix.lower() in MEDIA_SUFFIXES
+                             or base.lower() in JUNK_NAMES):
+        return False
+    if include and not hit(include):
+        return False
+    if exclude and hit(exclude):
+        return False
+    return True
+
+
+def list_members(url: str, token: Optional[str]) -> list[zipfile.ZipInfo]:
+    """The table of contents of a remote archive, without downloading it."""
+    with zipfile.ZipFile(RemoteFile(url, token)) as zf:
+        return [i for i in zf.infolist() if not i.is_dir()]
+
+
+def download_members(url: str, output_dir: Path, token: Optional[str],
+                     select=lambda name: True) -> tuple[list[str], int]:
+    """Extract the members of a remote archive that *select* accepts.
+
+    Returns (names written, number skipped). Paths inside the archive are
+    kept, exactly as a full download with --unzip would lay them out, so a
+    selective download is always a subset of the full one. A member already on
+    disk with the right size is skipped, which makes a rerun cheap and lets a
+    second call add files to an earlier one.
     """
     remote = RemoteFile(url, token)
-    written = []
+    written, skipped = [], 0
+    root = output_dir.resolve()
     with zipfile.ZipFile(remote) as zf:
         for info in zf.infolist():
-            if info.is_dir():
+            if info.is_dir() or not select(info.filename):
                 continue
-            if Path(info.filename).suffix.lower() in skip_suffixes:
+            dest = (output_dir / info.filename).resolve()
+            if root not in dest.parents:
+                print(f"     ⚠  refusing to write outside {output_dir}: "
+                      f"{info.filename}")
                 continue
-            dest = output_dir / Path(info.filename).name
+            if dest.exists() and dest.stat().st_size == info.file_size:
+                skipped += 1
+                continue
+            dest.parent.mkdir(parents=True, exist_ok=True)
             with zf.open(info) as src, open(dest, "wb") as dst:
                 while True:
                     chunk = src.read(8 * 1024 * 1024)
                     if not chunk:
                         break
                     dst.write(chunk)
-            written.append(dest.name)
-    return written
+            written.append(info.filename)
+    return written, skipped
+
+
+def format_size(n: int) -> str:
+    for unit in ("B", "KB", "MB", "GB"):
+        if n < 1000:
+            return f"{n:.0f} {unit}" if unit == "B" else f"{n:.1f} {unit}"
+        n /= 1000
+    return f"{n:.1f} TB"
+
+
+def print_members(members: list[zipfile.ZipInfo], select) -> None:
+    """Print an archive's contents, collapsing per-frame directories.
+
+    The matched and orthographic archives hold thousands of frames each, so
+    a directory with many files of one type is shown as a single line.
+    """
+    groups: dict[tuple[str, str], list[zipfile.ZipInfo]] = {}
+    for m in members:
+        d, _, base = m.filename.rpartition("/")
+        groups.setdefault((d, Path(base).suffix), []).append(m)
+    total = chosen = 0
+    for (d, suffix), ms in sorted(groups.items()):
+        size = sum(m.file_size for m in ms)
+        picked = [m for m in ms if select(m.filename)]
+        total += size
+        chosen += sum(m.file_size for m in picked)
+        mark = "✓" if len(picked) == len(ms) else ("~" if picked else " ")
+        if len(ms) > 3:
+            print(f"     {mark} {d + '/' if d else ''}*{suffix:<24} "
+                  f"{len(ms):>6} files {format_size(size):>10}")
+        else:
+            for m in ms:
+                print(f"     {mark} {m.filename:<40} "
+                      f"{format_size(m.file_size):>10}")
+    print(f"     selected {format_size(chosen)} of {format_size(total)}")
 
 
 def download_file(url: str, dest: Path, token: Optional[str]) -> None:
@@ -571,8 +677,38 @@ def main():
              "a few MB per flight instead of the full archive, and land "
              "extracted in the output directory. Implies --unzip.",
     )
+    parser.add_argument(
+        "--include", "-i",
+        nargs="+",
+        metavar="PATTERN",
+        help="Fetch only the archive members matching one of these glob "
+             "patterns, e.g. '*_gt.txt' 'labels/*' '*.SRT'. A pattern "
+             "matches the path inside the archive or the bare file name; "
+             "'<id>' stands for the flight id. Works for every version, "
+             "reads the members in place like --annotations-only, and "
+             "implies --unzip. Quote the patterns so the shell leaves them "
+             "alone.",
+    )
+    parser.add_argument(
+        "--exclude", "-x",
+        nargs="+",
+        metavar="PATTERN",
+        help="Skip the archive members matching one of these glob patterns "
+             "(same rules as --include, and combinable with it and with "
+             "--annotations-only).",
+    )
+    parser.add_argument(
+        "--list-files",
+        action="store_true",
+        help="Show what each requested flight's archive contains, with sizes "
+             "and which files --include / --exclude / --annotations-only would "
+             "pick, without downloading anything. Needs a flight selection.",
+    )
     args = parser.parse_args()
-    if args.annotations_only:
+    # Anything that picks members out of an archive reads them in place with
+    # range requests rather than downloading the whole ZIP.
+    selective = bool(args.annotations_only or args.include or args.exclude)
+    if selective:
         args.unzip = True
 
     if args.licences:
@@ -657,6 +793,17 @@ def main():
     if not prefixes:
         sys.exit("No valid flights to download.")
 
+    if args.list_files and not has_explicit_filter and not args.split:
+        sys.exit("Error: --list-files needs a flight selection (-f, --range, "
+                 "--parts or --split); listing every archive takes a while.")
+
+    def selector(prefix: str):
+        """The member filter for one flight, with `<id>` filled in."""
+        inc = [p.replace("<id>", prefix) for p in args.include or []]
+        exc = [p.replace("<id>", prefix) for p in args.exclude or []]
+        return lambda name: member_selected(name, inc, exc,
+                                            args.annotations_only)
+
     os.makedirs(args.output_dir, exist_ok=True)
 
     totals = {"downloaded": 0, "extracted": 0, "skipped": 0}
@@ -684,12 +831,50 @@ def main():
             print("  nothing to do for this layer")
             continue
 
+        # Files without the flight id in their names need a directory per
+        # flight as soon as there is more than one flight.
+        nested = name in NESTED_LAYERS and len(prefixes) > 1
+
+        def flight_dir(prefix: str) -> Path:
+            return args.output_dir / prefix if nested else args.output_dir
+
+        # ── List mode: show the archive contents, download nothing ───────────
+        if args.list_files:
+            file_maps: dict[int, dict[str, str]] = {}
+            for prefix in wanted:
+                info = this_index[prefix]
+                dep_id = info["deposition_id"]
+                try:
+                    if dep_id not in file_maps:
+                        file_maps[dep_id] = get_deposition_files(
+                            api_base, dep_id, args.token)
+                    url = file_maps[dep_id][info["zip_name"]]
+                    print(f"\n  {info['zip_name']}  (part {info['part']}, "
+                          f"deposition {dep_id})")
+                    print_members(list_members(url, args.token),
+                                  selector(prefix))
+                except (requests.RequestException, KeyError, RuntimeError,
+                        zipfile.BadZipFile) as e:
+                    print(f"  ❌ {info['zip_name']}: cannot list ({e})")
+                    failed.append(prefix)
+            continue
+
         # ── Pre-filter: skip already downloaded / extracted flights ──────────
+        # With --include / --exclude the flight's files are not known up
+        # front, so every flight is opened and the members already on disk
+        # are skipped one by one instead.
         to_download = []
         skipped_count = 0
         for prefix in wanted:
-            if flight_already_exists(prefix, args.output_dir, args.unzip,
-                                     this_index[prefix]["zip_name"], markers):
+            if args.include or args.exclude:
+                to_download.append(prefix)
+                continue
+            if args.annotations_only and not markers:
+                to_download.append(prefix)
+                continue
+            if flight_already_exists(prefix, flight_dir(prefix), args.unzip,
+                                     this_index[prefix]["zip_name"], markers,
+                                     nested):
                 skipped_count += 1
             else:
                 to_download.append(prefix)
@@ -711,9 +896,19 @@ def main():
 
         print(f"\n📥 Downloading {len(to_download)} flight(s) from "
               f"{len(by_deposition)} deposition(s)")
-        if args.annotations_only:
-            print("✂  Annotations only: video and masks are left on Zenodo, "
-                  "the other files are read out of each archive in place")
+        if nested:
+            print(f"📁 '{name}' archives do not carry the flight id in their "
+                  f"file names: each flight goes to {args.output_dir}/<id>/")
+        if selective:
+            what = []
+            if args.annotations_only:
+                what.append("no video, masks or frames")
+            if args.include:
+                what.append("only " + " ".join(args.include))
+            if args.exclude:
+                what.append("not " + " ".join(args.exclude))
+            print(f"✂  Selected files ({'; '.join(what)}) are read out of "
+                  f"each archive in place, the rest stays on Zenodo")
         elif args.unzip:
             print("📦 ZIPs will be extracted and removed after download")
 
@@ -743,7 +938,9 @@ def main():
 
             for prefix in dep_prefixes:
                 zip_name = this_index[prefix]["zip_name"]
-                dest_path = args.output_dir / zip_name
+                target = flight_dir(prefix)
+                target.mkdir(parents=True, exist_ok=True)
+                dest_path = target / zip_name
 
                 if zip_name not in file_map:
                     print(f"  ❌ {zip_name} not found in deposition files")
@@ -751,12 +948,19 @@ def main():
                     continue
 
                 print(f"  ⬇  {zip_name}")
-                if args.annotations_only:
+                if selective:
                     try:
-                        names = download_members(file_map[zip_name],
-                                                 args.output_dir, args.token)
-                        print(f"     ✂  {len(names)} file(s): "
-                              f"{', '.join(names)}")
+                        names, n_have = download_members(
+                            file_map[zip_name], target, args.token,
+                            selector(prefix))
+                        shown = ", ".join(names[:8]) + \
+                            (f" … (+{len(names) - 8})" if len(names) > 8 else "")
+                        print(f"     ✂  {len(names)} file(s)"
+                              + (f": {shown}" if names else "")
+                              + (f", {n_have} already present" if n_have else ""))
+                        if not names and not n_have:
+                            print("     ⚠  no file in this archive matches "
+                                  "the selection")
                         totals["downloaded"] += 1
                         totals["extracted"] += 1
                     except (requests.RequestException, zipfile.BadZipFile,
@@ -776,11 +980,16 @@ def main():
                 # Extract if requested
                 if args.unzip:
                     try:
-                        n_files = extract_and_remove_zip(dest_path, args.output_dir)
+                        n_files = extract_and_remove_zip(dest_path, target)
                         print(f"     📦 Extracted {n_files} file(s), ZIP removed")
                         totals["extracted"] += 1
                     except (zipfile.BadZipFile, OSError) as e:
                         print(f"     ⚠  Extraction failed: {e} (ZIP kept)")
+
+    if args.list_files:
+        for name, absent in missing_in_layer.items():
+            print(f"\nℹ  no '{name}' archive for: {', '.join(absent)}")
+        return
 
     # ── Summary ──────────────────────────────────────────────────────────────
     print(f"\n{'─' * 50}")

@@ -44,6 +44,9 @@ python download_from_zenodo.py -f 146 --unzip
 # or just its annotations, poses and metadata (a few MB, never the video)
 python download_from_zenodo.py --annotations-only -f 146
 
+# or exactly the files you name, in any version (see what's there with --list-files)
+python download_from_zenodo.py -f 146 --include '*_gt.txt' '*_poses.json'
+
 # pull a frame out of the video and draw the boxes on it
 python frame_extraction.py bambi_downloads/146_matched_processed.mp4 frames --start 3448 --end 3449
 python mot_frame_viewer.py frames/thermal/146_00003448.png bambi_downloads/146_gt.txt --show

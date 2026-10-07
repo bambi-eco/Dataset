@@ -1,26 +1,26 @@
 {
- "n_flights_raw": 178,
- "n_flights_ok": 177,
- "n_recordings": 179,
+ "n_flights_raw": 301,
+ "n_flights_ok": 298,
+ "n_recordings": 300,
  "n_skipped": 0,
  "verdicts": {
-  "reproduced": 173,
-  "not released": 6,
-  "unmatched": 15,
-  "degenerate": 3
+  "reproduced": 293,
+  "not released": 7,
+  "unmatched": 18,
+  "degenerate": 7
  },
- "n_boxes_total": 71654,
- "n_boxes": 62361,
+ "n_boxes_total": 102848,
+ "n_boxes": 92813,
  "onset_lag": {
-  "min": -28.368,
-  "median": 0.565,
-  "p95": 1.0426,
+  "min": -281.573,
+  "median": 0.5115000000000001,
+  "p95": 1.0331,
   "max": 4.906,
-  "share_negative": 0.0335195530726257
+  "share_negative": 0.05333333333333334
  },
  "clock_offset": {
-  "min": -2.88,
-  "median": 0.583,
+  "min": -23.417,
+  "median": 0.6114999999999999,
   "max": 30.0
  },
  "airdata_hz": {
@@ -28,18 +28,19 @@
    5.0,
    10.0
   ],
-  "share_10hz": 0.3240223463687151
+  "share_10hz": 0.33
  },
  "gaps": {
-  "recordings_with_gap_over_2s": 12,
+  "recordings_with_gap_over_2s": 31,
   "max_gap_s": 384.3
  },
  "fps_true": {
-  "median": 29.9833,
+  "median": 29.9818,
   "min": 29.6543,
   "max": 30.0471
  },
  "srt_decimals": [
+  4,
   5,
   6
  ],
@@ -49,36 +50,36 @@
  },
  "repro_median_m": 0.0,
  "nosrt_boxes": {
-  "mean": 2.7239313994323373,
-  "median": 1.885,
-  "p95": 6.361,
-  "share_over_match": 0.6111512002693992,
-  "share_over_1m": 0.7212199932650214
+  "mean": 2.4676761876030295,
+  "median": 1.498,
+  "p95": 6.231,
+  "share_over_match": 0.5404954047385603,
+  "share_over_1m": 0.6616960986068762
  },
  "nosrt_fixedfps_boxes": {
-  "mean": 1.9230575038886482,
-  "median": 2.016,
-  "p95": 4.522,
-  "share_over_match": 0.7145972643158385
+  "mean": 1.9846165946580756,
+  "median": 1.823,
+  "p95": 4.226,
+  "share_over_match": 0.628209410319675
  },
  "srtonly_boxes": {
-  "mean": 0.7743629512034766,
-  "median": 0.142,
-  "p95": 0.702,
-  "share_over_match": 0.016885553470919325
+  "mean": 1.715474524042968,
+  "median": 0.127,
+  "p95": 0.659,
+  "share_over_match": 0.01538577569952485
  },
  "box_speed": {
-  "median": 3.38,
-  "p95": 6.216,
-  "share_stationary": 0.00909222109972579
+  "median": 3.006,
+  "p95": 6.126,
+  "share_stationary": 0.02619245148847683
  },
  "interp1hz": {
-  "turn_p95_median": 0.2955,
-  "straight_p95_median": 0.061
+  "turn_p95_median": 0.296,
+  "straight_p95_median": 0.066
  },
  "yaw_diff": {
-  "median_abs": 5.8,
-  "p95_abs": 20.6
+  "median_abs": 6.2,
+  "p95_abs": 21.18000000000002
  },
  "rgb_pair_dt_ms": {
   "median": 7.0,

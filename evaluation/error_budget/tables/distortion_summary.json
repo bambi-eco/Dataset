@@ -1,111 +1,111 @@
 {
  "n_flights": 301,
- "n_flights_calib": 294,
- "n_flights_calib_own": 178,
- "n_flights_calib_inferred": 116,
- "n_boxes": 101900,
- "n_boxes_with_height": 101900,
+ "n_flights_calib": 301,
+ "n_flights_calib_own": 301,
+ "n_flights_calib_inferred": 0,
+ "n_boxes": 102427,
+ "n_boxes_with_height": 102427,
  "n_calibrations_thermal": 4,
- "n_calibrations_rgb": 4,
- "offset_mean": 0.7476788521707267,
- "offset_median": 0.5032901668272073,
- "offset_p95": 2.0198076284534277,
+ "n_calibrations_rgb": 5,
+ "offset_mean": 0.7481842404687726,
+ "offset_median": 0.5033117575998862,
+ "offset_p95": 2.023289544013375,
  "offset_max": 83.66525382770851,
- "share_over_match": 0.15306182531894014,
- "share_over_half_match": 0.4030421982335623,
- "share_over_1m": 0.2654170755642787,
+ "share_over_match": 0.153377527409765,
+ "share_over_half_match": 0.4029601569898562,
+ "share_over_1m": 0.26546711316352134,
  "agl_median": 43.88,
- "r_frac_median": 0.7099716836360035,
+ "r_frac_median": 0.7096982782268562,
  "by_alt_bin": [
   {
    "bin": "< 30",
-   "n_boxes": 10022,
-   "n_flights": 42,
-   "median": 0.2560298676142424,
-   "p95": 1.127664153601912,
-   "share_over_match": 0.018459389343444422
+   "n_boxes": 10149,
+   "n_flights": 44,
+   "median": 0.2556830939755498,
+   "p95": 1.1250630272530469,
+   "share_over_match": 0.01822839688639275
   },
   {
    "bin": "30-42",
-   "n_boxes": 18188,
-   "n_flights": 94,
-   "median": 0.37113548736470636,
-   "p95": 1.4676049357920518,
-   "share_over_match": 0.06372333406641742
+   "n_boxes": 18231,
+   "n_flights": 96,
+   "median": 0.37101407701631645,
+   "p95": 1.467154184602073,
+   "share_over_match": 0.06362788656683671
   },
   {
    "bin": "42-52",
-   "n_boxes": 56267,
-   "n_flights": 188,
-   "median": 0.5701115913028857,
-   "p95": 1.9621730460533338,
-   "share_over_match": 0.16247534078589582
+   "n_boxes": 56290,
+   "n_flights": 190,
+   "median": 0.5701227281274848,
+   "p95": 1.9620846734054622,
+   "share_over_match": 0.1624622490673299
   },
   {
    "bin": "52-62",
-   "n_boxes": 11384,
-   "n_flights": 129,
+   "n_boxes": 11426,
+   "n_flights": 131,
    "median": 0.686210186633512,
-   "p95": 2.2300131550352726,
-   "share_over_match": 0.2328706957132818
+   "p95": 2.22917080696989,
+   "share_over_match": 0.23280238053562052
   },
   {
    "bin": ">= 62",
-   "n_boxes": 4631,
-   "n_flights": 66,
-   "median": 1.1500282480540476,
-   "p95": 4.591651290830649,
-   "share_over_match": 0.43640682358022026
+   "n_boxes": 4923,
+   "n_flights": 71,
+   "median": 1.1247750117706452,
+   "p95": 4.5306545379408005,
+   "share_over_match": 0.4308348567946374
   }
  ],
  "by_radius": [
   {
    "lo": 0,
    "hi": 0.25,
-   "n_boxes": 7492,
-   "median": 0.007655778920165201,
-   "p95": 0.024634196541010688,
+   "n_boxes": 7539,
+   "median": 0.007652412774149322,
+   "p95": 0.024691939190642682,
    "share_over_match": 0.0
   },
   {
    "lo": 0.25,
    "hi": 0.5,
-   "n_boxes": 20123,
-   "median": 0.0866089543419807,
-   "p95": 0.1982825494959306,
-   "share_over_match": 0.0022362470804552005
+   "n_boxes": 20241,
+   "median": 0.08683123755896058,
+   "p95": 0.19985873615414698,
+   "share_over_match": 0.0022232103156958646
   },
   {
    "lo": 0.5,
    "hi": 0.75,
-   "n_boxes": 28255,
-   "median": 0.36301015606793213,
-   "p95": 0.673166751489102,
-   "share_over_match": 0.009095735268094143
+   "n_boxes": 28418,
+   "median": 0.3636028567013745,
+   "p95": 0.6769625747001259,
+   "share_over_match": 0.009149130832570906
   },
   {
    "lo": 0.75,
    "hi": 1.0,
-   "n_boxes": 31610,
-   "median": 0.9098452856352701,
-   "p95": 1.5480673469170874,
-   "share_over_match": 0.10439734261309712
+   "n_boxes": 31767,
+   "median": 0.9102805506236512,
+   "p95": 1.5592387404686538,
+   "share_over_match": 0.10636824377498662
   },
   {
    "lo": 1.0,
    "hi": 2.0,
-   "n_boxes": 14420,
-   "median": 1.7290043549765395,
-   "p95": 2.8686162510271385,
-   "share_over_match": 0.8318307905686546
+   "n_boxes": 14462,
+   "median": 1.7299516910978494,
+   "p95": 2.8866161416370613,
+   "share_over_match": 0.8315585672797676
   }
  ],
  "tracks": {
-  "n": 5365,
-  "rms_radius_median": 0.45039390725300155,
-  "rms_radius_p95": 1.1444029720659339,
-  "extent_median": 1.7183786821384206,
-  "extent_p95": 4.591807929683196,
-  "share_extent_over_match": 0.6206896551724138
+  "n": 5453,
+  "rms_radius_median": 0.449949663926774,
+  "rms_radius_p95": 1.1500218190711855,
+  "extent_median": 1.7133755639053818,
+  "extent_p95": 4.630684893184228,
+  "share_extent_over_match": 0.6176416651384559
  }
 }

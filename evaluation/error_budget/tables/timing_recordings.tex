@@ -1,25 +1,25 @@
 \begin{table}[t]
 \centering
 \small
-\caption{Camera-pose timing over the 179 recordings of the 177 flights with public raw logs: distribution over recordings.}
+\caption{Camera-pose timing over the 300 recordings of the 298 flights with public raw logs: distribution over recordings.}
 \label{tab:timing}
 \begin{tabular}{lrrrrr}
 \toprule
 quantity & n & min & median & p95 & max \\
 \midrule
-isVideo onset lag [s] & 179 & -28.37 & 0.56 & 1.04 & 4.91 \\
-SRT to AirData clock offset [s] & 179 & -2.88 & 0.58 & 1.36 & 30.00 \\
-true frame rate [fps] & 179 & 29.65 & 29.98 & 30.00 & 30.05 \\
-AirData log rate [Hz] & 179 & 5.00 & 5.00 & 10.00 & 10.00 \\
-largest AirData gap [s] & 179 & 0.10 & 0.20 & 8.48 & 384.30 \\
-median ground speed [m/s] & 179 & 0.00 & 2.99 & 4.97 & 4.99 \\
-pose error, AirData only, mean per recording [m] & 179 & 0.10 & 1.28 & 3.74 & 80.44 \\
-pose error, SRT only, mean per recording [m] & 179 & 0.06 & 0.09 & 1.25 & 1010.75 \\
-AirData interpolation at 1 Hz, p95 in turns [m] & 154 & 0.13 & 0.30 & 0.55 & 3.60 \\
-AirData interpolation at 1 Hz, p95 straight [m] & 174 & 0.01 & 0.06 & 0.29 & 0.36 \\
-|gimbal yaw SRT - AirData| [deg] & 179 & 0.00 & 5.80 & 20.60 & 37.20 \\
-RGB-thermal frame pairing |dt| [ms] & 122 & 3.00 & 7.00 & 9.00 & 15.00 \\
-reproduction of the published poses [m] & 173 & 0.00 & 0.00 & 0.00 & 0.04 \\
+isVideo onset lag [s] & 300 & -281.57 & 0.51 & 1.03 & 4.91 \\
+SRT to AirData clock offset [s] & 300 & -23.42 & 0.61 & 1.38 & 30.00 \\
+true frame rate [fps] & 300 & 29.65 & 29.98 & 29.99 & 30.05 \\
+AirData log rate [Hz] & 300 & 5.00 & 5.00 & 10.00 & 10.00 \\
+largest AirData gap [s] & 300 & 0.10 & 0.20 & 30.46 & 384.30 \\
+median ground speed [m/s] & 300 & 0.00 & 2.99 & 4.97 & 4.99 \\
+pose error, AirData only, mean per recording [m] & 300 & 0.03 & 1.19 & 3.74 & 540.66 \\
+pose error, SRT only, mean per recording [m] & 300 & 0.06 & 0.09 & 4.82 & 3133.70 \\
+AirData interpolation at 1 Hz, p95 in turns [m] & 255 & 0.13 & 0.30 & 0.74 & 17.07 \\
+AirData interpolation at 1 Hz, p95 straight [m] & 285 & 0.01 & 0.07 & 0.28 & 0.55 \\
+|gimbal yaw SRT - AirData| [deg] & 300 & 0.00 & 6.20 & 21.18 & 37.70 \\
+RGB-thermal frame pairing |dt| [ms] & 201 & 3.00 & 7.00 & 9.00 & 15.00 \\
+reproduction of the published poses [m] & 293 & 0.00 & 0.00 & 0.00 & 0.04 \\
 \bottomrule
 \end{tabular}
 \end{table}

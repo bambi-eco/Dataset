@@ -3,33 +3,33 @@
 ```
 {
  "flights_total": 301,
- "flights_with_calibration": 294,
+ "flights_with_calibration": 301,
  "boxes_total": 102848,
- "boxes_with_height": 101900,
- "boxes_in_border": 4.3473994111874354,
+ "boxes_with_height": 102427,
+ "boxes_in_border": 4.326984095990316,
  "median_tilt_deg": 0.046062500000005,
  "agl_median": 43.88,
- "agl_p5": 28.14,
- "agl_p95": 58.48,
- "r_frac_median": 0.7099716836360035,
- "timing_flights": 177,
- "timing_recordings": 179,
- "timing_boxes": 62361,
- "share_lag_negative": 3.35195530726257,
- "recordings_with_gap": 12,
- "recordings_10hz": 58,
- "tracks": 5365,
- "track_extent_median": 1.7183786821384206,
- "track_extent_p95": 4.591807929683196,
- "track_rms_median": 0.4503939072530015,
- "track_rms_p95": 1.1444029720659339,
- "flights_calib_own": 178,
- "flights_calib_inferred": 116,
+ "agl_p5": 28.093000000000004,
+ "agl_p95": 61.65,
+ "r_frac_median": 0.7096982782268562,
+ "timing_flights": 298,
+ "timing_recordings": 300,
+ "timing_boxes": 92813,
+ "share_lag_negative": 5.333333333333334,
+ "recordings_with_gap": 31,
+ "recordings_10hz": 99,
+ "tracks": 5453,
+ "track_extent_median": 1.7133755639053818,
+ "track_extent_p95": 4.630684893184229,
+ "track_rms_median": 0.449949663926774,
+ "track_rms_p95": 1.1500218190711855,
+ "flights_calib_own": 301,
+ "flights_calib_inferred": 0,
  "recordings_verdicts": {
-  "reproduced": 173,
-  "unmatched": 15,
-  "not released": 6,
-  "degenerate": 3
+  "reproduced": 293,
+  "unmatched": 18,
+  "not released": 7,
+  "degenerate": 7
  }
 }
 ```
@@ -39,13 +39,14 @@
 | camera | width | height | f_x | f_y | k_1 | k_2 | k_3 | edge [%] | corner [%] | flights |
 |---|---|---|---|---|---|---|---|---|---|---|
 | thermal | 640 | 512 | 762 | 746 | -0.374 | 0.215 | -0.021 | -5.95 | -9.23 | 200 |
-| thermal | 1280 | 1024 | 1520 | 1486 | -0.339 | 0.177 | 0.000 | -5.61 | -8.60 | 77 |
+| thermal | 1280 | 1024 | 1520 | 1486 | -0.339 | 0.177 | 0.000 | -5.61 | -8.60 | 84 |
 | thermal | 1280 | 1024 | 1524 | 1491 | -0.388 | 0.374 | 0.000 | -5.97 | -8.29 | 16 |
 | thermal | 640 | 512 | 762 | 746 | -0.388 | 0.374 | 0.000 | -5.97 | -8.29 | 1 |
 | rgb | 3840 | 2160 | 2986 | 2917 | 0.139 | -0.266 | 0.000 | 1.03 | -0.61 | 200 |
+| rgb | 3840 | 2160 | 2888 | 2819 | 0.139 | -0.255 | 0.000 | 1.00 | -0.82 | 50 |
 | rgb | 1920 | 1080 | 1444 | 1410 | 0.139 | -0.255 | 0.000 | 1.00 | -0.82 | 34 |
-| rgb | 3840 | 2160 | 2888 | 2819 | 0.139 | -0.255 | 0.000 | 1.00 | -0.82 | 32 |
-| rgb | 3840 | 2160 | 2888 | 2819 | 0.139 | -0.255 | 0.000 | 1.00 | -0.82 | 17 |
+| rgb | 3840 | 2160 | 2888 | 2819 | 0.139 | -0.255 | 0.000 | 1.00 | -0.82 | 16 |
+| rgb | 1920 | 1080 | 1444 | 1410 | 0.139 | -0.255 | 0.000 | 1.00 | -0.82 | 1 |
 
 ## Undistortion recovered from the masks
 
@@ -55,7 +56,7 @@
 | rgb | 1126 | 48.92 | 0.801 | 0.9999 | -2.46 | 200 |
 | thermal | 1126 | 48.89 | 0.789 | 0.9999 | -2.52 | 12 |
 | rgb | 1127 | 48.88 | 0.829 | 0.9999 | -2.54 | 11 |
-| rgb | 1555 | 36.46 | 0.911 | 0.9999 | -29.37 | 1 |
+| rgb | 1554 | 36.48 | 0.911 | 0.9999 | -29.32 | 1 |
 | thermal | 1125 | 48.93 | 0.788 | 0.9999 | -2.43 | 4 |
 | rgb | 1126 | 48.90 | 0.828 | 0.9999 | -2.49 | 55 |
 | thermal | 1577 | 35.98 | 0.882 | 0.9817 | -30.37 | 1 |
@@ -67,35 +68,35 @@
 
 | height above ground | flights | boxes | median [m] | p95 [m] | > 0.69 m [%] | > 1.37 m [%] |
 |---|---|---|---|---|---|---|
-| < 30 m | 42 | 10022 | 0.26 | 1.13 | 18 | 2 |
-| 30-42 m | 94 | 18188 | 0.37 | 1.47 | 29 | 6 |
-| 42-52 m | 188 | 56267 | 0.57 | 1.96 | 44 | 16 |
-| 52-62 m | 129 | 11384 | 0.69 | 2.23 | 50 | 23 |
-| >= 62 m | 66 | 4631 | 1.15 | 4.59 | 64 | 44 |
-| all | 294 | 101900 | 0.50 | 2.02 | 40 | 15 |
+| < 30 m | 44 | 10149 | 0.26 | 1.13 | 18 | 2 |
+| 30-42 m | 96 | 18231 | 0.37 | 1.47 | 29 | 6 |
+| 42-52 m | 190 | 56290 | 0.57 | 1.96 | 44 | 16 |
+| 52-62 m | 131 | 11426 | 0.69 | 2.23 | 50 | 23 |
+| >= 62 m | 71 | 4923 | 1.12 | 4.53 | 64 | 43 |
+| all | 301 | 102427 | 0.50 | 2.02 | 40 | 15 |
 
 ## Distortion offset by position in the frame
 
 | distance from the frame centre | boxes | share [%] | median [m] | p95 [m] | > 1.37 m [%] |
 |---|---|---|---|---|---|
-| 0-25 % | 7492 | 7 | 0.01 | 0.02 | 0 |
-| 25-50 % | 20123 | 20 | 0.09 | 0.20 | 0 |
-| 50-75 % | 28255 | 28 | 0.36 | 0.67 | 1 |
-| 75-100 % | 31610 | 31 | 0.91 | 1.55 | 10 |
-| corners (> 100 %) | 14420 | 14 | 1.73 | 2.87 | 83 |
+| 0-25 % | 7539 | 7 | 0.01 | 0.02 | 0 |
+| 25-50 % | 20241 | 20 | 0.09 | 0.20 | 0 |
+| 50-75 % | 28418 | 28 | 0.36 | 0.68 | 1 |
+| 75-100 % | 31767 | 31 | 0.91 | 1.56 | 11 |
+| corners (> 100 %) | 14462 | 14 | 1.73 | 2.89 | 83 |
 
 ## Distortion offset by species (ten most annotated)
 
 | species | boxes | median [m] | p95 [m] | > 1.37 m [%] |
 |---|---|---|---|---|
-| Cervus elaphus (Red deer) | 28953 | 0.58 | 2.14 | 18 |
+| Cervus elaphus (Red deer) | 28981 | 0.58 | 2.14 | 18 |
 | Sus scrofa (Wild boar) | 28833 | 0.48 | 1.85 | 13 |
 | Dama dama (Fallow Deer) | 22663 | 0.48 | 2.00 | 16 |
-| Capreolus capreolus (Roe deer) | 9507 | 0.42 | 2.07 | 13 |
-| Unknown | 4124 | 0.62 | 3.03 | 20 |
+| Capreolus capreolus (Roe deer) | 9748 | 0.43 | 2.12 | 13 |
+| Unknown | 4358 | 0.60 | 3.02 | 20 |
 | Capra ibex (Alpine ibex) | 2980 | 0.61 | 1.86 | 16 |
 | Sus scrofa x Sus domesticus (Hybrid Pig) | 1480 | 0.23 | 1.08 | 2 |
-| Homo sapiens (Human) | 1289 | 0.36 | 2.62 | 15 |
+| Homo sapiens (Human) | 1313 | 0.36 | 2.61 | 15 |
 | Aves (Bird) | 939 | 0.49 | 1.51 | 9 |
 | No-animal | 521 | 0.58 | 2.46 | 20 |
 
@@ -103,28 +104,28 @@
 
 | quantity | n | min | median | p95 | max |
 |---|---|---|---|---|---|
-| isVideo onset lag [s] | 179 | -28.368 | 0.565 | 1.043 | 4.906 |
-| SRT to AirData clock offset [s] | 179 | -2.880 | 0.583 | 1.364 | 30.000 |
-| true frame rate [fps] | 179 | 29.654 | 29.983 | 29.996 | 30.047 |
-| AirData log rate [Hz] | 179 | 5.000 | 5.000 | 10.000 | 10.000 |
-| largest AirData gap [s] | 179 | 0.100 | 0.200 | 8.480 | 384.300 |
-| median ground speed [m/s] | 179 | 0.000 | 2.990 | 4.970 | 4.990 |
-| pose error, AirData only, mean per recording [m] | 179 | 0.103 | 1.285 | 3.744 | 80.436 |
-| pose error, SRT only, mean per recording [m] | 179 | 0.059 | 0.092 | 1.247 | 1010.750 |
-| AirData interpolation at 1 Hz, p95 in turns [m] | 154 | 0.129 | 0.295 | 0.554 | 3.601 |
-| AirData interpolation at 1 Hz, p95 straight [m] | 174 | 0.015 | 0.061 | 0.294 | 0.358 |
-| |gimbal yaw SRT - AirData| [deg] | 179 | 0.000 | 5.800 | 20.600 | 37.200 |
-| RGB-thermal frame pairing |dt| [ms] | 122 | 3.000 | 7.000 | 9.000 | 15.000 |
-| reproduction of the published poses [m] | 173 | 0.000 | 0.000 | 0.000 | 0.043 |
+| isVideo onset lag [s] | 300 | -281.573 | 0.512 | 1.033 | 4.906 |
+| SRT to AirData clock offset [s] | 300 | -23.417 | 0.611 | 1.385 | 30.000 |
+| true frame rate [fps] | 300 | 29.654 | 29.982 | 29.993 | 30.047 |
+| AirData log rate [Hz] | 300 | 5.000 | 5.000 | 10.000 | 10.000 |
+| largest AirData gap [s] | 300 | 0.100 | 0.200 | 30.455 | 384.300 |
+| median ground speed [m/s] | 300 | 0.000 | 2.990 | 4.970 | 4.990 |
+| pose error, AirData only, mean per recording [m] | 300 | 0.028 | 1.187 | 3.744 | 540.662 |
+| pose error, SRT only, mean per recording [m] | 300 | 0.059 | 0.090 | 4.820 | 3133.700 |
+| AirData interpolation at 1 Hz, p95 in turns [m] | 255 | 0.129 | 0.296 | 0.740 | 17.072 |
+| AirData interpolation at 1 Hz, p95 straight [m] | 285 | 0.015 | 0.066 | 0.282 | 0.553 |
+| |gimbal yaw SRT - AirData| [deg] | 300 | 0.000 | 6.200 | 21.180 | 37.700 |
+| RGB-thermal frame pairing |dt| [ms] | 201 | 3.000 | 7.000 | 9.000 | 15.000 |
+| reproduction of the published poses [m] | 293 | 0.000 | 0.000 | 0.001 | 0.045 |
 
 ## Error budget at the annotated animals
 
 | effect | n | median [m] | mean [m] | p95 [m] | > 0.69 m [%] | > 1.37 m [%] |
 |---|---|---|---|---|---|---|
-| lens distortion ignored | 101900 | 0.50 | 0.75 | 2.02 | 40 | 15 |
-| frame times from the flight log alone (30 fps from the isVideo onset) | 62361 | 1.89 | 2.72 | 6.36 | 80 | 61 |
-| same with the recording's true frame rate | 62361 | 2.02 | 1.92 | 4.52 | 85 | 71 |
-| pose position from the SRT alone | 62361 | 0.14 | 0.77 | 0.70 | 6 | 2 |
-| 50 deg field of view assumed instead of the frames' own | 101900 | 0.32 | 0.35 | 0.63 | 3 | 1 |
-| distortion: apparent motion along a track (RMS radius) | 5365 | 0.45 | 0.57 | 1.14 | 24 | 3 |
-| distortion: apparent motion along a track (extent) | 5365 | 1.72 | 2.19 | 4.59 | 83 | 62 |
+| lens distortion ignored | 102427 | 0.50 | 0.75 | 2.02 | 40 | 15 |
+| frame times from the flight log alone (30 fps from the isVideo onset) | 92813 | 1.50 | 2.47 | 6.23 | 76 | 54 |
+| same with the recording's true frame rate | 92813 | 1.82 | 1.98 | 4.23 | 78 | 63 |
+| pose position from the SRT alone | 92813 | 0.13 | 1.72 | 0.66 | 4 | 2 |
+| 50 deg field of view assumed instead of the frames' own | 102427 | 0.32 | 0.35 | 0.63 | 4 | 1 |
+| distortion: apparent motion along a track (RMS radius) | 5453 | 0.45 | 0.57 | 1.15 | 24 | 3 |
+| distortion: apparent motion along a track (extent) | 5453 | 1.71 | 2.18 | 4.63 | 83 | 62 |

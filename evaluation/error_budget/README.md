@@ -103,15 +103,14 @@ python evaluation/error_budget/report.py     --out evaluation/error_budget      
 | | |
 |---|---|
 | annotated flights in the release (key-frame boxes) | 301 flights, 102,848 boxes |
-| with a thermal calibration | 294 flights, 101,900 boxes (178 flights carry their own raw calibration, 116 borrow the one of the same drone instance and undistortion mask) |
-| height above ground from the BEV terrain model | all 294 flights; median 43.9 m, 5th to 95th percentile 28 to 58 m |
-| with public raw logs for the timing analysis | 177 flights, 197 recordings; 179 usable (173 reproduce the published poses to within 4 cm, 6 are recordings the release does not use), 3 degenerate (< 10 s), 15 see *Dataset issue* |
-| boxes with a timing error | 62,361 |
+| with a thermal calibration | all 301 flights, 102,427 boxes with a height above ground (every flight carries its own raw calibration now that all raw parts are public) |
+| height above ground from the BEV terrain model | all 301 flights; median 43.9 m, 5th to 95th percentile 28 to 62 m |
+| with raw logs for the timing analysis | 301 flights, 325 recordings; 300 usable (293 reproduce the published poses to within 5 cm, 7 are recordings the release does not use), 7 degenerate (< 10 s), 18 see *Dataset issue* |
+| boxes with a timing error | 92,813 |
 | camera tilt | median 0.05 deg from nadir, so the flat nadir model holds |
 
-17 of the 47 raw parts on Zenodo answer 404 (listed in the session), which is
-why the timing analysis covers 177 of the 301 annotated flights; the
-distortion analysis covers all but seven.
+All 47 raw parts on Zenodo are public (17 of them were published after the
+first run of this analysis), so both analyses cover every annotated flight.
 
 ## Results: lens distortion
 
@@ -124,9 +123,9 @@ lenses are mild and mixed (k1 = +0.14, k2 = −0.26; at most 1.7 % outward,
 0.6 to 0.8 % inward at the corner).
 
 **The undistortion the release used.** The masks pin the new camera matrix of
-the released frames down to within 0.01 % of their pixels. For 293 of the 294
+the released frames down to within 0.01 % of their pixels. For 300 of the 301
 thermal flights the focal length is 1124 to 1126 px at 1024 px, a vertical
-field of view of 48.9 to 49.0 deg, and the same for 248 of 283 RGB flights.
+field of view of 48.9 to 49.0 deg, and the same for 266 of 301 RGB flights.
 The remaining 35 RGB flights (the Matrice 30T flights with 1080p RGB video,
 drone instances 7 and 8) were undistorted to 36.5 deg, and one thermal
 flight to 36.0 deg. The 154 flights whose poses are in the alfs_py format
@@ -137,12 +136,12 @@ boxes beyond the matching radius. 4.3 % of the thermal box centres lie in
 the invalid border of the undistorted frame.
 
 **What skipping the undistortion would do** (`figures/boxes_by_height`,
-`tables/distortion_by_altitude.tex`). Over all 101,900 boxes the ground
+`tables/distortion_by_altitude.tex`). Over all 102,427 boxes the ground
 offset has a median of 0.50 m, a mean of 0.75 m and a 95th percentile of
 2.02 m; 40 % of the boxes move by more than half the matching radius and
 15 % by more than the full radius. The offset is a product of height and
 image position: it grows from a median of 0.26 m below 30 m to 1.15 m above
-62 m (where 44 % of the boxes exceed the radius), and from 0.01 m in the inner
+62 m (where 43 % of the boxes exceed the radius), and from 0.01 m in the inner
 quarter of the frame to 0.91 m in the outer quarter and 1.73 m in the
 corners (14 % of the boxes, 83 % of which exceed the radius). At the frame
 edge the offset is 3.0 cm per metre of height. The species do not differ
@@ -153,8 +152,8 @@ outer quarter.
 **The offset is systematic, not noise.** It always points toward the nadir
 and depends on where in the frame the animal is, so it does not average out
 along a track: the offset vectors of one track have a median RMS radius of
-0.45 m (p95 1.14 m) and a median extent of 1.72 m (p95 4.6 m); 62 % of the
-5,365 tracks would appear to move by more than the matching radius without
+0.45 m (p95 1.15 m) and a median extent of 1.71 m (p95 4.6 m); 62 % of the
+5,453 tracks would appear to move by more than the matching radius without
 having moved. Two frames that see the same animal at different image positions
 therefore disagree, which is the case that matters for georeferenced tracking
 and for the light-field integral, where every view would place the animal at
@@ -163,39 +162,40 @@ its own offset.
 ## Results: pose timing
 
 **What the logs look like** (`tables/timing_recordings.tex`, `figures/onset_lag`,
-`figures/onset_cost`). AirData logs at 5 Hz (121 recordings) or 10 Hz (58); 12
+`figures/onset_cost`). AirData logs at 5 Hz (201 recordings) or 10 Hz (99); 31
 recordings have a gap longer than 2 s (up to 384 s), where the extractor falls
 back to the SRT. The SRT frame times run at 29.98 fps (29.65 to 30.05). The
-fitted SRT-to-AirData clock offset has a median of 0.58 s and ranges from
-−2.9 to +30 s, so it has to be fitted per recording. Drone speed is 3.0 m/s
+fitted SRT-to-AirData clock offset has a median of 0.61 s and ranges from
+−23 to +30 s, so it has to be fitted per recording. Drone speed is 3.0 m/s
 median, 5.0 m/s at the 95th percentile.
 
 **Timing from the flight log alone.** The `isVideo` flag comes on after the
-first frame in 97 % of the recordings, by a median 0.57 s and up to 1.04 s at
-the 95th percentile (58 % of the recordings between 0.3 and 0.9 s; one
-recording −28 s, one +4.9 s). At the annotated animals this costs a median
-1.89 m (mean 2.72 m, p95 6.4 m): 61 % of the boxes move beyond the matching
-radius and 32 % by more than 4 m. Using the recording's true frame rate
-instead of 30 fps does not help (median 2.02 m), because the onset lag, not
+first frame in 95 % of the recordings, by a median 0.51 s and up to 1.03 s at
+the 95th percentile (57 % of the recordings between 0.3 and 0.9 s; the
+extremes are −282 s, a log whose video run begins long before the first frame,
+and +4.9 s). At the annotated animals this costs a median
+1.50 m (mean 2.47 m, p95 6.2 m): 54 % of the boxes move beyond the matching
+radius and 22 % by more than 4 m. Using the recording's true frame rate
+instead of 30 fps does not help (median 1.82 m), because the onset lag, not
 the frame rate, is the error. The lag varies between recordings, so it cannot
 be calibrated away.
 
 **Positions from the SRT alone.** With the clock offset known, the SRT
-coordinates are within 0.14 m (median) and 0.70 m (p95) of the published
-poses; only 1.7 % of the boxes move beyond the matching radius. But 6 of the
-179 recordings carry stale coordinates in the SRT, off by 5 to 1,000 m for
+coordinates are within 0.13 m (median) and 0.66 m (p95) of the published
+poses; only 1.5 % of the boxes move beyond the matching radius. But 14 of the
+300 recordings carry stale coordinates in the SRT, off by 5 to 3,100 m for
 the whole recording, so the SRT cannot be the only source either.
 
 **Interpolating the log.** Thinned to 1 Hz, the AirData track interpolates
-to 0.06 m (p95) on straight legs and 0.30 m (p95) in turns, median over
+to 0.07 m (p95) on straight legs and 0.30 m (p95) in turns, median over
 recordings; the native 5 to 10 Hz is more than enough.
 
 **Side quantities.** The thermal and RGB SRT files pair frames within
 7 ms (median) and 9 ms (p95) on the camera clock, i.e. 2 to 5 cm of drone
 motion, so the residual RGB-thermal offset of the orthographic views is not a
 frame-pairing effect. The SRT gimbal yaw and the log's gimbal heading disagree
-by a median 5.8 deg and up to 21 deg (p95), a constant per recording; at the
-frame edge (20 m from nadir at 45 m height) 5.8 deg is 2 m, which is what the
+by a median 6.2 deg and up to 21 deg (p95), a constant per recording; at the
+frame edge (20 m from nadir at 45 m height) 6 deg is 2 m, which is what the
 per-flight rotation correction of the dataset absorbs.
 
 ## Error budget
@@ -205,10 +205,10 @@ per-flight rotation correction of the dataset absorbs.
 | effect | median | mean | p95 | > 0.69 m | > 1.37 m |
 |---|---|---|---|---|---|
 | lens distortion ignored | 0.50 m | 0.75 m | 2.02 m | 40 % | 15 % |
-| frame times from the flight log alone | 1.89 m | 2.72 m | 6.36 m | 80 % | 61 % |
-| positions from the SRT alone | 0.14 m | 0.77 m | 0.70 m | 6 % | 2 % |
-| 50 deg field of view instead of 49 deg | 0.32 m | 0.35 m | 0.63 m | 3 % | 1 % |
-| distortion, apparent motion along a track (RMS) | 0.45 m | 0.57 m | 1.14 m | 24 % | 3 % |
+| frame times from the flight log alone | 1.50 m | 2.47 m | 6.23 m | 76 % | 54 % |
+| positions from the SRT alone | 0.13 m | 1.72 m | 0.66 m | 4 % | 2 % |
+| 50 deg field of view instead of 49 deg | 0.32 m | 0.35 m | 0.63 m | 4 % | 1 % |
+| distortion, apparent motion along a track (RMS) | 0.45 m | 0.57 m | 1.15 m | 24 % | 3 % |
 
 Both corrected steps are of the order of the matching radius: timing from the
 log alone would move most animals beyond it, and lens distortion would move one
@@ -218,14 +218,14 @@ in quadrature.
 
 ## Dataset issue found on the way: poses of later recordings in multi-recording flights
 
-In 10 flights with several video files (17, 35, 57, 59, 60, 119, 132, 156,
-158, 160) the published poses of the second and later recordings do not lie
+In 13 flights with several video files (17, 35, 57, 59, 60, 119, 132, 156,
+158, 160, 229, 239, 243) the published poses of the second and later recordings do not lie
 on the flight path: they form a straight line 28 to 1,300 m away from where
 both logs put the drone, which looks like a linear extrapolation of the first
 recording's log segment rather than a lookup in the recording's own `isVideo`
-run (`tables/timing_recordings.csv`, verdict `unmatched`). 3,095 annotated
+run (`tables/timing_recordings.csv`, verdict `unmatched`). 3,344 annotated
 boxes (3 % of all) fall into these recordings: flight 158 (2,380 boxes), 156
-(272), 119 (214), 35 (168), 160 (46), 132 (40). Flight 119 is the one the
+(272), 243 (217), 119 (189), 35 (168), 160 (46), 132 (40), 239 (32). Flight 119 is the one the
 paper already drops for geometrically inconsistent projected boxes, so the
 others probably show the same symptom. The fix is in the extractor: match
 each recording to its own `isVideo` run of the log.
@@ -239,16 +239,16 @@ each recording to its own `isVideo` run of the log.
 > raw pixels up to 9 % toward the optical centre. Casting rays through the raw
 > pixels instead of the undistorted ones would displace the annotated animals
 > on the ground by a median of 0.50 m (p95 2.0 m), 15 % of them beyond the
-> matching radius and 44 % of those above 62 m; because the displacement is
+> matching radius and 43 % of those above 62 m; because the displacement is
 > systematic toward the nadir, an animal tracked across the frame would appear
 > to move by 1.7 m. Pose timing: the flight log's own recording flag lags the
-> first frame by a median 0.57 s (up to 1.0 s at the 95th percentile, varying
+> first frame by a median 0.51 s (up to 1.0 s at the 95th percentile, varying
 > between recordings), so timing frames from the log alone would displace the
-> animals by a median 1.9 m (p95 6.4 m), 61 % beyond the matching radius; the
+> animals by a median 1.5 m (p95 6.2 m), 54 % beyond the matching radius; the
 > SRT subtitle file supplies the frame times, and we fit one clock offset per
-> recording (median 0.58 s, range −2.9 to +30 s). The SRT coordinates alone
-> are within 0.14 m of the combined poses for most recordings but are stale
-> by hundreds of metres in 3 % of them, so neither log suffices on its own.
+> recording (median 0.61 s, range −23 to +30 s). The SRT coordinates alone
+> are within 0.13 m of the combined poses for most recordings but are stale
+> by 5 m to 3 km in 5 % of them, so neither log suffices on its own.
 > The two cameras' frames pair within 9 ms, so the residual RGB-thermal offset
 > is not a timing effect.
 

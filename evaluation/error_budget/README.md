@@ -114,7 +114,7 @@ first run of this analysis), so both analyses cover every annotated flight.
 
 ## Results: lens distortion
 
-**The lenses.** Four thermal and four RGB calibrations serve the whole dataset
+**The lenses.** Four thermal and five RGB calibrations serve the whole dataset
 (`tables/calibrations.csv`, `figures/lens_profile`). All thermal lenses have strong
 barrel distortion (k1 between −0.34 and −0.39): the raw pixel sits 5.6 to
 6.0 % closer to the optical centre than its ideal pinhole position at the

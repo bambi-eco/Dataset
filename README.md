@@ -184,12 +184,22 @@ was produced, and where each one fails.
 ## Citation
 
 ```bibtex
-@misc{praschl2026bambi,
-  title        = {The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife},
-  author       = {Praschl, Christoph and Markoff, Hugo and Maschek, Anna and Jantsch, Wolfram and Wohlfahrt, Stephanie and Leitner, Horst and Beery, Sara and {\O}rsted, Michael and Schedl, David C.},
-  year         = {2026},
-  howpublished = {Presented at the CV4Animals Workshop, held in conjunction with the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  note         = {Non-archival workshop paper},
+@inproceedings{praschl2026bambi,
+  title     = {The BAMBI Dataset: Multimodal Nadir UAV-Recordings of Forest Wildlife},
+  author    = {Praschl, Christoph and
+               Markoff, Hugo and
+               Maschek, Anna and
+               Jantsch, Wolfram and
+               Wohlfahrt, Stephanie and
+               J{\o}rgensen, Anton Hjalte and
+               Mogensen, Christian Emil and
+               Skadhauge, Mathias Bech and
+               Beery, Sara and
+               {\O}rsted, Michael and
+               Schedl, David C.},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2026},
+  note      = {Accepted at NeurIPS 2026, Evaluations and Datasets Track}
 }
 ```
 

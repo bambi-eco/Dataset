@@ -85,98 +85,108 @@ def main():
     trec_ok = trec[(trec.status == "ok") & trec.verdict.isin(["reproduced", "release follows SRT", "not released"])].copy()
     md = []
 
-    # ------------------------------------------------------------------ figure 1: the lenses
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.9), gridspec_kw=dict(width_ratios=[1.15, 1.0], wspace=0.35))
-    ax = axes[0]
+    # ------------------------------------------------------------------ figures: one panel per file (paper subfigures)
+    def save(fig, name):
+        fig.savefig(fdir / f"{name}.pdf", bbox_inches="tight")
+        fig.savefig(fdir / f"{name}.png", bbox_inches="tight")
+        plt.close(fig)
+
+    PANEL = (3.4, 2.6)
+    # (1) radial distortion profiles
+    fig, ax = plt.subplots(figsize=PANEL)
+    n_t = sum(1 for p in model["profiles"].values() if p["cam"] == "T")
+    n_w = sum(1 for p in model["profiles"].values() if p["cam"] == "W")
     for k, p in model["profiles"].items():
-        col = BLUE if p["cam"] == "T" else ORANGE
-        ax.plot(np.array(p["r"]) * 100, np.array(p["frac"]) * 100, color=col, lw=1.6, alpha=0.9)
-    ax.plot([], [], color=BLUE, lw=1.6, label=f"thermal ({sum(1 for p in model['profiles'].values() if p['cam'] == 'T')} calibrations)")
-    ax.plot([], [], color=ORANGE, lw=1.6, label=f"RGB ({sum(1 for p in model['profiles'].values() if p['cam'] == 'W')} calibrations)")
-    ax.set_xlabel("distance from the optical centre, % of half-diagonal")
-    ax.set_ylabel("raw pixel displacement, % of its radius")
+        ax.plot(np.array(p["r"]) * 100, np.array(p["frac"]) * 100, color=BLUE if p["cam"] == "T" else ORANGE, lw=1.4, alpha=0.9)
+    ax.plot([], [], color=BLUE, lw=1.4, label=f"Thermal ({n_t} calibrations)")
+    ax.plot([], [], color=ORANGE, lw=1.4, label=f"RGB ({n_w} calibrations)")
     ax.axhline(0, color=MUTED, lw=0.8)
+    ax.set_xlabel("Distance from the optical centre [% of half-diagonal]")
+    ax.set_ylabel("Radial displacement of the raw pixel [%]")
     ax.legend(loc="lower left")
-    ax.set_title("(a) lens distortion of the raw frames (negative: barrel)", loc="left", color=INK)
-    ax = axes[1]
+    save(fig, "lens_profile")
+
+    # (2) ground-offset field over the frame
+    fig, ax = plt.subplots(figsize=(3.4, 3.0))
     key = next(k for k in model["fields"] if k.startswith("T_"))
     field = np.array(model["fields"][key])
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
-    # pcolormesh instead of imshow so the PDF stays vector (a 64 x 64 mesh)
     ex = np.linspace(0, C.W, field.shape[1] + 1); ey = np.linspace(0, C.H, field.shape[0] + 1)
     im = ax.pcolormesh(ex, ey, field * 100, cmap=cmap, vmin=0, vmax=max(5, np.ceil(field.max() * 100)), shading="flat", rasterized=False, linewidth=0, antialiased=False)
     ax.set_xlim(0, C.W); ax.set_ylim(C.H, 0); ax.set_aspect("equal")
     xs = np.linspace(0, C.W, field.shape[1]); ys = np.linspace(0, C.H, field.shape[0])
     cs = ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.5)
     ax.clabel(cs, fmt="%g", fontsize=6.5)
-    # where the annotated animals are
     from scipy.ndimage import gaussian_filter
     H2, xe, ye = np.histogram2d(boxes.u, boxes.v, bins=64, range=[[0, C.W], [0, C.H]])
-    H2 = gaussian_filter(H2.T, 2.0)
-    H2 = H2 / H2.max()
+    H2 = gaussian_filter(H2.T, 2.0); H2 = H2 / H2.max()
     ax.contour((xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2, H2, levels=[0.25, 0.5, 0.75], colors=ORANGE, linewidths=0.9)
-    ax.plot([], [], color=ORANGE, lw=0.9, label="where the annotated animals are")
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.33))
+    ax.plot([], [], color=ORANGE, lw=0.9, label="Density of annotated animals")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17))
     ax.set_xticks([0, 512, 1024]); ax.set_yticks([0, 512, 1024]); ax.grid(False)
-    ax.set_title("(b) offset without undistortion [cm per m height]", loc="left", color=INK)
+    ax.set_xlabel("x [px]"); ax.set_ylabel("y [px]")
     cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)
     cb.solids.set_rasterized(False)
+    cb.set_label("Ground offset [cm per m of height]", fontsize=7.5)
     cb.ax.tick_params(labelsize=7)
-    fig.savefig(fdir / "lens.pdf", bbox_inches="tight"); fig.savefig(fdir / "lens.png", bbox_inches="tight"); plt.close(fig)
+    save(fig, "lens_field")
 
-    # ------------------------------------------------------------------ figure 2: per-box error distributions
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.8), gridspec_kw=dict(wspace=0.3))
-    ax = axes[0]
+    # (3) distortion offset per box, by height above ground
     ok = boxes[np.isfinite(boxes.offset)]
     bins = C.alt_bin(ok.agl.values)
+    fig, ax = plt.subplots(figsize=PANEL)
     for i, lab in enumerate(C.ALT_LABELS):
         sel = bins == i
         if sel.sum():
-            cdf(ax, ok.offset[sel], ORD5[i], f"{lab} m  (n={sel.sum():,})", lw=1.6)
+            label = lab.replace(">= ", "$\\geq$ ")
+            cdf(ax, ok.offset[sel], ORD5[i], f"{label} m (n = {sel.sum():,})", lw=1.5)
     ax.axvline(C.MATCH_RADIUS, color=MUTED, lw=0.9, ls="--")
-    ax.text(C.MATCH_RADIUS + 0.05, 0.3, "matching radius 1.37 m", color=INK2, fontsize=7, rotation=90, va="bottom")
+    ax.text(C.MATCH_RADIUS + 0.06, 0.03, "Matching radius", color=INK2, fontsize=7, rotation=90, va="bottom")
     ax.set_xlim(0, 4); ax.set_ylim(0, 1)
-    ax.set_xlabel("offset without undistortion [m]")
-    ax.set_ylabel("share of annotated boxes")
-    ax.legend(title="height above ground", fontsize=7, title_fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2)
-    ax.set_title("(a) lens distortion, by flight height", loc="left", color=INK)
-    ax = axes[1]
-    cdf(ax, ok.offset, BLUE, "lens distortion ignored")
-    cdf(ax, tb.err_nosrt, ORANGE, "pose timing from the flight log alone")
-    cdf(ax, tb.err_srtonly, AQUA, "pose position from the SRT alone")
-    cdf(ax, tracks.rms_radius, BLUE, "distortion: apparent motion along a track (RMS)", lw=1.2, ls=":")
-    ax.axvline(C.MATCH_RADIUS, color=MUTED, lw=0.9, ls="--")
-    ax.set_xlim(0, 4); ax.set_ylim(0, 1)
-    ax.set_xlabel("ground error at the annotated animal [m]")
-    ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=1)
-    ax.set_title("(b) the three effects, all annotated boxes", loc="left", color=INK)
-    fig.savefig(fdir / "box_errors.pdf", bbox_inches="tight"); fig.savefig(fdir / "box_errors.png", bbox_inches="tight"); plt.close(fig)
+    ax.set_xlabel("Ground offset without undistortion [m]")
+    ax.set_ylabel("Share of annotated boxes")
+    ax.legend(title="Height above ground", fontsize=6.5, title_fontsize=7, loc="lower right")
+    save(fig, "boxes_by_height")
 
-    # ------------------------------------------------------------------ figure 3: per recording
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.6), gridspec_kw=dict(wspace=0.3))
-    ax = axes[0]
+    # (4) the three effects
+    fig, ax = plt.subplots(figsize=PANEL)
+    cdf(ax, ok.offset, BLUE, "Lens distortion ignored")
+    cdf(ax, tb.err_nosrt, ORANGE, "Frame times from the flight log alone")
+    cdf(ax, tb.err_srtonly, AQUA, "Positions from the SRT alone")
+    cdf(ax, tracks.rms_radius, BLUE, "Distortion: apparent motion along a track", lw=1.2, ls=":")
+    ax.axvline(C.MATCH_RADIUS, color=MUTED, lw=0.9, ls="--")
+    ax.text(C.MATCH_RADIUS + 0.06, 0.03, "Matching radius", color=INK2, fontsize=7, rotation=90, va="bottom")
+    ax.set_xlim(0, 4); ax.set_ylim(0, 1)
+    ax.set_xlabel("Ground error at the annotated animal [m]")
+    ax.set_ylabel("Share of annotated boxes")
+    ax.legend(fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, -0.24), ncol=1)
+    save(fig, "boxes_effects")
+
+    # (5) onset lag per recording
+    fig, ax = plt.subplots(figsize=PANEL)
     lag = trec_ok.onset_lag_s.values
     shown = lag[(lag > -2) & (lag < 5)]
     ax.hist(shown, bins=np.arange(-2, 5.01, 0.2), color=ORANGE, edgecolor="white", linewidth=0.6)
     n_out = len(lag) - len(shown)
-    ax.text(0.98, 0.95, f"{n_out} recording{'s' if n_out != 1 else ''} outside the range\n(min {lag.min():+.0f} s, max {lag.max():+.1f} s)", transform=ax.transAxes,
-            ha="right", va="top", fontsize=7, color=INK2)
-    ax.set_xlabel("isVideo flag onset after the first frame [s]")
-    ax.set_ylabel("recordings")
-    ax.set_title("(a) when the log says the video started", loc="left", color=INK)
-    ax = axes[1]
+    if n_out:
+        ax.text(0.98, 0.95, f"{n_out} recording{'s' if n_out != 1 else ''} outside the axis ({lag.min():+.0f} s)", transform=ax.transAxes, ha="right", va="top", fontsize=7, color=INK2)
+    ax.set_xlabel("Onset of the isVideo flag after the first frame [s]")
+    ax.set_ylabel("Recordings")
+    save(fig, "onset_lag")
+
+    # (6) cost of the onset lag per recording
+    fig, ax = plt.subplots(figsize=PANEL)
     y = trec_ok.nosrt_mean.values
-    ax.scatter(trec_ok.median_speed, np.minimum(y, 9.8), s=14, color=ORANGE, alpha=0.75, linewidths=0)
+    ax.scatter(trec_ok.median_speed, np.minimum(y, 9.8), s=12, color=ORANGE, alpha=0.75, linewidths=0)
     ax.axhline(C.MATCH_RADIUS, color=MUTED, lw=0.9, ls="--")
-    ax.text(0.02, C.MATCH_RADIUS + 0.2, "matching radius", fontsize=7, color=INK2)
+    ax.text(0.05, C.MATCH_RADIUS + 0.2, "Matching radius", fontsize=7, color=INK2)
     ax.set_ylim(0, 10)
     n_out = int((y > 9.8).sum())
     if n_out:
-        ax.text(0.98, 0.95, f"{n_out} recording{'s' if n_out != 1 else ''} above 10 m (max {y.max():.0f} m)", transform=ax.transAxes, ha="right", va="top", fontsize=7, color=INK2)
-    ax.set_xlabel("median ground speed of the recording [m/s]")
-    ax.set_ylabel("mean pose error without the SRT [m]")
-    ax.set_title("(b) what the onset lag costs", loc="left", color=INK)
-    fig.savefig(fdir / "recordings.pdf", bbox_inches="tight"); fig.savefig(fdir / "recordings.png", bbox_inches="tight"); plt.close(fig)
+        ax.text(0.98, 0.95, f"{n_out} recording{'s' if n_out != 1 else ''} above the axis (max {y.max():.0f} m)", transform=ax.transAxes, ha="right", va="top", fontsize=7, color=INK2)
+    ax.set_xlabel("Median ground speed of the recording [m/s]")
+    ax.set_ylabel("Mean pose error without the SRT [m]")
+    save(fig, "onset_cost")
 
     # ------------------------------------------------------------------ tables
     # T1 calibrations

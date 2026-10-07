@@ -24,6 +24,7 @@ BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
 SEQ = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
 ORD5 = ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#104281"]     # ordinal, 5 steps, starts no lighter than step 250
 INK, INK2, MUTED, GRID = "#0b0b0b", "#52514e", "#898781", "#e1e0d9"
+SHOW_DENSITY = False
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 8.5, "axes.edgecolor": MUTED, "axes.labelcolor": INK2,
                      "xtick.color": INK2, "ytick.color": INK2, "axes.spines.top": False, "axes.spines.right": False,
                      "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6, "legend.frameon": False, "figure.dpi": 150})
@@ -117,12 +118,13 @@ def main():
     xs = np.linspace(0, C.W, field.shape[1]); ys = np.linspace(0, C.H, field.shape[0])
     cs = ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.5)
     ax.clabel(cs, fmt="%g", fontsize=6.5)
-    from scipy.ndimage import gaussian_filter
-    H2, xe, ye = np.histogram2d(boxes.u, boxes.v, bins=64, range=[[0, C.W], [0, C.H]])
-    H2 = gaussian_filter(H2.T, 2.0); H2 = H2 / H2.max()
-    ax.contour((xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2, H2, levels=[0.25, 0.5, 0.75], colors=ORANGE, linewidths=0.9)
-    ax.plot([], [], color=ORANGE, lw=0.9, label="Density of annotated animals")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17))
+    if SHOW_DENSITY:   # kernel density of the annotated box centres; off by default, the shares by image position are in the tables
+        from scipy.ndimage import gaussian_filter
+        H2, xe, ye = np.histogram2d(boxes.u, boxes.v, bins=64, range=[[0, C.W], [0, C.H]])
+        H2 = gaussian_filter(H2.T, 2.0); H2 = H2 / H2.max()
+        ax.contour((xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2, H2, levels=[0.25, 0.5, 0.75], colors=ORANGE, linewidths=0.9)
+        ax.plot([], [], color=ORANGE, lw=0.9, label="Density of annotated animals")
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17))
     ax.set_xticks([0, 512, 1024]); ax.set_yticks([0, 512, 1024]); ax.grid(False)
     ax.set_xlabel("x [px]"); ax.set_ylabel("y [px]")
     cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)

@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Ground error at the annotated animals (thermal boxes) that each step of the pipeline removes, and the share of boxes it would move by more than half and more than the full matching radius of the detection protocol.}
+\label{tab:budget}
+\begin{tabular}{lrrrrrr}
+\toprule
+effect & n & median [m] & mean [m] & p95 [m] & > 0.69 m [\%] & > 1.37 m [\%] \\
+\midrule
+lens distortion ignored & 101900 & 0.50 & 0.75 & 2.02 & 40 & 15 \\
+frame times from the flight log alone (30 fps from the isVideo onset) & 62361 & 1.89 & 2.72 & 6.36 & 80 & 61 \\
+same with the recording's true frame rate & 62361 & 2.02 & 1.92 & 4.52 & 85 & 71 \\
+pose position from the SRT alone & 62361 & 0.14 & 0.77 & 0.70 & 6 & 2 \\
+50 deg field of view assumed instead of the frames' own & 101900 & 0.32 & 0.35 & 0.63 & 3 & 1 \\
+distortion: apparent motion along a track (RMS radius) & 5365 & 0.45 & 0.57 & 1.14 & 24 & 3 \\
+distortion: apparent motion along a track (extent) & 5365 & 1.72 & 2.19 & 4.59 & 83 & 62 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,87 @@
+{
+ "n_flights_raw": 178,
+ "n_flights_ok": 177,
+ "n_recordings": 179,
+ "n_skipped": 0,
+ "verdicts": {
+  "reproduced": 173,
+  "not released": 6,
+  "unmatched": 15,
+  "degenerate": 3
+ },
+ "n_boxes_total": 71654,
+ "n_boxes": 62361,
+ "onset_lag": {
+  "min": -28.368,
+  "median": 0.565,
+  "p95": 1.0426,
+  "max": 4.906,
+  "share_negative": 0.0335195530726257
+ },
+ "clock_offset": {
+  "min": -2.88,
+  "median": 0.583,
+  "max": 30.0
+ },
+ "airdata_hz": {
+  "values": [
+   5.0,
+   10.0
+  ],
+  "share_10hz": 0.3240223463687151
+ },
+ "gaps": {
+  "recordings_with_gap_over_2s": 12,
+  "max_gap_s": 384.3
+ },
+ "fps_true": {
+  "median": 29.9833,
+  "min": 29.6543,
+  "max": 30.0471
+ },
+ "srt_decimals": [
+  5,
+  6
+ ],
+ "speed": {
+  "median": 2.99,
+  "p95": 4.97
+ },
+ "repro_median_m": 0.0,
+ "nosrt_boxes": {
+  "mean": 2.7239313994323373,
+  "median": 1.885,
+  "p95": 6.361,
+  "share_over_match": 0.6111512002693992,
+  "share_over_1m": 0.7212199932650214
+ },
+ "nosrt_fixedfps_boxes": {
+  "mean": 1.9230575038886482,
+  "median": 2.016,
+  "p95": 4.522,
+  "share_over_match": 0.7145972643158385
+ },
+ "srtonly_boxes": {
+  "mean": 0.7743629512034766,
+  "median": 0.142,
+  "p95": 0.702,
+  "share_over_match": 0.016885553470919325
+ },
+ "box_speed": {
+  "median": 3.38,
+  "p95": 6.216,
+  "share_stationary": 0.00909222109972579
+ },
+ "interp1hz": {
+  "turn_p95_median": 0.2955,
+  "straight_p95_median": 0.061
+ },
+ "yaw_diff": {
+  "median_abs": 5.8,
+  "p95_abs": 20.6
+ },
+ "rgb_pair_dt_ms": {
+  "median": 7.0,
+  "p95": 16.0
+ }
+}

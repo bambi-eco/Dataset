@@ -1,0 +1,31 @@
+{
+ "flights_total": 301,
+ "flights_with_calibration": 294,
+ "boxes_total": 102848,
+ "boxes_with_height": 101900,
+ "boxes_in_border": 4.3473994111874354,
+ "median_tilt_deg": 0.046062500000005,
+ "agl_median": 43.88,
+ "agl_p5": 28.14,
+ "agl_p95": 58.48,
+ "r_frac_median": 0.7099716836360035,
+ "timing_flights": 177,
+ "timing_recordings": 179,
+ "timing_boxes": 62361,
+ "share_lag_negative": 3.35195530726257,
+ "recordings_with_gap": 12,
+ "recordings_10hz": 58,
+ "tracks": 5365,
+ "track_extent_median": 1.7183786821384206,
+ "track_extent_p95": 4.591807929683196,
+ "track_rms_median": 0.4503939072530015,
+ "track_rms_p95": 1.1444029720659339,
+ "flights_calib_own": 178,
+ "flights_calib_inferred": 116,
+ "recordings_verdicts": {
+  "reproduced": 173,
+  "unmatched": 15,
+  "not released": 6,
+  "degenerate": 3
+ }
+}

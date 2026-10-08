@@ -159,7 +159,8 @@ def main():
     share = dens / dens.sum() * 100 / cell                               # % of all boxes per 100 x 100 px
     im = ax.pcolormesh(xe, ye, share, cmap=cmap_o, vmin=0, shading="flat", rasterized=False, linewidth=0, antialiased=False)
     ax.set_xlim(0, C.W); ax.set_ylim(C.H, 0); ax.set_aspect("equal")
-    ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.4, alpha=0.6)
+    cs = ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.5, alpha=0.8)
+    ax.clabel(cs, fmt="%g", fontsize=6.5)
     ax.set_xticks([0, 512, 1024]); ax.set_yticks([0, 512, 1024]); ax.grid(False)
     ax.set_xlabel("x [px]"); ax.set_ylabel("y [px]")
     cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)

@@ -24,7 +24,6 @@ BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
 SEQ = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
 ORD5 = ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#104281"]     # ordinal, 5 steps, starts no lighter than step 250
 INK, INK2, MUTED, GRID = "#0b0b0b", "#52514e", "#898781", "#e1e0d9"
-SHOW_DENSITY = False
 plt.rcParams.update({"font.family": "sans-serif", "font.size": 8.5, "axes.edgecolor": MUTED, "axes.labelcolor": INK2,
                      "xtick.color": INK2, "ytick.color": INK2, "axes.spines.top": False, "axes.spines.right": False,
                      "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6, "legend.frameon": False, "figure.dpi": 150})
@@ -118,13 +117,12 @@ def main():
     xs = np.linspace(0, C.W, field.shape[1]); ys = np.linspace(0, C.H, field.shape[0])
     cs = ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.5)
     ax.clabel(cs, fmt="%g", fontsize=6.5)
-    if SHOW_DENSITY:   # kernel density of the annotated box centres; off by default, the shares by image position are in the tables
-        from scipy.ndimage import gaussian_filter
-        H2, xe, ye = np.histogram2d(boxes.u, boxes.v, bins=64, range=[[0, C.W], [0, C.H]])
-        H2 = gaussian_filter(H2.T, 2.0); H2 = H2 / H2.max()
-        ax.contour((xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2, H2, levels=[0.25, 0.5, 0.75], colors=ORANGE, linewidths=0.9)
-        ax.plot([], [], color=ORANGE, lw=0.9, label="Density of annotated animals")
-        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17))
+    # density of the annotated box centres over the frame (shared by the variants below)
+    from scipy.ndimage import gaussian_filter
+    H2, xe, ye = np.histogram2d(boxes.u, boxes.v, bins=64, range=[[0, C.W], [0, C.H]])
+    dens = gaussian_filter(H2.T, 1.5)
+    dens_n = dens / dens.max()
+    xc, yc = (xe[:-1] + xe[1:]) / 2, (ye[:-1] + ye[1:]) / 2
     ax.set_xticks([0, 512, 1024]); ax.set_yticks([0, 512, 1024]); ax.grid(False)
     ax.set_xlabel("x [px]"); ax.set_ylabel("y [px]")
     cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)
@@ -132,6 +130,43 @@ def main():
     cb.set_label("Ground offset [cm per m of height]", fontsize=7.5)
     cb.ax.tick_params(labelsize=7)
     save(fig, "lens_field")
+
+    # variant (b'): the same field with the density as filled transparent bands
+    fig, ax = plt.subplots(figsize=(3.4, 3.0))
+    im = ax.pcolormesh(ex, ey, field * 100, cmap=cmap, vmin=0, vmax=max(5, np.ceil(field.max() * 100)), shading="flat", rasterized=False, linewidth=0, antialiased=False)
+    ax.set_xlim(0, C.W); ax.set_ylim(C.H, 0); ax.set_aspect("equal")
+    cs = ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.5)
+    ax.clabel(cs, fmt="%g", fontsize=6.5)
+    from matplotlib.colors import to_rgba
+    for lo, hi, a in ((0.25, 0.5, 0.22), (0.5, 0.75, 0.38), (0.75, 1.01, 0.55)):
+        ax.contourf(xc, yc, dens_n, levels=[lo, hi], colors=[to_rgba(ORANGE, a)], antialiased=True)
+    from matplotlib.patches import Patch
+    ax.legend(handles=[Patch(facecolor=to_rgba(ORANGE, a), label=f"$\\geq$ {int(lo * 100)}% of peak density") for lo, a in ((0.25, 0.22), (0.5, 0.38), (0.75, 0.55))],
+              title="Annotated box centres", loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=3, fontsize=6, title_fontsize=6.5, handlelength=1.2, columnspacing=0.8)
+    ax.set_xticks([0, 512, 1024]); ax.set_yticks([0, 512, 1024]); ax.grid(False)
+    ax.set_xlabel("x [px]"); ax.set_ylabel("y [px]")
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)
+    cb.solids.set_rasterized(False)
+    cb.set_label("Ground offset [cm per m of height]", fontsize=7.5)
+    cb.ax.tick_params(labelsize=7)
+    save(fig, "lens_field_density")
+
+    # (2b) the density of the annotated box centres as its own panel, same frame coordinates
+    fig, ax = plt.subplots(figsize=(3.4, 3.0))
+    ORANGE_SEQ = ["#fdebe3", "#f9c9b3", "#f4a580", "#ee8252", "#eb6834", "#c44a1e", "#8f3312"]
+    cmap_o = LinearSegmentedColormap.from_list("seq_o", ORANGE_SEQ)
+    cell = (C.W / dens.shape[1]) * (C.H / dens.shape[0]) / 1e4          # cell area in units of 100 x 100 px
+    share = dens / dens.sum() * 100 / cell                               # % of all boxes per 100 x 100 px
+    im = ax.pcolormesh(xe, ye, share, cmap=cmap_o, vmin=0, shading="flat", rasterized=False, linewidth=0, antialiased=False)
+    ax.set_xlim(0, C.W); ax.set_ylim(C.H, 0); ax.set_aspect("equal")
+    ax.contour(xs, ys, field * 100, levels=[1, 2, 3, 4, 5, 6], colors=INK, linewidths=0.4, alpha=0.6)
+    ax.set_xticks([0, 512, 1024]); ax.set_yticks([0, 512, 1024]); ax.grid(False)
+    ax.set_xlabel("x [px]"); ax.set_ylabel("y [px]")
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)
+    cb.solids.set_rasterized(False)
+    cb.set_label("Annotated box centres [% per 100 x 100 px]", fontsize=7.5)
+    cb.ax.tick_params(labelsize=7)
+    save(fig, "lens_density")
 
     # (3) distortion offset per box, by height above ground
     ok = boxes[np.isfinite(boxes.offset)]

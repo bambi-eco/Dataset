@@ -200,3 +200,29 @@ def pct(x, q):
     x = np.asarray(x, dtype=float)
     x = x[np.isfinite(x)]
     return float(np.percentile(x, q)) if len(x) else float("nan")
+
+
+def load_heights(data: Path, fid: str, n: int) -> dict:
+    """Per-frame heights above ground from terrain.py: 'corrected' (corrected camera over the terrain model)
+    and 'takeoff' (terrain at take-off + barometric height above take-off - terrain at the nadir)."""
+    import csv as _csv
+    out = dict(corrected=np.full(n, np.nan), takeoff=np.full(n, np.nan))
+    p = data / "agl" / f"{fid}_agl.csv"
+    if not p.exists():
+        return out
+    for row in _csv.DictReader(open(p)):
+        i = int(row["frame"])
+        if i >= n:
+            continue
+        if row.get("agl", "") != "":
+            out["corrected"][i] = float(row["agl"])
+        if row.get("agl_takeoff", "") not in ("", None):
+            out["takeoff"][i] = float(row["agl_takeoff"])
+    return out
+
+
+MIN_AGL, MAX_AGL = 5.0, 250.0     # heights outside this range mark poses that do not belong to the frame
+
+
+def valid_height(h: np.ndarray) -> np.ndarray:
+    return np.isfinite(h) & (h >= MIN_AGL) & (h <= MAX_AGL)

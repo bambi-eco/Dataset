@@ -7,13 +7,16 @@
 \toprule
 effect & n & median [m] & mean [m] & p95 [m] & > 0.69 m [\%] & > 1.37 m [\%] \\
 \midrule
-lens distortion ignored & 102427 & 0.50 & 0.75 & 2.02 & 40 & 15 \\
-frame times from the flight log alone (30 fps from the isVideo onset) & 92813 & 1.50 & 2.47 & 6.23 & 76 & 54 \\
-same with the recording's true frame rate & 92813 & 1.82 & 1.98 & 4.23 & 78 & 63 \\
-pose position from the SRT alone & 92813 & 0.13 & 1.72 & 0.66 & 4 & 2 \\
-50 deg field of view assumed instead of the frames' own & 102427 & 0.32 & 0.35 & 0.63 & 4 & 1 \\
-distortion: apparent motion along a track (RMS radius) & 5453 & 0.45 & 0.57 & 1.15 & 24 & 3 \\
-distortion: apparent motion along a track (extent) & 5453 & 1.71 & 2.18 & 4.63 & 83 & 62 \\
+lens distortion ignored & 90164 & 0.51 & 0.69 & 1.98 & 41 & 15 \\
+frame times from the flight log alone (30 fps from the isVideo onset) & 90164 & 1.54 & 2.51 & 6.24 & 76 & 55 \\
+same with the recording's true frame rate & 90164 & 1.78 & 1.99 & 4.25 & 77 & 62 \\
+pose position from the SRT alone & 90164 & 0.13 & 1.70 & 0.66 & 5 & 2 \\
+50 deg field of view assumed instead of the frames' own & 90164 & 0.33 & 0.34 & 0.60 & 2 & 0 \\
+distortion: apparent motion along a track (RMS radius) & 4954 & 0.45 & 0.49 & 1.03 & 22 & 1 \\
+distortion: apparent motion along a track (extent) & 4954 & 1.68 & 1.89 & 4.29 & 83 & 61 \\
+pose correction omitted & 90164 & 1.23 & 2.31 & 7.35 & 71 & 45 \\
+  altitude offset only & 90164 & 1.01 & 1.57 & 4.38 & 66 & 33 \\
+  heading offset only & 90164 & 0.24 & 1.15 & 5.69 & 27 & 23 \\
 \bottomrule
 \end{tabular}
 \end{table}

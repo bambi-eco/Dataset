@@ -148,16 +148,14 @@ def frame_agl_airdata(fl: C.Flight, poses: dict):
 
 
 def frame_agl(fl: C.Flight, poses: dict, data: Path):
-    """Height above ground per frame: corrected pose over the BEV terrain model (terrain.py), else the flight log."""
-    p = data / "agl" / f"{fl.fid}_agl.csv"
-    if p.exists():
-        agl = np.full(poses["n"], np.nan)
-        for row in __import__("csv").DictReader(open(p)):
-            if row["agl"] != "":
-                agl[int(row["frame"])] = float(row["agl"])
-        if np.isfinite(agl).any():
-            return agl, "dem"
-    return frame_agl_airdata(fl, poses)
+    """
+    Height above ground per frame: terrain at the take-off point + barometric height above take-off
+    - terrain at the nadir (terrain.py --takeoff), independent of the published altitude and of the pose
+    correction. Heights outside [MIN_AGL, MAX_AGL] mark poses that do not belong to the frame and are NaN.
+    """
+    h = C.load_heights(data, fl.fid, poses["n"])["takeoff"]
+    h = np.where(C.valid_height(h), h, np.nan)
+    return h, "takeoff" if np.isfinite(h).any() else "none"
 
 
 def main():

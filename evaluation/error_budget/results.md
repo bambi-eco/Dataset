@@ -2,27 +2,30 @@
 
 ```
 {
+ "common_boxes": 90164,
+ "common_flights": 286,
+ "boxes_before_common_set": 102427,
  "flights_total": 301,
  "flights_with_calibration": 301,
  "boxes_total": 102848,
- "boxes_with_height": 102427,
- "boxes_in_border": 4.326984095990316,
+ "boxes_with_height": 90164,
+ "boxes_in_border": 4.1857060467592415,
  "median_tilt_deg": 0.046062500000005,
- "agl_median": 43.88,
- "agl_p5": 28.093000000000004,
- "agl_p95": 61.65,
- "r_frac_median": 0.7096982782268562,
+ "agl_median": 46.26,
+ "agl_p5": 29.67,
+ "agl_p95": 58.39,
+ "r_frac_median": 0.7085494291075876,
  "timing_flights": 298,
  "timing_recordings": 300,
- "timing_boxes": 92813,
+ "timing_boxes": 90164,
  "share_lag_negative": 5.333333333333334,
  "recordings_with_gap": 31,
  "recordings_10hz": 99,
- "tracks": 5453,
- "track_extent_median": 1.7133755639053818,
- "track_extent_p95": 4.630684893184229,
- "track_rms_median": 0.449949663926774,
- "track_rms_p95": 1.1500218190711855,
+ "tracks": 4954,
+ "track_extent_median": 1.6838045124961523,
+ "track_extent_p95": 4.290261982557779,
+ "track_rms_median": 0.45297796244004557,
+ "track_rms_p95": 1.0277436020613784,
  "flights_calib_own": 301,
  "flights_calib_inferred": 0,
  "recordings_verdicts": {
@@ -68,37 +71,37 @@
 
 | height above ground | flights | boxes | median [m] | p95 [m] | > 0.69 m [%] | > 1.37 m [%] |
 |---|---|---|---|---|---|---|
-| < 30 m | 44 | 10149 | 0.26 | 1.13 | 18 | 2 |
-| 30-42 m | 96 | 18231 | 0.37 | 1.47 | 29 | 6 |
-| 42-52 m | 190 | 56290 | 0.57 | 1.96 | 44 | 16 |
-| 52-62 m | 131 | 11426 | 0.69 | 2.23 | 50 | 23 |
-| >= 62 m | 71 | 4923 | 1.12 | 4.53 | 64 | 43 |
-| all | 301 | 102427 | 0.50 | 2.02 | 40 | 15 |
+| < 30 m | 33 | 7262 | 0.25 | 1.13 | 19 | 2 |
+| 30-42 m | 82 | 12286 | 0.38 | 1.43 | 29 | 6 |
+| 42-52 m | 187 | 54905 | 0.55 | 1.99 | 43 | 16 |
+| 52-62 m | 171 | 11909 | 0.70 | 2.23 | 51 | 22 |
+| >= 62 m | 67 | 3802 | 0.87 | 3.10 | 57 | 33 |
+| all | 286 | 90164 | 0.51 | 1.98 | 41 | 15 |
 
 ## Distortion offset by position in the frame
 
 | distance from the frame centre | boxes | share [%] | median [m] | p95 [m] | > 1.37 m [%] |
 |---|---|---|---|---|---|
-| 0-25 % | 7539 | 7 | 0.01 | 0.02 | 0 |
-| 25-50 % | 20241 | 20 | 0.09 | 0.20 | 0 |
-| 50-75 % | 28418 | 28 | 0.36 | 0.68 | 1 |
-| 75-100 % | 31767 | 31 | 0.91 | 1.56 | 11 |
-| corners (> 100 %) | 14462 | 14 | 1.73 | 2.89 | 83 |
+| 0-25 % | 6654 | 7 | 0.01 | 0.02 | 0 |
+| 25-50 % | 17985 | 20 | 0.09 | 0.19 | 0 |
+| 50-75 % | 24939 | 28 | 0.37 | 0.65 | 0 |
+| 75-100 % | 27959 | 31 | 0.93 | 1.48 | 11 |
+| corners (> 100 %) | 12627 | 14 | 1.78 | 2.75 | 86 |
 
 ## Distortion offset by species (ten most annotated)
 
 | species | boxes | median [m] | p95 [m] | > 1.37 m [%] |
 |---|---|---|---|---|
-| Cervus elaphus (Red deer) | 28981 | 0.58 | 2.14 | 18 |
-| Sus scrofa (Wild boar) | 28833 | 0.48 | 1.85 | 13 |
-| Dama dama (Fallow Deer) | 22663 | 0.48 | 2.00 | 16 |
-| Capreolus capreolus (Roe deer) | 9748 | 0.43 | 2.12 | 13 |
-| Unknown | 4358 | 0.60 | 3.02 | 20 |
-| Capra ibex (Alpine ibex) | 2980 | 0.61 | 1.86 | 16 |
-| Sus scrofa x Sus domesticus (Hybrid Pig) | 1480 | 0.23 | 1.08 | 2 |
-| Homo sapiens (Human) | 1313 | 0.36 | 2.61 | 15 |
-| Aves (Bird) | 939 | 0.49 | 1.51 | 9 |
-| No-animal | 521 | 0.58 | 2.46 | 20 |
+| Sus scrofa (Wild boar) | 28242 | 0.48 | 1.83 | 13 |
+| Cervus elaphus (Red deer) | 22301 | 0.60 | 2.12 | 18 |
+| Dama dama (Fallow Deer) | 21708 | 0.48 | 2.05 | 17 |
+| Capreolus capreolus (Roe deer) | 7062 | 0.50 | 1.86 | 12 |
+| Unknown | 3326 | 0.60 | 2.26 | 20 |
+| Capra ibex (Alpine ibex) | 2865 | 0.61 | 1.86 | 16 |
+| Sus scrofa x Sus domesticus (Hybrid Pig) | 1480 | 0.24 | 1.11 | 2 |
+| Homo sapiens (Human) | 1145 | 0.34 | 2.07 | 13 |
+| Aves (Bird) | 924 | 0.50 | 1.51 | 9 |
+| Rupicapra rupicapra (Chamois) | 517 | 0.40 | 1.48 | 8 |
 
 ## Timing, distribution over recordings
 
@@ -122,10 +125,121 @@
 
 | effect | n | median [m] | mean [m] | p95 [m] | > 0.69 m [%] | > 1.37 m [%] |
 |---|---|---|---|---|---|---|
-| lens distortion ignored | 102427 | 0.50 | 0.75 | 2.02 | 40 | 15 |
-| frame times from the flight log alone (30 fps from the isVideo onset) | 92813 | 1.50 | 2.47 | 6.23 | 76 | 54 |
-| same with the recording's true frame rate | 92813 | 1.82 | 1.98 | 4.23 | 78 | 63 |
-| pose position from the SRT alone | 92813 | 0.13 | 1.72 | 0.66 | 4 | 2 |
-| 50 deg field of view assumed instead of the frames' own | 102427 | 0.32 | 0.35 | 0.63 | 4 | 1 |
-| distortion: apparent motion along a track (RMS radius) | 5453 | 0.45 | 0.57 | 1.15 | 24 | 3 |
-| distortion: apparent motion along a track (extent) | 5453 | 1.71 | 2.18 | 4.63 | 83 | 62 |
+| lens distortion ignored | 90164 | 0.51 | 0.69 | 1.98 | 41 | 15 |
+| frame times from the flight log alone (30 fps from the isVideo onset) | 90164 | 1.54 | 2.51 | 6.24 | 76 | 55 |
+| same with the recording's true frame rate | 90164 | 1.78 | 1.99 | 4.25 | 77 | 62 |
+| pose position from the SRT alone | 90164 | 0.13 | 1.70 | 0.66 | 5 | 2 |
+| 50 deg field of view assumed instead of the frames' own | 90164 | 0.33 | 0.34 | 0.60 | 2 | 0 |
+| distortion: apparent motion along a track (RMS radius) | 4954 | 0.45 | 0.49 | 1.03 | 22 | 1 |
+| distortion: apparent motion along a track (extent) | 4954 | 1.68 | 1.89 | 4.29 | 83 | 61 |
+| pose correction omitted | 90164 | 1.23 | 2.31 | 7.35 | 71 | 45 |
+|   altitude offset only | 90164 | 1.01 | 1.57 | 4.38 | 66 | 33 |
+|   heading offset only | 90164 | 0.24 | 1.15 | 5.69 | 27 | 23 |
+
+## Pose correction
+
+```
+{
+ "n_flights": 301,
+ "n_flights_used": 294,
+ "n_boxes": 94049,
+ "flights_with_altitude_correction": 231,
+ "flights_with_heading_correction": 224,
+ "flights_corrected": 231,
+ "flights_with_fine": 224,
+ "fine_segments": 343,
+ "fine_segments_inverted": 1,
+ "dz": {
+  "n": 231,
+  "median": 4.5892682454595,
+  "mean": 10.525745252703752,
+  "p95": 45.849999999999994,
+  "max": 55.0,
+  "over_half": 0.961038961038961,
+  "over_match": 0.9134199134199135
+ },
+ "dz_signed": {
+  "median": -3.4,
+  "min": -17.0,
+  "max": 55.0,
+  "share_negative": 0.7965367965367965
+ },
+ "rz_deg": {
+  "n": 224,
+  "median": 4.499999999999998,
+  "mean": 7.829011612275273,
+  "p95": 17.743747512671813,
+  "max": 30.396022033092564,
+  "over_half": 0.9285714285714286,
+  "over_match": 0.7053571428571429
+ },
+ "rz_signed": {
+  "median": -3.006805496994045,
+  "min": -30.396022033092564,
+  "max": 9.083785327222666
+ },
+ "disp_total": {
+  "n": 94049,
+  "median": 1.181,
+  "mean": 2.2428833267764676,
+  "p95": 7.314,
+  "max": 28.314,
+  "over_half": 0.6858233474040129,
+  "over_match": 0.4341460302608215
+ },
+ "disp_altitude": {
+  "n": 94049,
+  "median": 0.972,
+  "mean": 1.5173584195472574,
+  "p95": 4.313599999999991,
+  "max": 28.312,
+  "over_half": 0.6365830577677594,
+  "over_match": 0.32355474274048635
+ },
+ "disp_heading": {
+  "n": 94049,
+  "median": 0.233,
+  "mean": 1.1238098331720698,
+  "p95": 5.676,
+  "max": 12.599,
+  "over_half": 0.26668013482333675,
+  "over_match": 0.22385139661240416
+ },
+ "boxes_uncorrected_frames": 0.09827855692245531,
+ "altitude_vs_takeoff": {
+  "with_fov_term": {
+   "n": 231,
+   "median_abs": 1.0238691125256016,
+   "within": 0.48484848484848486,
+   "tol": 1.0
+  },
+  "without_fov_term": {
+   "n": 231,
+   "median_abs": 1.3006460848170323,
+   "within": 0.45021645021645024,
+   "tol": 1.0
+  },
+  "r_with_fov_term": 0.03126253887055757,
+  "r_without": 0.03840463697678809,
+  "within_2m": 0.7272727272727273
+ },
+ "heading_vs_gimbal": {
+  "n": 223,
+  "median_abs": 1.496155999999985,
+  "within": 0.6188340807174888,
+  "tol": 2.0,
+  "r": 0.9242270765728912,
+  "within_5deg": 0.9147982062780269
+ }
+}
+```
+
+## Pose correction omitted, by height above ground
+
+| height above ground | boxes | median [m] | p95 [m] | > 1.37 m [%] |
+|---|---|---|---|---|
+| < 30 m | 7454 | 0.89 | 1.97 | 21 |
+| 30-42 m | 13815 | 0.96 | 4.10 | 32 |
+| 42-52 m | 56868 | 1.16 | 6.38 | 42 |
+| 52-62 m | 12054 | 3.69 | 10.81 | 75 |
+| >= 62 m | 3858 | 1.30 | 20.33 | 50 |

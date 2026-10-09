@@ -83,6 +83,33 @@ def main():
     trec = pd.read_csv(tdir / "timing_recordings.csv")
     tsum = json.load(open(tdir / "timing_summary.json"))
     trec_ok = trec[(trec.status == "ok") & trec.verdict.isin(["reproduced", "release follows SRT", "not released"])].copy()
+    have_corr = (tdir / "correction_boxes.csv").exists()
+    if have_corr:
+        corr_b = pd.read_csv(tdir / "correction_boxes.csv")
+        cf = pd.read_csv(tdir / "correction_flights.csv")
+        csum = json.load(open(tdir / "correction_summary.json"))
+
+    # ---- one common set of boxes for every row: pose reproduced from the flight's own logs (timing.py)
+    # and a valid take-off-referenced height (distortion.py / correction.py)
+    key = lambda d: d.flight.astype(str) + ":" + d.frame.astype(str) + ":" + d.tid.astype(str)
+    common = set(key(tb)) & set(key(boxes[np.isfinite(boxes.offset)]))
+    if have_corr:
+        common &= set(key(corr_b[np.isfinite(corr_b.disp_total)]))
+    n_all_boxes = len(boxes)
+    boxes = boxes[key(boxes).isin(common)].copy()
+    tb = tb[key(tb).isin(common)].copy()
+    if have_corr:
+        corr_b = corr_b[key(corr_b).isin(common)].copy()
+    # apparent motion along a track, recomputed on the common set
+    trk = []
+    for (fl_, tid_), g in boxes.groupby(["flight", "tid"]):
+        if len(g) < 2:
+            continue
+        v = g[["vx", "vy"]].values
+        c = v.mean(axis=0)
+        trk.append(dict(flight=fl_, tid=tid_, n_boxes=len(g), rms_radius=float(np.sqrt(np.mean(np.sum((v - c) ** 2, axis=1)))),
+                        extent=float(np.max(np.linalg.norm(v - c, axis=1)) * 2)))
+    tracks = pd.DataFrame(trk)
     md = []
 
     # ------------------------------------------------------------------ figures: one panel per file (paper subfigures)
@@ -192,6 +219,8 @@ def main():
     cdf(ax, tb.err_nosrt, ORANGE, "Frame times from the flight log alone")
     cdf(ax, tb.err_srtonly, AQUA, "Positions from the SRT alone")
     cdf(ax, tracks.rms_radius, BLUE, "Distortion: apparent motion along a track", lw=1.2, ls=":")
+    if have_corr:
+        cdf(ax, corr_b.disp_total, YELLOW, "Pose correction omitted", lw=1.6, ls="-.")
     ax.axvline(C.MATCH_RADIUS, color=MUTED, lw=0.9, ls="--")
     ax.text(C.MATCH_RADIUS + 0.06, 0.03, "Matching radius", color=INK2, fontsize=7, rotation=90, va="bottom")
     ax.set_xlim(0, 4); ax.set_ylim(0, 1)
@@ -225,6 +254,55 @@ def main():
     ax.set_xlabel("Median ground speed of the recording [m/s]")
     ax.set_ylabel("Mean pose error without the SRT [m]")
     save(fig, "onset_cost")
+
+    if have_corr:
+        cfu = cf[np.isfinite(cf.dz)].copy()
+        # (7) altitude correction against the take-off reference
+        fig, ax = plt.subplots(figsize=PANEL)
+        sel = (cfu.dz != 0) & np.isfinite(cfu.takeoff_offset)
+        x = (cfu.takeoff_offset + cfu.fov_term)[sel].values; y = cfu.dz[sel].values
+        lim = (-20, 10)
+        inside = (y >= lim[0]) & (y <= lim[1]) & (x >= lim[0]) & (x <= lim[1])
+        ax.plot(lim, lim, color=MUTED, lw=0.9, ls="--")
+        ax.fill_between(lim, [lim[0] - 2, lim[1] - 2], [lim[0] + 2, lim[1] + 2], color=GRID, alpha=0.6, linewidth=0)
+        ax.scatter(x[inside], y[inside], s=12, color=BLUE, alpha=0.75, linewidths=0)
+        n_out = int((~inside).sum())
+        if n_out:
+            ax.text(0.98, 0.04, f"{n_out} flight{'s' if n_out != 1 else ''} outside the axes", transform=ax.transAxes, ha="right", va="bottom", fontsize=7, color=INK2)
+        ax.set_xlim(lim); ax.set_ylim(lim); ax.set_aspect("equal")
+        ax.set_xlabel("Take-off altitude error + field-of-view term [m]")
+        ax.set_ylabel("Altitude correction [m]")
+        save(fig, "correction_altitude")
+
+        # (8) heading correction against compass minus gimbal yaw
+        fig, ax = plt.subplots(figsize=PANEL)
+        sel = (cfu.rz_deg != 0) & np.isfinite(cfu.heading_offset)
+        x = cfu.heading_offset[sel].values; y = cfu.rz_deg[sel].values
+        lim = (-25, 15)
+        inside = (y >= lim[0]) & (y <= lim[1]) & (x >= lim[0]) & (x <= lim[1])
+        ax.plot(lim, lim, color=MUTED, lw=0.9, ls="--")
+        ax.fill_between(lim, [lim[0] - 2, lim[1] - 2], [lim[0] + 2, lim[1] + 2], color=GRID, alpha=0.6, linewidth=0)
+        ax.scatter(x[inside], y[inside], s=12, color=BLUE, alpha=0.75, linewidths=0)
+        n_out = int((~inside).sum())
+        if n_out:
+            ax.text(0.98, 0.04, f"{n_out} flight{'s' if n_out != 1 else ''} outside the axes", transform=ax.transAxes, ha="right", va="bottom", fontsize=7, color=INK2)
+        ax.set_xlim(lim); ax.set_ylim(lim); ax.set_aspect("equal")
+        ax.set_xlabel("Compass heading $-$ gimbal yaw [deg]")
+        ax.set_ylabel("Heading correction [deg]")
+        save(fig, "correction_heading")
+
+        # (9) displacement of the boxes without the correction, by component
+        fig, ax = plt.subplots(figsize=PANEL)
+        cdf(ax, corr_b.disp_total, YELLOW, "Altitude and heading offset")
+        cdf(ax, corr_b.disp_altitude, BLUE, "Altitude offset only", lw=1.3, ls="--")
+        cdf(ax, corr_b.disp_heading, AQUA, "Heading offset only", lw=1.3, ls=":")
+        ax.axvline(C.MATCH_RADIUS, color=MUTED, lw=0.9, ls="--")
+        ax.text(C.MATCH_RADIUS + 0.06, 0.03, "Matching radius", color=INK2, fontsize=7, rotation=90, va="bottom")
+        ax.set_xlim(0, 6); ax.set_ylim(0, 1)
+        ax.set_xlabel("Ground displacement without the pose correction [m]")
+        ax.set_ylabel("Share of annotated boxes")
+        ax.legend(fontsize=6.5, loc="lower right")
+        save(fig, "correction_boxes")
 
     # ------------------------------------------------------------------ tables
     # T1 calibrations
@@ -290,11 +368,14 @@ def main():
               "with public raw logs: distribution over recordings.", "tab:timing", fmt={"n": "{:d}"})
     md.append("## Timing, distribution over recordings\n\n" + md_table(t3, fmt={"min": "{:.3f}", "median": "{:.3f}", "p95": "{:.3f}", "max": "{:.3f}"}))
     rows = []
-    for name, col in (("lens distortion ignored", ok.offset), ("frame times from the flight log alone (30 fps from the isVideo onset)", tb.err_nosrt),
-                      ("same with the recording's true frame rate", tb.err_nosrt_fixedfps), ("pose position from the SRT alone", tb.err_srtonly),
-                      ("50 deg field of view assumed instead of the frames' own", ok.offset_fov),
-                      ("distortion: apparent motion along a track (RMS radius)", tracks.rms_radius),
-                      ("distortion: apparent motion along a track (extent)", tracks.extent)):
+    effects = [("lens distortion ignored", ok.offset), ("frame times from the flight log alone (30 fps from the isVideo onset)", tb.err_nosrt),
+               ("same with the recording's true frame rate", tb.err_nosrt_fixedfps), ("pose position from the SRT alone", tb.err_srtonly),
+               ("50 deg field of view assumed instead of the frames' own", ok.offset_fov),
+               ("distortion: apparent motion along a track (RMS radius)", tracks.rms_radius),
+               ("distortion: apparent motion along a track (extent)", tracks.extent)]
+    if have_corr:
+        effects += [("pose correction omitted", corr_b.disp_total), ("  altitude offset only", corr_b.disp_altitude), ("  heading offset only", corr_b.disp_heading)]
+    for name, col in effects:
         x = np.asarray(col, float); x = x[np.isfinite(x)]
         rows.append(dict(effect=name, n=len(x), median=float(np.median(x)), mean=float(x.mean()), p95=C.pct(x, 95),
                          over_half=float(np.mean(x > C.MATCH_RADIUS / 2)) * 100, over_match=float(np.mean(x > C.MATCH_RADIUS)) * 100))
@@ -305,8 +386,15 @@ def main():
     md.append("## Error budget at the annotated animals\n\n" + md_table(t4.rename(columns=lambda c: c.replace("\\%", "%")),
                                                                           fmt={"> 0.69 m [%]": "{:.0f}", "> 1.37 m [%]": "{:.0f}"}))
 
+    if have_corr:
+        md.append("## Pose correction\n\n```\n" + json.dumps({k: v for k, v in csum.items() if k != "by_alt_bin"}, indent=1) + "\n```")
+        rows = [dict(bin=f"{r['bin']} m", boxes=r["n"], median=r["median"], p95=r["p95"], over_match=r["over_match"] * 100) for r in csum["by_alt_bin"]]
+        tc = pd.DataFrame(rows); tc.columns = ["height above ground", "boxes", "median [m]", "p95 [m]", "> 1.37 m [%]"]
+        md.append("## Pose correction omitted, by height above ground\n\n" + md_table(tc, fmt={"> 1.37 m [%]": "{:.0f}"}))
+
     # headline numbers
-    head = dict(flights_total=int(flights.shape[0]), flights_with_calibration=int((flights.calib_t != "").sum() if flights.calib_t.dtype == object else flights.calib_t.notna().sum()),
+    head = dict(common_boxes=int(len(boxes)), common_flights=int(boxes.flight.nunique()), boxes_before_common_set=int(n_all_boxes),
+                flights_total=int(flights.shape[0]), flights_with_calibration=int((flights.calib_t != "").sum() if flights.calib_t.dtype == object else flights.calib_t.notna().sum()),
                 boxes_total=int(flights.n_boxes.sum()), boxes_with_height=int(len(ok)), boxes_in_border=float(1 - boxes.in_mask.mean()) * 100,
                 median_tilt_deg=float(flights.median_tilt.median()), agl_median=float(ok.agl.median()), agl_p5=C.pct(ok.agl, 5), agl_p95=C.pct(ok.agl, 95),
                 r_frac_median=float(ok.r_frac.median()), timing_flights=int(trec_ok.flight.nunique()), timing_recordings=int(len(trec_ok)),
